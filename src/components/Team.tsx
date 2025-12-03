@@ -117,14 +117,27 @@ const Team: React.FC = () => {
   const modalContentRef = useRef<HTMLDivElement>(null);
   const ceoCardRef = useRef<HTMLDivElement>(null);
 
-  // Preload critical team member images (all images for faster loading)
+  // Preload all team member images with priority handling
   useEffect(() => {
     team.forEach((member, idx) => {
       if (member.image) {
+        // Use both link preload and Image object for maximum browser support
+        const link = document.createElement("link");
+        link.rel = "preload";
+        link.as = "image";
+        link.href = member.image;
+        if (idx < 4) {
+          link.setAttribute("fetchpriority", "high");
+        }
+        document.head.appendChild(link);
+
+        // Also preload via Image object for browser cache
         const img = new Image();
-        img.src = member.image; // Use direct path
+        img.src = member.image;
         if (idx < 4) {
           img.fetchPriority = "high";
+        } else {
+          img.fetchPriority = "low";
         }
       }
     });

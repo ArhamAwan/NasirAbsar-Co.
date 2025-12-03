@@ -23,37 +23,6 @@ const Clients: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState(0);
   const carouselRef = useRef<HTMLDivElement>(null);
 
-  // Preload logos for the selected category
-  useEffect(() => {
-    if (clientCategories[selectedCategory]) {
-      const category = clientCategories[selectedCategory];
-      const allLogoMaps = [
-        nonProfitLogos,
-        manufacturingLogos,
-        educationLogos,
-        healthLogos,
-        constructionLogos,
-        tradingLogos,
-        servicesLogos,
-        miningLogos,
-        powerLogos,
-      ];
-      
-      // Get the appropriate logo map based on category
-      const logoMap = allLogoMaps.find((map) => 
-        category.clients.some((client) => map[client])
-      ) || {};
-
-      // Preload first 10 logos for the selected category
-      category.clients.slice(0, 10).forEach((client) => {
-        if (logoMap[client]) {
-          const img = new Image();
-          img.src = logoMap[client]; // Use direct path
-        }
-      });
-    }
-  }, [selectedCategory]);
-
   // Logo mapping for non-profit organizations
   const nonProfitLogos: { [key: string]: string } = {
     "National Testing Service - Pakistan (NTS)":
@@ -428,6 +397,57 @@ const Clients: React.FC = () => {
     { icon: Award, value: "25+", label: "Years of Trust" },
     { icon: TrendingUp, value: "98%", label: "Client Retention" },
   ];
+
+  // Preload all logos from all categories
+  useEffect(() => {
+    const allLogoMaps = [
+      nonProfitLogos,
+      manufacturingLogos,
+      educationLogos,
+      healthLogos,
+      constructionLogos,
+      tradingLogos,
+      servicesLogos,
+      miningLogos,
+      powerLogos,
+    ];
+    
+    // Collect all unique logo paths
+    const allLogos = new Set<string>();
+    allLogoMaps.forEach((logoMap) => {
+      Object.values(logoMap).forEach((logoPath) => {
+        if (logoPath && !logoPath.startsWith('data:') && !logoPath.startsWith('http')) {
+          allLogos.add(logoPath);
+        }
+      });
+    });
+
+    // Preload all logos with priority: first 20 logos get high priority, others get low
+    let logoIndex = 0;
+    allLogos.forEach((logoPath) => {
+      // Use link preload for better browser support
+      const link = document.createElement('link');
+      link.rel = 'preload';
+      link.as = 'image';
+      link.href = logoPath;
+      if (logoIndex < 20) {
+        link.setAttribute('fetchpriority', 'high');
+      } else {
+        link.setAttribute('fetchpriority', 'low');
+      }
+      document.head.appendChild(link);
+      
+      // Also preload via Image object for browser cache
+      const img = new Image();
+      img.src = logoPath;
+      if (logoIndex < 20) {
+        img.fetchPriority = 'high';
+      } else {
+        img.fetchPriority = 'low';
+      }
+      logoIndex++;
+    });
+  }, []);
 
   // Infinite Logo Carousel Component
   const InfiniteLogoCarousel: React.FC<{
