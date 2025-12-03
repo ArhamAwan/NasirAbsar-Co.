@@ -15,6 +15,7 @@ import {
   Globe,
   CheckCircle,
 } from "lucide-react";
+import { getVercelOptimizedImage } from "../utils/imageOptimization";
 
 const Clients: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState(0);
@@ -41,12 +42,12 @@ const Clients: React.FC = () => {
         category.clients.some((client) => map[client])
       ) || {};
 
-      // Preload first 10 logos for the selected category
+      // Preload first 10 logos for the selected category with optimization
       category.clients.slice(0, 10).forEach((client) => {
         if (logoMap[client]) {
           const img = new Image();
-          // Use direct path - Vercel optimizes automatically
-          img.src = logoMap[client];
+          // Use optimized URL - this will track in Vercel dashboard
+          img.src = getVercelOptimizedImage(logoMap[client], 400, 80);
         }
       });
     }
@@ -562,7 +563,7 @@ const Clients: React.FC = () => {
                 }}
               >
                 <img
-                  src={item.logo}
+                  src={getVercelOptimizedImage(item.logo, 400, 80)}
                   alt={item.name}
                   className="max-w-full max-h-full object-contain"
                   loading="lazy"

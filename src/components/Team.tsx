@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Linkedin, X } from "lucide-react";
+import { getVercelOptimizedImage } from "../utils/imageOptimization";
 
 const placeholderImg = "https://via.placeholder.com/300x400?text=No+Image";
 
@@ -129,8 +130,8 @@ const Team: React.FC = () => {
     team.forEach((member, idx) => {
       if (member.image) {
         const img = new Image();
-        // Use direct path - Vercel optimizes automatically
-        img.src = member.image;
+        // Use optimized URL for preloading - this will track in Vercel dashboard
+        img.src = getVercelOptimizedImage(member.image, 640, 85);
         // Set fetch priority for first 4 images
         if (idx < 4) {
           img.fetchPriority = "high";
@@ -416,7 +417,11 @@ const Team: React.FC = () => {
                   {/* Image */}
                   <div className="w-full h-[280px] xs:h-[320px] sm:h-[350px] md:h-[380px] lg:h-[400px] overflow-hidden rounded-t-lg bg-gray-100">
                     <img
-                      src={member.image || placeholderImg}
+                      src={getVercelOptimizedImage(
+                        member.image || placeholderImg,
+                        640,
+                        85
+                      )}
                       alt={member.name}
                       className="w-full h-full object-cover"
                       loading={idx < 4 ? "eager" : "lazy"}
@@ -428,7 +433,10 @@ const Team: React.FC = () => {
                       onError={(e) => {
                         // Fallback to placeholder if image fails to load
                         const target = e.target as HTMLImageElement;
-                        if (target.src !== placeholderImg) {
+                        if (
+                          target.src !== placeholderImg &&
+                          !target.src.includes("_vercel/image")
+                        ) {
                           target.src = placeholderImg;
                         }
                       }}
@@ -495,7 +503,11 @@ const Team: React.FC = () => {
               </button>
               <div className="flex flex-col items-center mb-4 sm:mb-5 md:mb-6">
                 <img
-                  src={team[selected].image || placeholderImg}
+                  src={getVercelOptimizedImage(
+                    team[selected].image || placeholderImg,
+                    224,
+                    90
+                  )}
                   alt={team[selected].name}
                   className="w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 rounded-full object-cover border-2 sm:border-4 border-blue-600 shadow mb-3 sm:mb-4"
                   width={112}
@@ -506,7 +518,10 @@ const Team: React.FC = () => {
                   onError={(e) => {
                     // Fallback to placeholder if image fails to load
                     const target = e.target as HTMLImageElement;
-                    if (target.src !== placeholderImg) {
+                    if (
+                      target.src !== placeholderImg &&
+                      !target.src.includes("_vercel/image")
+                    ) {
                       target.src = placeholderImg;
                     }
                   }}
