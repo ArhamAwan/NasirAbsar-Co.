@@ -9,10 +9,12 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <!-- Preload critical images -->
-    <link rel="preload" as="image" href="/team/Muhammad Nasir.jpeg" />
-    <link rel="preload" as="image" href="/team/Absar Nasir 1.png" />
-    <link rel="preload" as="image" href="/image.png" />
+    <!-- Preload critical images with high priority -->
+    <link rel="preload" as="image" href="/team/Muhammad Nasir.jpeg" fetchpriority="high" />
+    <link rel="preload" as="image" href="/team/Absar Nasir 1.png" fetchpriority="high" />
+    <link rel="preload" as="image" href="/team/Imran.png" />
+    <link rel="preload" as="image" href="/team/Javed.jpg" />
+    <link rel="preload" as="image" href="/image.png" fetchpriority="high" />
   </head>
   <body>
     <div id="root"></div>

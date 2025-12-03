@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Linkedin, X } from "lucide-react";
+import { getVercelOptimizedImage } from "../utils/imageOptimization";
 
 const placeholderImg = "https://via.placeholder.com/300x400?text=No+Image";
 
@@ -41,7 +42,7 @@ const team = [
     name: "Rizwan Saeed",
     lastName: "Saeed",
     position: "Associate Chartered Accountant",
-    image: "",
+    image: "/team/Rizwan Saeed.png",
     linkedin: "https://pk.linkedin.com/company/nasir-absar-co",
     bio: `Associate Member of Chartered Accountants\nExperience: 21 years of professional experience in field of Audit and Accounts.`,
   },
@@ -57,7 +58,7 @@ const team = [
     name: "Shahid Shoaib",
     lastName: "Shoaib",
     position: "Associate Chartered Accountant",
-    image: "",
+    image: "/team/Shahid Shoaib.png",
     linkedin: "https://pk.linkedin.com/company/nasir-absar-co",
     bio: `Fellow Member of Certified Chartered Accountants\nExperience: 20 years of professional experience in field of Transaction Advisory.`,
   },
@@ -124,12 +125,17 @@ const Team: React.FC = () => {
   const modalContentRef = useRef<HTMLDivElement>(null);
   const ceoCardRef = useRef<HTMLDivElement>(null);
 
-  // Preload critical team member images (first 4 visible members)
+  // Preload critical team member images (all images for faster loading)
   useEffect(() => {
-    team.slice(0, 4).forEach((member) => {
+    team.forEach((member, idx) => {
       if (member.image) {
         const img = new Image();
-        img.src = member.image;
+        // Use optimized URL for preloading
+        img.src = getVercelOptimizedImage(member.image, 640, 85);
+        // Set fetch priority for first 4 images
+        if (idx < 4) {
+          img.fetchPriority = "high";
+        }
       }
     });
   }, []);
@@ -411,13 +417,18 @@ const Team: React.FC = () => {
                   {/* Image */}
                   <div className="w-full h-[280px] xs:h-[320px] sm:h-[350px] md:h-[380px] lg:h-[400px] overflow-hidden rounded-t-lg">
                     <img
-                      src={member.image || placeholderImg}
+                      src={getVercelOptimizedImage(
+                        member.image || placeholderImg,
+                        640,
+                        85
+                      )}
                       alt={member.name}
                       className="w-full h-full object-cover"
                       loading={idx < 4 ? "eager" : "lazy"}
                       decoding="async"
                       width={320}
                       height={400}
+                      fetchPriority={idx < 4 ? "high" : "auto"}
                       style={{ willChange: "auto" }}
                     />
                   </div>
@@ -482,13 +493,18 @@ const Team: React.FC = () => {
               </button>
               <div className="flex flex-col items-center mb-4 sm:mb-5 md:mb-6">
                 <img
-                  src={team[selected].image || placeholderImg}
+                  src={getVercelOptimizedImage(
+                    team[selected].image || placeholderImg,
+                    224,
+                    90
+                  )}
                   alt={team[selected].name}
                   className="w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 rounded-full object-cover border-2 sm:border-4 border-blue-600 shadow mb-3 sm:mb-4"
                   width={112}
                   height={112}
                   loading="eager"
                   decoding="async"
+                  fetchPriority="high"
                 />
                 {(() => {
                   const { firstName, lastName } = splitName(
