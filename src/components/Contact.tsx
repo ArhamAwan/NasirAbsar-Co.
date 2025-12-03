@@ -1,23 +1,23 @@
-import React, { useState } from 'react';
-import { motion } from 'framer-motion';
-import { 
-  MapPin, 
-  Phone, 
-  Mail, 
-  Clock, 
+import React, { useState } from "react";
+import { motion } from "framer-motion";
+import {
+  MapPin,
+  Phone,
+  Mail,
+  Clock,
   Send,
   Linkedin,
   CheckCircle,
-  ExternalLink
-} from 'lucide-react';
+  ExternalLink,
+} from "lucide-react";
 
 const Contact: React.FC = () => {
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    service: '',
-    message: ''
+    name: "",
+    email: "",
+    phone: "",
+    service: "",
+    message: "",
   });
   const [isSubmitted, setIsSubmitted] = useState(false);
 
@@ -28,65 +28,81 @@ const Contact: React.FC = () => {
     setTimeout(() => setIsSubmitted(false), 3000);
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
+  ) => {
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     });
   };
 
   const contactInfo = [
     {
       icon: MapPin,
-      title: 'Office Address',
-      details: ['I-8 Markaz', 'Islamabad, Pakistan', 'Postal Code: 44000']
+      title: "Office Address",
+      details: ["I-8 Markaz", "Islamabad, Pakistan", "Postal Code: 44000"],
     },
     {
       icon: Phone,
-      title: 'Phone Numbers',
-      details: ['+92-51-1234567', '+92-300-1234567', 'Fax: +92-51-1234568']
+      title: "Phone Numbers",
+      details: ["+92-51-1234567", "+92-300-1234567", "Fax: +92-51-1234568"],
     },
     {
       icon: Mail,
-      title: 'Email Addresses',
-      details: ['info@nasirabsar.com', 'nasir@nasirabsar.com', 'support@nasirabsar.com']
+      title: "Email Addresses",
+      details: [
+        "info@nasirabsar.com",
+        "nasir@nasirabsar.com",
+        "support@nasirabsar.com",
+      ],
     },
     {
       icon: Clock,
-      title: 'Business Hours',
-      details: ['Monday - Friday: 9:00 AM - 6:00 PM', 'Saturday: 9:00 AM - 2:00 PM', 'Sunday: Closed']
-    }
+      title: "Business Hours",
+      details: [
+        "Monday - Friday: 9:00 AM - 6:00 PM",
+        "Saturday: 9:00 AM - 2:00 PM",
+        "Sunday: Closed",
+      ],
+    },
   ];
 
   const services = [
-    'Accounting Services',
-    'Auditing',
-    'Tax Services',
-    'Financial Advisory',
-    'Corporate Services',
-    'Business Consulting'
+    "Accounting Services",
+    "Auditing",
+    "Tax Services",
+    "Financial Advisory",
+    "Corporate Services",
+    "Business Consulting",
   ];
 
   return (
-    <section id="contact" className="py-20 bg-gradient-to-br from-white via-blue-50/20 to-gray-50 overflow-x-hidden w-full max-w-full">
-      <div className="container mx-auto px-4 w-full max-w-full">
+    <section
+      id="contact"
+      className="py-12 sm:py-16 md:py-20 bg-gradient-to-br from-white via-blue-50/20 to-gray-50 overflow-x-hidden w-full max-w-full"
+    >
+      <div className="container mx-auto px-4 sm:px-6 w-full max-w-full">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
           viewport={{ once: true }}
-          className="text-center mb-16"
+          className="text-center mb-10 sm:mb-12 md:mb-16"
         >
-          <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
+          <h2 className="text-2xl xs:text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-3 sm:mb-4 md:mb-6 px-2">
             Get In Touch
           </h2>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Ready to take your business to the next level? Contact us today for a free consultation 
-            and discover how our expertise can benefit your organization.
+          <p className="text-sm xs:text-base sm:text-lg md:text-xl text-gray-600 max-w-3xl mx-auto px-2">
+            Ready to take your business to the next level? Contact us today for
+            a free consultation and discover how our expertise can benefit your
+            organization.
           </p>
         </motion.div>
 
-        <div className="grid lg:grid-cols-2 gap-12 items-start">
+        <div className="grid lg:grid-cols-2 gap-8 sm:gap-10 md:gap-12 items-start">
           {/* Contact Information */}
           <motion.div
             initial={{ opacity: 0, x: -50 }}
@@ -95,26 +111,35 @@ const Contact: React.FC = () => {
             viewport={{ once: true }}
             className="flex flex-col"
           >
-            <h3 className="text-2xl font-bold text-gray-900 mb-6">Contact Information</h3>
-            
-            <div className="space-y-5">
+            <h3 className="text-xl xs:text-2xl font-bold text-gray-900 mb-4 sm:mb-5 md:mb-6">
+              Contact Information
+            </h3>
+
+            <div className="space-y-4 sm:space-y-5">
               {contactInfo.map((info, index) => (
                 <motion.div
                   key={index}
-                  className="glass-card flex items-start space-x-4 p-5 rounded-xl border border-white/50"
+                  className="glass-card flex items-start space-x-3 sm:space-x-4 p-4 sm:p-5 rounded-lg sm:rounded-xl border border-white/50"
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: index * 0.1 }}
                   viewport={{ once: true }}
                   whileHover={{ y: -4, scale: 1.02 }}
                 >
-                  <div className="w-11 h-11 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center flex-shrink-0 shadow-lg">
-                    <info.icon className="w-5 h-5 text-white" />
+                  <div className="w-10 h-10 sm:w-11 sm:h-11 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center flex-shrink-0 shadow-lg">
+                    <info.icon className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
                   </div>
-                  <div className="flex-1">
-                    <h4 className="text-base font-semibold text-gray-900 mb-1.5">{info.title}</h4>
+                  <div className="flex-1 min-w-0">
+                    <h4 className="text-sm xs:text-base font-semibold text-gray-900 mb-1 sm:mb-1.5 break-words">
+                      {info.title}
+                    </h4>
                     {info.details.map((detail, detailIndex) => (
-                      <p key={detailIndex} className="text-gray-600 text-sm">{detail}</p>
+                      <p
+                        key={detailIndex}
+                        className="text-xs xs:text-sm text-gray-600 break-words"
+                      >
+                        {detail}
+                      </p>
                     ))}
                   </div>
                 </motion.div>
@@ -129,7 +154,9 @@ const Contact: React.FC = () => {
               transition={{ duration: 0.8 }}
               viewport={{ once: true }}
             >
-              <h4 className="text-base font-semibold text-gray-900 mb-3">Follow Us</h4>
+              <h4 className="text-base font-semibold text-gray-900 mb-3">
+                Follow Us
+              </h4>
               <div className="flex space-x-3">
                 <motion.a
                   href="https://pk.linkedin.com/company/nasir-absar-co"
@@ -151,10 +178,12 @@ const Contact: React.FC = () => {
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
-            className="glass-card rounded-2xl p-6 border border-white/50 shadow-xl h-fit"
+            className="glass-card rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 border border-white/50 shadow-xl h-fit"
           >
-            <h3 className="text-2xl font-bold text-gray-900 mb-6">Send Us a Message</h3>
-            
+            <h3 className="text-xl xs:text-2xl font-bold text-gray-900 mb-4 sm:mb-5 md:mb-6">
+              Get Consultation
+            </h3>
+
             {isSubmitted ? (
               <motion.div
                 initial={{ opacity: 0, scale: 0.8 }}
@@ -162,14 +191,21 @@ const Contact: React.FC = () => {
                 className="text-center py-8"
               >
                 <CheckCircle className="w-14 h-14 text-green-500 mx-auto mb-3" />
-                <h4 className="text-xl font-bold text-gray-900 mb-2">Message Sent!</h4>
-                <p className="text-gray-600 text-sm">Thank you for contacting us. We'll get back to you soon.</p>
+                <h4 className="text-xl font-bold text-gray-900 mb-2">
+                  Message Sent!
+                </h4>
+                <p className="text-gray-600 text-sm">
+                  Thank you for contacting us. We'll get back to you soon.
+                </p>
               </motion.div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-5">
                 <div className="grid md:grid-cols-2 gap-5">
                   <div>
-                    <label htmlFor="name" className="block text-xs font-medium text-gray-700 mb-1.5">
+                    <label
+                      htmlFor="name"
+                      className="block text-xs font-medium text-gray-700 mb-1.5"
+                    >
                       Full Name *
                     </label>
                     <input
@@ -183,9 +219,12 @@ const Contact: React.FC = () => {
                       placeholder="Your full name"
                     />
                   </div>
-                  
+
                   <div>
-                    <label htmlFor="email" className="block text-xs font-medium text-gray-700 mb-1.5">
+                    <label
+                      htmlFor="email"
+                      className="block text-xs font-medium text-gray-700 mb-1.5"
+                    >
                       Email Address *
                     </label>
                     <input
@@ -203,7 +242,10 @@ const Contact: React.FC = () => {
 
                 <div className="grid md:grid-cols-2 gap-5">
                   <div>
-                    <label htmlFor="phone" className="block text-xs font-medium text-gray-700 mb-1.5">
+                    <label
+                      htmlFor="phone"
+                      className="block text-xs font-medium text-gray-700 mb-1.5"
+                    >
                       Phone Number
                     </label>
                     <input
@@ -216,9 +258,12 @@ const Contact: React.FC = () => {
                       placeholder="+92-300-1234567"
                     />
                   </div>
-                  
+
                   <div>
-                    <label htmlFor="service" className="block text-xs font-medium text-gray-700 mb-1.5">
+                    <label
+                      htmlFor="service"
+                      className="block text-xs font-medium text-gray-700 mb-1.5"
+                    >
                       Service Interested In
                     </label>
                     <select
@@ -230,14 +275,19 @@ const Contact: React.FC = () => {
                     >
                       <option value="">Select a service</option>
                       {services.map((service, index) => (
-                        <option key={index} value={service}>{service}</option>
+                        <option key={index} value={service}>
+                          {service}
+                        </option>
                       ))}
                     </select>
                   </div>
                 </div>
 
                 <div>
-                  <label htmlFor="message" className="block text-xs font-medium text-gray-700 mb-1.5">
+                  <label
+                    htmlFor="message"
+                    className="block text-xs font-medium text-gray-700 mb-1.5"
+                  >
                     Message *
                   </label>
                   <textarea
@@ -301,7 +351,9 @@ const Contact: React.FC = () => {
                 <div className="p-3 glass-light">
                   <div className="flex items-center space-x-2 text-gray-700">
                     <MapPin size={14} className="text-blue-600" />
-                    <span className="text-xs font-medium">I-8 Markaz, Islamabad, Pakistan</span>
+                    <span className="text-xs font-medium">
+                      I-8 Markaz, Islamabad, Pakistan
+                    </span>
                   </div>
                 </div>
               </div>

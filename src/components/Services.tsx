@@ -221,19 +221,19 @@ const Services: React.FC = () => {
   };
 
   return (
-    <section id="services" className="py-20 bg-gradient-to-br from-white via-blue-50/20 to-gray-50 w-full max-w-full" style={{ overflow: 'visible' }}>
-      <div className="container mx-auto px-4 w-full max-w-full" style={{ overflow: 'visible' }}>
+    <section id="services" className="py-12 sm:py-16 md:py-20 bg-gradient-to-br from-white via-blue-50/20 to-gray-50 w-full max-w-full" style={{ overflow: 'visible' }}>
+      <div className="container mx-auto px-4 sm:px-6 w-full max-w-full" style={{ overflow: 'visible' }}>
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
           viewport={{ once: true }}
-          className="text-center mb-16"
+          className="text-center mb-10 sm:mb-12 md:mb-16"
         >
-          <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
+          <h2 className="text-2xl xs:text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-3 sm:mb-4 md:mb-6 px-2">
             Comprehensive Professional Services
           </h2>
-          <p className="text-xl text-gray-600 max-w-4xl mx-auto">
+          <p className="text-sm xs:text-base sm:text-lg md:text-xl text-gray-600 max-w-4xl mx-auto px-2">
             Nasir Absar & Co. provides a comprehensive range of professional services designed to help 
             organizations and individuals achieve their objectives, succeed by measuring performance, 
             managing risks, and leveraging knowledge across various functions and sectors.
@@ -247,22 +247,22 @@ const Services: React.FC = () => {
               {services.map((service, index) => (
                 <motion.div
                   key={index}
-                  className="glass-card rounded-3xl hover:shadow-2xl transition-all duration-300 border border-white/50 flex-shrink-0"
-                  style={{ width: '420px', maxWidth: 'calc(100vw - 3rem)', overflow: 'visible', willChange: 'transform, opacity' }}
+                  className="glass-card rounded-2xl sm:rounded-3xl hover:shadow-2xl transition-all duration-300 border border-white/50 flex-shrink-0"
+                  style={{ width: 'min(420px, calc(100vw - 2rem))', maxWidth: 'calc(100vw - 2rem)', overflow: 'visible', willChange: 'transform, opacity' }}
                   initial={{ opacity: 0, x: 50 }}
                   whileInView={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.5, delay: index * 0.1 }}
                   viewport={{ once: true, margin: '-100px' }}
                   whileHover={{ y: -8, scale: 1.02 }}
                 >
-                  <div className="p-8 h-full flex flex-col overflow-hidden rounded-3xl">
-                <div className="flex items-start mb-6">
-                  <div className="flex items-center space-x-4">
-                    <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center shadow-lg">
-                      <service.icon className="w-8 h-8 text-white" />
+                  <div className="p-5 sm:p-6 md:p-8 h-full flex flex-col overflow-hidden rounded-2xl sm:rounded-3xl">
+                <div className="flex items-start mb-4 sm:mb-6">
+                  <div className="flex items-center space-x-3 sm:space-x-4">
+                    <div className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center shadow-lg flex-shrink-0">
+                      <service.icon className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 text-white" />
                     </div>
-                    <div>
-                      <h3 className="text-2xl font-bold text-gray-900 mb-2">{service.title}</h3>
+                    <div className="min-w-0">
+                      <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-gray-900 mb-1 sm:mb-2 break-words">{service.title}</h3>
                     </div>
                   </div>
                 </div>

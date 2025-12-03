@@ -122,6 +122,32 @@ const Team: React.FC = () => {
   const lastScrollLeftRef = useRef(0);
   const modalRef = useRef<HTMLDivElement>(null);
   const modalContentRef = useRef<HTMLDivElement>(null);
+  const ceoCardRef = useRef<HTMLDivElement>(null);
+
+  // Center CEO at start
+  useEffect(() => {
+    if (scrollContainerRef.current && ceoCardRef.current) {
+      // Wait for layout to be ready
+      const timer = setTimeout(() => {
+        if (scrollContainerRef.current && ceoCardRef.current) {
+          const container = scrollContainerRef.current;
+          const card = ceoCardRef.current;
+          const containerWidth = container.clientWidth;
+          const cardLeft = card.offsetLeft;
+          const cardWidth = card.offsetWidth;
+
+          // Calculate scroll position to center the card
+          const scrollToPosition =
+            cardLeft - containerWidth / 2 + cardWidth / 2;
+
+          container.scrollLeft = Math.max(0, scrollToPosition);
+          lastScrollLeftRef.current = container.scrollLeft;
+        }
+      }, 200);
+
+      return () => clearTimeout(timer);
+    }
+  }, []);
 
   // Handle user scroll detection
   const handleUserScroll = () => {
@@ -146,6 +172,31 @@ const Team: React.FC = () => {
       setIsPaused(false);
     }, 4000);
   };
+
+  // Center CEO at start
+  useEffect(() => {
+    if (scrollContainerRef.current && ceoCardRef.current) {
+      // Wait for layout to be ready
+      const timer = setTimeout(() => {
+        if (scrollContainerRef.current && ceoCardRef.current) {
+          const container = scrollContainerRef.current;
+          const card = ceoCardRef.current;
+          const containerWidth = container.clientWidth;
+          const cardLeft = card.offsetLeft;
+          const cardWidth = card.offsetWidth;
+
+          // Calculate scroll position to center the card
+          const scrollToPosition =
+            cardLeft - containerWidth / 2 + cardWidth / 2;
+
+          container.scrollLeft = Math.max(0, scrollToPosition);
+          lastScrollLeftRef.current = container.scrollLeft;
+        }
+      }, 200);
+
+      return () => clearTimeout(timer);
+    }
+  }, []);
 
   // Auto-scroll functionality
   useEffect(() => {
@@ -296,13 +347,13 @@ const Team: React.FC = () => {
   return (
     <section
       id="team"
-      className="py-20 bg-white min-h-[600px] overflow-x-hidden w-full max-w-full relative"
+      className="py-12 sm:py-16 md:py-20 bg-white min-h-[400px] sm:min-h-[500px] md:min-h-[600px] overflow-x-hidden w-full max-w-full relative"
     >
-      <div className="container mx-auto px-4 flex flex-col items-center w-full max-w-full">
-        <h2 className="text-4xl lg:text-5xl font-extrabold text-gray-900 mb-6 text-center">
+      <div className="container mx-auto px-4 sm:px-6 flex flex-col items-center w-full max-w-full">
+        <h2 className="text-2xl xs:text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-900 mb-3 sm:mb-4 md:mb-6 text-center px-2">
           Meet Our Expert Team
         </h2>
-        <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-12 text-center">
+        <p className="text-sm xs:text-base sm:text-lg md:text-xl text-gray-600 max-w-3xl mx-auto mb-8 sm:mb-10 md:mb-12 text-center px-2">
           Our leadership brings decades of combined experience in accounting,
           auditing, tax advisory, legal services, and comprehensive financial
           consulting.
@@ -332,10 +383,13 @@ const Team: React.FC = () => {
                 ? member.name.replace(displayLastName, "").trim()
                 : member.name;
 
+              const isCEO = member.position === "CEO";
+
               return (
                 <motion.div
                   key={member.name}
-                  className="flex-shrink-0 w-[280px] sm:w-[320px] bg-white rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 cursor-pointer"
+                  ref={isCEO ? ceoCardRef : null}
+                  className="flex-shrink-0 w-[240px] xs:w-[260px] sm:w-[280px] md:w-[300px] lg:w-[320px] bg-white rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 cursor-pointer"
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: idx * 0.1 }}
@@ -345,7 +399,7 @@ const Team: React.FC = () => {
                   style={{ willChange: "transform, opacity" }}
                 >
                   {/* Image */}
-                  <div className="w-full h-[350px] sm:h-[400px] overflow-hidden rounded-t-lg">
+                  <div className="w-full h-[280px] xs:h-[320px] sm:h-[350px] md:h-[380px] lg:h-[400px] overflow-hidden rounded-t-lg">
                     <img
                       src={member.image || placeholderImg}
                       alt={member.name}
@@ -357,9 +411,9 @@ const Team: React.FC = () => {
                   </div>
 
                   {/* Content */}
-                  <div className="p-6 flex flex-col">
+                  <div className="p-4 sm:p-5 md:p-6 flex flex-col">
                     {/* LinkedIn Icon - positioned at top */}
-                    <div className="mb-4">
+                    <div className="mb-3 sm:mb-4">
                       <a
                         href={member.linkedin}
                         target="_blank"
@@ -367,18 +421,18 @@ const Team: React.FC = () => {
                         onClick={(e) => e.stopPropagation()}
                         className="inline-block"
                       >
-                        <Linkedin className="w-6 h-6 text-gray-900 hover:text-blue-600 transition-colors" />
+                        <Linkedin className="w-5 h-5 sm:w-6 sm:h-6 text-gray-900 hover:text-blue-600 transition-colors" />
                       </a>
                     </div>
 
                     {/* Name with last name in blue */}
-                    <h3 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
+                    <h3 className="text-lg xs:text-xl sm:text-2xl md:text-3xl font-bold text-gray-900 mb-1 sm:mb-2 break-words">
                       {displayFirstName}{" "}
                       <span className="text-blue-600">{displayLastName}</span>
                     </h3>
 
                     {/* Position */}
-                    <p className="text-gray-600 text-base sm:text-lg">
+                    <p className="text-gray-600 text-sm xs:text-base sm:text-lg break-words">
                       {member.position}
                     </p>
                   </div>
@@ -402,23 +456,23 @@ const Team: React.FC = () => {
           >
             <motion.div
               ref={modalContentRef}
-              className="glass-card rounded-3xl shadow-2xl max-w-lg w-full p-8 relative overflow-y-auto max-h-[90vh] border border-white/50 backdrop-blur-xl mx-4"
+              className="glass-card rounded-2xl sm:rounded-3xl shadow-2xl max-w-lg w-full p-4 sm:p-6 md:p-8 relative overflow-y-auto max-h-[90vh] border border-white/50 backdrop-blur-xl mx-2 sm:mx-4"
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
               onClick={(e) => e.stopPropagation()}
             >
               <button
-                className="absolute top-4 right-4 glass-light rounded-full p-2 hover:bg-white/80 backdrop-blur-md border border-white/30"
+                className="absolute top-2 right-2 sm:top-4 sm:right-4 glass-light rounded-full p-1.5 sm:p-2 hover:bg-white/80 backdrop-blur-md border border-white/30"
                 onClick={() => setSelected(null)}
               >
-                <X className="w-6 h-6 text-gray-600" />
+                <X className="w-5 h-5 sm:w-6 sm:h-6 text-gray-600" />
               </button>
-              <div className="flex flex-col items-center mb-4">
+              <div className="flex flex-col items-center mb-4 sm:mb-5 md:mb-6">
                 <img
                   src={team[selected].image || placeholderImg}
                   alt={team[selected].name}
-                  className="w-28 h-28 rounded-full object-cover border-4 border-blue-600 shadow mb-2"
+                  className="w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 rounded-full object-cover border-2 sm:border-4 border-blue-600 shadow mb-3 sm:mb-4"
                 />
                 {(() => {
                   const { firstName, lastName } = splitName(
@@ -429,17 +483,17 @@ const Team: React.FC = () => {
                     ? team[selected].name.replace(displayLastName, "").trim()
                     : team[selected].name;
                   return (
-                    <h3 className="text-2xl font-extrabold text-gray-900 mb-1 tracking-tight text-center">
+                    <h3 className="text-xl sm:text-2xl md:text-3xl font-extrabold text-gray-900 mb-2 sm:mb-3 tracking-tight text-center">
                       {displayFirstName}{" "}
                       <span className="text-blue-600">{displayLastName}</span>
                     </h3>
                   );
                 })()}
-                <div className="text-gray-600 font-semibold text-lg mb-2 text-center">
+                <div className="text-gray-600 font-semibold text-base sm:text-lg md:text-xl mb-4 sm:mb-5 md:mb-6 text-center">
                   {team[selected].position}
                 </div>
               </div>
-              <div className="text-gray-700 text-base leading-relaxed space-y-5">
+              <div className="text-gray-700 text-sm sm:text-base leading-relaxed space-y-4 sm:space-y-5 text-left">
                 {team[selected].bio.split("\n\n").map((paragraph, index) => {
                   const trimmedParagraph = paragraph.trim();
                   if (!trimmedParagraph) return null;
@@ -458,7 +512,7 @@ const Team: React.FC = () => {
                     if (label.split(" ").length <= 4 && label.length < 25) {
                       return (
                         <div key={index} className="space-y-2">
-                          <h4 className="text-gray-900 font-bold text-lg uppercase tracking-wide">
+                          <h4 className="text-gray-900 font-bold text-base sm:text-lg uppercase tracking-wide">
                             {label}
                           </h4>
                           <div className="text-gray-700 leading-relaxed space-y-1">
@@ -480,7 +534,7 @@ const Team: React.FC = () => {
                                     <span className="text-blue-600 mr-2">
                                       •
                                     </span>
-                                    <span>
+                                    <span className="text-sm sm:text-base">
                                       {trimmedLine.replace(
                                         /^[\*\-\d+\.\)]\s*/,
                                         ""
@@ -491,7 +545,10 @@ const Team: React.FC = () => {
                               }
 
                               return (
-                                <p key={lineIndex} className="text-gray-700">
+                                <p
+                                  key={lineIndex}
+                                  className="text-gray-700 text-sm sm:text-base"
+                                >
                                   {trimmedLine}
                                 </p>
                               );
@@ -502,9 +559,12 @@ const Team: React.FC = () => {
                     }
                   }
 
-                  // Regular paragraph
+                  // Regular paragraph - left aligned
                   return (
-                    <p key={index} className="text-gray-700 leading-relaxed">
+                    <p
+                      key={index}
+                      className="text-gray-700 leading-relaxed text-sm sm:text-base text-left"
+                    >
                       {trimmedParagraph
                         .split("\n")
                         .map((line, lineIndex, array) => (

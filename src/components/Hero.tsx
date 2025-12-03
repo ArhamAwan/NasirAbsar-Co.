@@ -1,19 +1,78 @@
-import React, { Suspense } from 'react';
+import React, { Suspense, useState, useEffect } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls, Sphere, MeshDistortMaterial, Float } from '@react-three/drei';
 import { motion } from 'framer-motion';
 import { ArrowRight, Award, Users, TrendingUp } from 'lucide-react';
 
+// Typing animation hook
+const useTypingAnimation = (text: string, speed: number = 50, delay: number = 0) => {
+  const [displayedText, setDisplayedText] = useState('');
+  const [isComplete, setIsComplete] = useState(false);
+
+  useEffect(() => {
+    if (text.length === 0) return;
+    
+    setDisplayedText('');
+    setIsComplete(false);
+    
+    const timeout = setTimeout(() => {
+      let currentIndex = 0;
+      const interval = setInterval(() => {
+        if (currentIndex < text.length) {
+          setDisplayedText(text.slice(0, currentIndex + 1));
+          currentIndex++;
+        } else {
+          setIsComplete(true);
+          clearInterval(interval);
+        }
+      }, speed);
+
+      return () => clearInterval(interval);
+    }, delay);
+
+    return () => clearTimeout(timeout);
+  }, [text, speed, delay]);
+
+  return { displayedText, isComplete };
+};
+
 const AnimatedSphere: React.FC = () => {
+  const [scale, setScale] = useState(2.4);
+  const [opacity, setOpacity] = useState(0.5);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 640) {
+        // Mobile
+        setScale(1.2);
+        setOpacity(0.4);
+      } else if (window.innerWidth < 1024) {
+        // Tablet
+        setScale(1.8);
+        setOpacity(0.45);
+      } else {
+        // Desktop
+        setScale(2.4);
+        setOpacity(0.5);
+      }
+    };
+
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   return (
     <Float speed={1.4} rotationIntensity={1} floatIntensity={2}>
-      <Sphere args={[1, 100, 200]} scale={2.4}>
+      <Sphere args={[1, 100, 200]} scale={scale}>
         <MeshDistortMaterial
           color="#3B82F6"
           attach="material"
           distort={0.3}
           speed={1.5}
           roughness={0}
+          transparent
+          opacity={opacity}
         />
       </Sphere>
     </Float>
@@ -27,25 +86,37 @@ const Hero: React.FC = () => {
     { icon: TrendingUp, value: '98%', label: 'Success Rate' }
   ];
 
+  const whyChooseUsItems = [
+    'Certified Chartered Accountants',
+    '25+ Years of Industry Experience',
+    'Located in I-8, Islamabad',
+    'Comprehensive Financial Solutions'
+  ];
+
+  const item1 = useTypingAnimation(whyChooseUsItems[0], 50, 800);
+  const item2 = useTypingAnimation(whyChooseUsItems[1], 50, 1300);
+  const item3 = useTypingAnimation(whyChooseUsItems[2], 50, 1800);
+  const item4 = useTypingAnimation(whyChooseUsItems[3], 50, 2300);
+
   return (
-    <section id="home" className="relative min-h-screen flex items-center overflow-x-hidden w-full max-w-full">
+    <section id="home" className="relative min-h-screen flex items-start overflow-x-hidden w-full max-w-full pt-20 sm:pt-24">
       {/* Background Gradient */}
       <div className="absolute inset-0 bg-gradient-to-br from-blue-900 via-blue-800 to-indigo-900" />
       
       {/* Three.js Background */}
-      <div className="absolute inset-0 opacity-30" style={{ willChange: 'transform', transform: 'translateZ(0)' }}>
+      <div className="absolute inset-0" style={{ willChange: 'transform', transform: 'translateZ(0)' }}>
         <Canvas camera={{ position: [0, 0, 5] }} dpr={[1, 2]}>
           <Suspense fallback={null}>
-            <ambientLight intensity={0.5} />
-            <directionalLight position={[10, 10, 5]} intensity={1} />
+            <ambientLight intensity={0.6} />
+            <directionalLight position={[10, 10, 5]} intensity={1.2} />
             <AnimatedSphere />
             <OrbitControls enableZoom={false} enablePan={false} autoRotate autoRotateSpeed={0.5} enableDamping dampingFactor={0.05} />
           </Suspense>
         </Canvas>
       </div>
 
-      <div className="relative z-10 container mx-auto px-4 sm:px-6 py-12 sm:py-20 w-full max-w-full">
-        <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center w-full">
+      <div className="relative z-10 container mx-auto px-4 sm:px-6 py-4 sm:py-6 md:py-8 w-full max-w-full">
+        <div className="grid lg:grid-cols-2 gap-4 lg:gap-6 items-start w-full">
           <motion.div
             initial={{ opacity: 0, x: -50 }}
             animate={{ opacity: 1, x: 0 }}
@@ -54,7 +125,7 @@ const Hero: React.FC = () => {
             style={{ willChange: 'transform, opacity' }}
           >
             <motion.h1
-              className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-bold mb-4 sm:mb-6 leading-tight"
+              className="text-2xl xs:text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold mb-2 sm:mb-2 md:mb-3 leading-tight"
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2, type: "spring", damping: 25, stiffness: 100, duration: 0.8 }}
@@ -65,7 +136,7 @@ const Hero: React.FC = () => {
             </motion.h1>
             
             <motion.p
-              className="text-base sm:text-lg md:text-xl lg:text-2xl mb-6 sm:mb-8 text-blue-100 leading-relaxed"
+              className="text-sm xs:text-base sm:text-lg md:text-xl lg:text-2xl mb-2 sm:mb-3 md:mb-4 text-blue-100 leading-relaxed"
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4, type: "spring", damping: 25, stiffness: 100, duration: 0.8 }}
@@ -75,37 +146,39 @@ const Hero: React.FC = () => {
             </motion.p>
 
             <motion.div
-              className="flex flex-col sm:flex-row gap-3 sm:gap-4 mb-8 sm:mb-12 w-full"
+              className="flex flex-row gap-2 sm:gap-3 md:gap-4 mb-3 sm:mb-4 md:mb-5 w-full"
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.6, type: "spring", damping: 25, stiffness: 100, duration: 0.8 }}
               style={{ willChange: 'transform, opacity' }}
             >
-              <motion.button
-                className="glass-button text-white px-6 sm:px-8 py-3 sm:py-4 rounded-xl font-semibold flex items-center justify-center space-x-2 text-sm sm:text-base w-full sm:w-auto"
+              <motion.a
+                href="#contact"
+                className="glass-button text-white px-4 sm:px-5 md:px-6 py-2 sm:py-2.5 md:py-3 rounded-lg sm:rounded-xl font-semibold flex items-center justify-center space-x-1.5 sm:space-x-2 text-xs sm:text-sm md:text-base flex-1 sm:flex-initial"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 transition={{ type: "spring", stiffness: 400, damping: 17 }}
                 style={{ willChange: 'transform' }}
               >
-                <span>Get Consultation</span>
-                <ArrowRight size={18} className="sm:w-5 sm:h-5" />
-              </motion.button>
+                <span className="truncate">Get Consultation</span>
+                <ArrowRight size={14} className="sm:w-4 sm:h-4 md:w-5 md:h-5 flex-shrink-0" />
+              </motion.a>
               
-              <motion.button
-                className="glass border-2 border-white/30 text-white hover:bg-white/20 px-6 sm:px-8 py-3 sm:py-4 rounded-xl font-semibold backdrop-blur-md text-sm sm:text-base w-full sm:w-auto"
+              <motion.a
+                href="#services"
+                className="glass border-2 border-white/30 text-white hover:bg-white/20 px-4 sm:px-5 md:px-6 py-2 sm:py-2.5 md:py-3 rounded-lg sm:rounded-xl font-semibold backdrop-blur-md text-xs sm:text-sm md:text-base flex-1 sm:flex-initial whitespace-nowrap"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 transition={{ type: "spring", stiffness: 400, damping: 17 }}
                 style={{ willChange: 'transform' }}
               >
                 Our Services
-              </motion.button>
+              </motion.a>
             </motion.div>
 
             {/* Stats */}
             <motion.div
-              className="grid grid-cols-3 gap-2 sm:gap-4 w-full"
+              className="grid grid-cols-3 gap-1.5 xs:gap-2 sm:gap-3 md:gap-4 w-full"
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.8, type: "spring", damping: 25, stiffness: 100, duration: 0.8 }}
@@ -114,44 +187,65 @@ const Hero: React.FC = () => {
               {stats.map((stat, index) => (
                 <motion.div
                   key={index}
-                  className="glass text-center p-2 sm:p-4 rounded-xl border border-white/20 backdrop-blur-md min-w-0"
+                  className="glass text-center p-1.5 xs:p-2 sm:p-3 md:p-4 rounded-lg sm:rounded-xl border border-white/20 backdrop-blur-md min-w-0"
                   whileHover={{ scale: 1.05, y: -5 }}
                   transition={{ type: "spring", stiffness: 400, damping: 17 }}
                   style={{ willChange: 'transform' }}
                 >
-                  <stat.icon className="w-5 h-5 sm:w-8 sm:h-8 mx-auto mb-1 sm:mb-2 text-blue-300 flex-shrink-0" />
-                  <div className="text-lg sm:text-2xl font-bold text-white truncate">{stat.value}</div>
-                  <div className="text-xs sm:text-sm text-blue-200 line-clamp-2">{stat.label}</div>
+                  <stat.icon className="w-4 h-4 xs:w-5 xs:h-5 sm:w-6 sm:h-6 md:w-8 md:h-8 mx-auto mb-0.5 xs:mb-1 sm:mb-2 text-blue-300 flex-shrink-0" />
+                  <div className="text-sm xs:text-base sm:text-lg md:text-xl lg:text-2xl font-bold text-white truncate">{stat.value}</div>
+                  <div className="text-[10px] xs:text-xs sm:text-sm text-blue-200 line-clamp-2 leading-tight">{stat.label}</div>
                 </motion.div>
               ))}
             </motion.div>
           </motion.div>
 
           <motion.div
-            className="relative w-full mt-8 lg:mt-0"
+            className="relative w-full mt-4 lg:mt-0"
             initial={{ opacity: 0, x: 50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ type: "spring", damping: 25, stiffness: 100, duration: 0.8, delay: 0.3 }}
             style={{ willChange: 'transform, opacity' }}
           >
-            <div className="relative z-10 glass-light rounded-2xl p-5 sm:p-6 border border-white/40 shadow-2xl backdrop-blur-xl w-full max-w-lg mx-auto">
-              <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-5 text-center">Why Choose Us?</h3>
-              <ul className="space-y-2.5 sm:space-y-3 text-gray-700">
-                <li className="flex items-center space-x-3 sm:space-x-3.5">
-                  <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 bg-blue-600 rounded-full flex-shrink-0"></div>
-                  <span className="font-medium text-sm sm:text-base">Certified Chartered Accountants</span>
+            <div className="relative z-10 rounded-xl sm:rounded-2xl p-4 xs:p-5 sm:p-6 border border-white/60 shadow-2xl backdrop-blur-3xl w-full max-w-lg mx-auto"
+              style={{
+                background: 'rgba(255, 255, 255, 0.25)',
+                backdropFilter: 'blur(30px) saturate(100%)',
+                WebkitBackdropFilter: 'blur(30px) saturate(100%)',
+                boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.2), inset 0 1px 1px 0 rgba(255, 255, 255, 0.5), inset 0 -1px 1px 0 rgba(255, 255, 255, 0.2)'
+              }}
+            >
+              <h3 className="text-lg xs:text-xl sm:text-2xl font-bold text-white mb-3 sm:mb-4 md:mb-5 text-center drop-shadow-lg">
+                Why Choose Us?
+              </h3>
+              <ul className="space-y-2 xs:space-y-2.5 sm:space-y-3 text-white">
+                <li className="flex items-start xs:items-center space-x-2 xs:space-x-3 sm:space-x-3.5">
+                  <div className="w-2 h-2 xs:w-2.5 xs:h-2.5 sm:w-3 sm:h-3 bg-blue-300 rounded-full flex-shrink-0 shadow-lg mt-1 xs:mt-0"></div>
+                  <span className="font-medium text-xs xs:text-sm sm:text-base drop-shadow-md leading-relaxed">
+                    {item1.displayedText}
+                    {!item1.isComplete && <span className="animate-pulse">|</span>}
+                  </span>
                 </li>
-                <li className="flex items-center space-x-3 sm:space-x-3.5">
-                  <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 bg-blue-600 rounded-full flex-shrink-0"></div>
-                  <span className="font-medium text-sm sm:text-base">25+ Years of Industry Experience</span>
+                <li className="flex items-start xs:items-center space-x-2 xs:space-x-3 sm:space-x-3.5">
+                  <div className="w-2 h-2 xs:w-2.5 xs:h-2.5 sm:w-3 sm:h-3 bg-blue-300 rounded-full flex-shrink-0 shadow-lg mt-1 xs:mt-0"></div>
+                  <span className="font-medium text-xs xs:text-sm sm:text-base drop-shadow-md leading-relaxed">
+                    {item2.displayedText}
+                    {!item2.isComplete && <span className="animate-pulse">|</span>}
+                  </span>
                 </li>
-                <li className="flex items-center space-x-3 sm:space-x-3.5">
-                  <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 bg-blue-600 rounded-full flex-shrink-0"></div>
-                  <span className="font-medium text-sm sm:text-base">Located in I-8, Islamabad</span>
+                <li className="flex items-start xs:items-center space-x-2 xs:space-x-3 sm:space-x-3.5">
+                  <div className="w-2 h-2 xs:w-2.5 xs:h-2.5 sm:w-3 sm:h-3 bg-blue-300 rounded-full flex-shrink-0 shadow-lg mt-1 xs:mt-0"></div>
+                  <span className="font-medium text-xs xs:text-sm sm:text-base drop-shadow-md leading-relaxed">
+                    {item3.displayedText}
+                    {!item3.isComplete && <span className="animate-pulse">|</span>}
+                  </span>
                 </li>
-                <li className="flex items-center space-x-3 sm:space-x-3.5">
-                  <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 bg-blue-600 rounded-full flex-shrink-0"></div>
-                  <span className="font-medium text-sm sm:text-base">Comprehensive Financial Solutions</span>
+                <li className="flex items-start xs:items-center space-x-2 xs:space-x-3 sm:space-x-3.5">
+                  <div className="w-2 h-2 xs:w-2.5 xs:h-2.5 sm:w-3 sm:h-3 bg-blue-300 rounded-full flex-shrink-0 shadow-lg mt-1 xs:mt-0"></div>
+                  <span className="font-medium text-xs xs:text-sm sm:text-base drop-shadow-md leading-relaxed">
+                    {item4.displayedText}
+                    {!item4.isComplete && <span className="animate-pulse">|</span>}
+                  </span>
                 </li>
               </ul>
             </div>

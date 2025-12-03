@@ -554,20 +554,20 @@ const Clients: React.FC = () => {
   return (
     <section
       id="clients"
-      className="py-20 bg-gradient-to-br from-gray-50 via-white to-blue-50/30 overflow-x-hidden w-full max-w-full"
+      className="py-12 sm:py-16 md:py-20 bg-gradient-to-br from-gray-50 via-white to-blue-50/30 overflow-x-hidden w-full max-w-full"
     >
-      <div className="container mx-auto px-4 w-full max-w-full">
+      <div className="container mx-auto px-4 sm:px-6 w-full max-w-full">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
           viewport={{ once: true }}
-          className="text-center mb-16"
+          className="text-center mb-10 sm:mb-12 md:mb-16"
         >
-          <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
+          <h2 className="text-2xl xs:text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-4 sm:mb-5 md:mb-6 px-2">
             Our Prestigious Clients
           </h2>
-          <p className="text-xl text-gray-600 max-w-4xl mx-auto">
+          <p className="text-sm xs:text-base sm:text-lg md:text-xl text-gray-600 max-w-4xl mx-auto px-2">
             Over 25 years, we have had the privilege of serving a diverse
             portfolio of prestigious clients across multiple sectors, from
             listed companies and multinational organizations to leading
@@ -577,7 +577,7 @@ const Clients: React.FC = () => {
 
         {/* Client Statistics */}
         <motion.div
-          className="grid md:grid-cols-4 gap-8 mb-20"
+          className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 md:gap-8 mb-12 sm:mb-16 md:mb-20"
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
@@ -586,33 +586,35 @@ const Clients: React.FC = () => {
           {stats.map((stat, index) => (
             <motion.div
               key={index}
-              className="glass-card rounded-3xl p-8 text-center shadow-xl hover:shadow-2xl transition-all duration-300 border border-white/50"
+              className="glass-card rounded-xl sm:rounded-2xl md:rounded-3xl p-4 sm:p-6 md:p-8 text-center shadow-xl hover:shadow-2xl transition-all duration-300 border border-white/50"
               whileHover={{ y: -8, scale: 1.03 }}
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
               viewport={{ once: true }}
             >
-              <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
-                <stat.icon className="w-8 h-8 text-white" />
+              <div className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4 shadow-lg">
+                <stat.icon className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 text-white" />
               </div>
-              <div className="text-3xl font-bold text-gray-900 mb-2">
+              <div className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900 mb-1 sm:mb-2">
                 {stat.value}
               </div>
-              <div className="text-gray-600">{stat.label}</div>
+              <div className="text-xs sm:text-sm md:text-base text-gray-600">
+                {stat.label}
+              </div>
             </motion.div>
           ))}
         </motion.div>
 
         {/* Tab Navigation */}
         <motion.div
-          className="mb-8 w-full"
+          className="mb-6 sm:mb-8 w-full"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
           viewport={{ once: true }}
         >
-          <div className="flex flex-wrap gap-2 justify-center">
+          <div className="grid grid-cols-3 gap-2 sm:gap-3 px-2 sm:px-4 max-w-2xl mx-auto">
             {clientCategories.map((category, index) => {
               const Icon = category.icon;
               const isSelected = selectedCategory === index;
@@ -621,7 +623,7 @@ const Clients: React.FC = () => {
                   key={index}
                   onClick={() => setSelectedCategory(index)}
                   className={`
-                    flex items-center space-x-2 px-3 py-2.5 rounded-lg font-medium transition-all duration-300 whitespace-nowrap flex-shrink-0
+                    flex items-center justify-center space-x-1.5 sm:space-x-2 px-2 sm:px-3 py-2 sm:py-2.5 rounded-lg font-medium transition-all duration-300 whitespace-nowrap text-xs sm:text-sm w-full
                     ${
                       isSelected
                         ? "bg-blue-600 text-white shadow-lg border-2 border-blue-400"
@@ -632,11 +634,11 @@ const Clients: React.FC = () => {
                   whileTap={{ scale: 0.95 }}
                 >
                   <Icon
-                    className={`w-4 h-4 ${
-                      isSelected ? "text-blue-100" : "text-gray-600"
+                    className={`w-3 h-3 sm:w-4 sm:h-4 flex-shrink-0 ${
+                      isSelected ? "text-white" : "text-gray-600"
                     }`}
                   />
-                  <span className="text-sm">{category.title}</span>
+                  <span className="truncate text-center">{category.title}</span>
                 </motion.button>
               );
             })}
