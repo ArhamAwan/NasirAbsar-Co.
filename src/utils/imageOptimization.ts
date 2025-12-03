@@ -1,11 +1,12 @@
 /**
- * Get Vercel optimized image URL
- * Uses Vercel's Image Optimization API for automatic format conversion and compression
+ * Get optimized image URL
+ * Vercel automatically optimizes images from the public folder,
+ * so we return the original path and let Vercel handle optimization
  * 
  * @param src - Image source path (e.g., "/team/image.jpg")
- * @param width - Optional width in pixels
- * @param quality - Image quality (1-100), default 85
- * @returns Optimized image URL
+ * @param width - Optional width in pixels (for future use)
+ * @param quality - Image quality (1-100), default 85 (for future use)
+ * @returns Image URL
  */
 export const getVercelOptimizedImage = (
   src: string,
@@ -17,20 +18,9 @@ export const getVercelOptimizedImage = (
     return src;
   }
 
-  // Check if we're in production (Vercel) or development
-  const isProduction = import.meta.env.PROD;
-  
-  if (isProduction) {
-    // Use Vercel's image optimization API in production
-    const params = new URLSearchParams();
-    params.set('url', src);
-    if (width) params.set('w', width.toString());
-    params.set('q', quality.toString());
-    
-    return `/_vercel/image?${params.toString()}`;
-  }
-  
-  // In development, return original path
+  // Vercel automatically optimizes images from the public folder
+  // No need to use /_vercel/image API for static Vite builds
+  // Just return the original path and Vercel's CDN will optimize it
   return src;
 };
 
