@@ -115,8 +115,8 @@ const Hero: React.FC = () => {
         </Canvas>
       </div>
 
-      <div className="relative z-10 container mx-auto px-4 sm:px-6 py-4 sm:py-6 md:py-8 w-full max-w-full">
-        <div className="grid lg:grid-cols-2 gap-4 lg:gap-6 items-start w-full">
+      <div className="relative z-10 container mx-auto px-4 sm:px-6 py-6 sm:py-6 md:py-8 w-full max-w-full">
+        <div className="grid lg:grid-cols-2 gap-6 lg:gap-6 items-center w-full">
           <motion.div
             initial={{ opacity: 0, x: -50 }}
             animate={{ opacity: 1, x: 0 }}
@@ -125,7 +125,7 @@ const Hero: React.FC = () => {
             style={{ willChange: 'transform, opacity' }}
           >
             <motion.h1
-              className="text-2xl xs:text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold mb-2 sm:mb-2 md:mb-3 leading-tight"
+              className="text-2xl xs:text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold mb-4 sm:mb-2 md:mb-3 leading-tight"
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2, type: "spring", damping: 25, stiffness: 100, duration: 0.8 }}
@@ -136,7 +136,7 @@ const Hero: React.FC = () => {
             </motion.h1>
             
             <motion.p
-              className="text-sm xs:text-base sm:text-lg md:text-xl lg:text-2xl mb-2 sm:mb-3 md:mb-4 text-blue-100 leading-relaxed"
+              className="text-sm xs:text-base sm:text-lg md:text-xl lg:text-2xl mb-4 sm:mb-3 md:mb-4 text-blue-100 leading-relaxed"
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4, type: "spring", damping: 25, stiffness: 100, duration: 0.8 }}
@@ -146,7 +146,7 @@ const Hero: React.FC = () => {
             </motion.p>
 
             <motion.div
-              className="flex flex-row gap-2 sm:gap-3 md:gap-4 mb-3 sm:mb-4 md:mb-5 w-full"
+              className="flex flex-row gap-2 sm:gap-3 md:gap-4 mb-5 sm:mb-4 md:mb-5 w-full"
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.6, type: "spring", damping: 25, stiffness: 100, duration: 0.8 }}
@@ -201,13 +201,13 @@ const Hero: React.FC = () => {
           </motion.div>
 
           <motion.div
-            className="relative w-full mt-4 lg:mt-0"
+            className="relative w-full mt-6 lg:mt-0 flex items-center justify-center"
             initial={{ opacity: 0, x: 50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ type: "spring", damping: 25, stiffness: 100, duration: 0.8, delay: 0.3 }}
             style={{ willChange: 'transform, opacity' }}
           >
-            <div className="relative z-10 rounded-xl sm:rounded-2xl p-4 xs:p-5 sm:p-6 border border-white/60 shadow-2xl backdrop-blur-3xl w-full max-w-lg mx-auto"
+            <div className="relative z-10 rounded-xl sm:rounded-2xl p-5 xs:p-5 sm:p-6 border border-white/60 shadow-2xl backdrop-blur-3xl w-full max-w-lg mx-auto"
               style={{
                 background: 'rgba(255, 255, 255, 0.25)',
                 backdropFilter: 'blur(30px) saturate(100%)',
@@ -215,10 +215,10 @@ const Hero: React.FC = () => {
                 boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.2), inset 0 1px 1px 0 rgba(255, 255, 255, 0.5), inset 0 -1px 1px 0 rgba(255, 255, 255, 0.2)'
               }}
             >
-              <h3 className="text-lg xs:text-xl sm:text-2xl font-bold text-white mb-3 sm:mb-4 md:mb-5 text-center drop-shadow-lg">
+              <h3 className="text-lg xs:text-xl sm:text-2xl font-bold text-white mb-4 sm:mb-4 md:mb-5 text-center drop-shadow-lg">
                 Why Choose Us?
               </h3>
-              <ul className="space-y-2 xs:space-y-2.5 sm:space-y-3 text-white">
+              <ul className="space-y-3 xs:space-y-2.5 sm:space-y-3 text-white">
                 <li className="flex items-start xs:items-center space-x-2 xs:space-x-3 sm:space-x-3.5">
                   <div className="w-2 h-2 xs:w-2.5 xs:h-2.5 sm:w-3 sm:h-3 bg-blue-300 rounded-full flex-shrink-0 shadow-lg mt-1 xs:mt-0"></div>
                   <span className="font-medium text-xs xs:text-sm sm:text-base drop-shadow-md leading-relaxed">

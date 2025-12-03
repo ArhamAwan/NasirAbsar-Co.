@@ -53,7 +53,7 @@ const Header: React.FC = () => {
             transition={{ type: "spring", stiffness: 400, damping: 17 }}
           >
             <img
-              src="/image.png"
+              src="/logo.png"
               alt="Nasir Absar & Co."
               className="h-12 w-12 sm:h-16 sm:w-16 md:h-20 md:w-20 object-contain flex-shrink-0"
               width="80"

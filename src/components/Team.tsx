@@ -9,7 +9,7 @@ const team = [
     name: "Muhammad Nasir",
     lastName: "Nasir",
     position: "CEO",
-    image: "/Muhammad Nasir.jpeg",
+    image: "/team/Muhammad Nasir.jpeg",
     linkedin: "https://pk.linkedin.com/company/nasir-absar-co",
     bio: `Profession: Chartered Accountant\nNationality: Pakistani\nContact: +92 321 5216303\nEmail: nasir@nasirabsar.com\n\nExperience: As Financial Management Consultant (FMC) for business development and establishment of new ventures...\n\nKey qualifications: As Senior Partner of Nasir Absar & Co. (the Firm), share responsibilities with other partners, for all types of professional work carried out by the Firm. However, specifically responsible for accounting system development, computerization (IT), financial restructuring, mergers and acquisition accounting.\n\nEmployment Record: 2001 - to-date: CEO in Nasir Absar & Co. (Pvt) Ltd. (Auditors, Accountants, Corporate, Financial, Management & Tax Consultants)\n1998 - 2005 : Finance Controller and Director Finance in Islamic International Medical College Trust and Riphah International University, Islamabad, respectively.\n1996 - 1998 : Manager Audit & Tax in Jawaid Qadeer Rashid & Co. Chartered Accountants.\n\nSocial Services: Ex-Member Finance, Prime Minister's Task Force for Gems and Jewelry, Ex-Member Management Committee – Pakistan Red Crescent Society, Punjab, Ex-Member Board of Governors – Pak Red Crescent Medical & Dental College, Lahore, and more.`,
   },
@@ -17,7 +17,7 @@ const team = [
     name: "Absar Nasir",
     lastName: "Nasir",
     position: "Executive Director",
-    image: "/Absar Nasir.jpeg",
+    image: "/team/Absar Nasir 1.png",
     linkedin: "https://pk.linkedin.com/company/nasir-absar-co",
     bio: `Profession: Corporate and Tax Consultant\nNationality: Pakistani\nContact: 092 300 9569379\nEmail: absar@nasirabsar.com\n\nExperience: As Partner of Nasir Absar & Co. (Pvt) Limited (the Company), share responsibilities with other Directors, for all types of professional work carried out by the Firm. However, specifically responsible for Tax, Corporate, Intellectual Property Laws, share registrar and NPO Legal Frame work.\n\nKey qualifications: Several distinctions in LLM (Master in Corporate Law). Position holder in the LLB (Graduate in Law). Distinction in Finance during MBA. First Position in Bachelor of Commerce.\n\nEmployment Record: 2001 – to-date: Executive Director, Nasir Absar & Co. (Pvt) Limited. 1997 – 2001 : Manager Tax & Corporate in Nadeem Ahmed & Co. Islamabad.`,
   },
@@ -25,7 +25,7 @@ const team = [
     name: "Syed Muhammad Imran",
     lastName: "Imran",
     position: "Director Tax & Corporate Regulatory Services",
-    image: "/Syed muhammad imran.jpg",
+    image: "/team/Imran.png",
     linkedin: "https://pk.linkedin.com/company/nasir-absar-co",
     bio: `Advocate High Courts\nExperience: 15 years of professional experience in field of Taxation and Corporate Regulatory Services.`,
   },
@@ -33,7 +33,7 @@ const team = [
     name: "Muhammad Jawaid Iqbal Khan",
     lastName: "Khan",
     position: "Associate Chartered Accountant",
-    image: "/Muhammad Jawaid Iqbal Khan.jpeg",
+    image: "/team/Javed.jpg",
     linkedin: "https://pk.linkedin.com/company/nasir-absar-co",
     bio: `Fellow Member of Chartered Accountants\nExperience: 22 years of professional experience in field of Audit and transaction advisory.`,
   },
@@ -49,7 +49,7 @@ const team = [
     name: "Aadil Ameen",
     lastName: "Ameen",
     position: "Management Consultant",
-    image: "/Adil Ameen.jpeg",
+    image: "/team/Adil Ameen.png",
     linkedin: "https://pk.linkedin.com/company/nasir-absar-co",
     bio: `Fellow Member of Institute of Cost and Management Accountants\nExperience: 20 years of professional experience in field of Management Consultancy.`,
   },
@@ -65,7 +65,7 @@ const team = [
     name: "Asif Gulzar",
     lastName: "Gulzar",
     position: "Director Audit",
-    image: "/Asif Gulzar.jpeg",
+    image: "/team/Asif Gulzar.jpg",
     linkedin: "https://pk.linkedin.com/company/nasir-absar-co",
     bio: `CFA\nExperience: 22 years of professional experience in the field Audit.`,
   },
@@ -81,7 +81,7 @@ const team = [
     name: "Syed Musharraf Imam",
     lastName: "Imam",
     position: "Director Corporate Registrations",
-    image: "/Musharraf Imam.jpeg",
+    image: "/team/Musharraf Imam.png",
     linkedin: "https://pk.linkedin.com/company/nasir-absar-co",
     bio: `Experience: 20 years of professional experience in field of Business Promotion.`,
   },
@@ -89,7 +89,7 @@ const team = [
     name: "Tariq Jamal",
     lastName: "Jamal",
     position: "Manager Taxation",
-    image: "/Tariq.jpeg",
+    image: "/team/Tariq Jamal.png",
     linkedin: "https://pk.linkedin.com/company/nasir-absar-co",
     bio: `CA-Finalist\nExperience: 7 years of professional experience in field of Taxation.`,
   },
@@ -97,7 +97,7 @@ const team = [
     name: "Asad Mehmood",
     lastName: "Mehmood",
     position: "Manager Legal",
-    image: "/Asad.jpeg",
+    image: "/team/Asad.png",
     linkedin: "https://pk.linkedin.com/company/nasir-absar-co",
     bio: `Advocate High Courts\nExperience: 7 years of professional experience in the field of Law.`,
   },
@@ -123,6 +123,16 @@ const Team: React.FC = () => {
   const modalRef = useRef<HTMLDivElement>(null);
   const modalContentRef = useRef<HTMLDivElement>(null);
   const ceoCardRef = useRef<HTMLDivElement>(null);
+
+  // Preload critical team member images (first 4 visible members)
+  useEffect(() => {
+    team.slice(0, 4).forEach((member) => {
+      if (member.image) {
+        const img = new Image();
+        img.src = member.image;
+      }
+    });
+  }, []);
 
   // Center CEO at start
   useEffect(() => {
@@ -404,8 +414,10 @@ const Team: React.FC = () => {
                       src={member.image || placeholderImg}
                       alt={member.name}
                       className="w-full h-full object-cover"
-                      loading="lazy"
+                      loading={idx < 4 ? "eager" : "lazy"}
                       decoding="async"
+                      width={320}
+                      height={400}
                       style={{ willChange: "auto" }}
                     />
                   </div>
@@ -473,6 +485,10 @@ const Team: React.FC = () => {
                   src={team[selected].image || placeholderImg}
                   alt={team[selected].name}
                   className="w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 rounded-full object-cover border-2 sm:border-4 border-blue-600 shadow mb-3 sm:mb-4"
+                  width={112}
+                  height={112}
+                  loading="eager"
+                  decoding="async"
                 />
                 {(() => {
                   const { firstName, lastName } = splitName(

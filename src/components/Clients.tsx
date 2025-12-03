@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
-import {
-  Factory,
-  Heart,
-  GraduationCap,
-  Building,
-  ShoppingCart,
+import { 
+  Factory, 
+  Heart, 
+  GraduationCap, 
+  Building, 
+  ShoppingCart, 
   Briefcase,
   Mountain,
   Zap,
@@ -19,6 +19,37 @@ import {
 const Clients: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState(0);
   const carouselRef = useRef<HTMLDivElement>(null);
+
+  // Preload logos for the selected category
+  useEffect(() => {
+    if (clientCategories[selectedCategory]) {
+      const category = clientCategories[selectedCategory];
+      const allLogoMaps = [
+        nonProfitLogos,
+        manufacturingLogos,
+        educationLogos,
+        healthLogos,
+        constructionLogos,
+        tradingLogos,
+        servicesLogos,
+        miningLogos,
+        powerLogos,
+      ];
+      
+      // Get the appropriate logo map based on category
+      const logoMap = allLogoMaps.find((map) => 
+        category.clients.some((client) => map[client])
+      ) || {};
+
+      // Preload first 10 logos for the selected category
+      category.clients.slice(0, 10).forEach((client) => {
+        if (logoMap[client]) {
+          const img = new Image();
+          img.src = logoMap[client];
+        }
+      });
+    }
+  }, [selectedCategory]);
 
   // Logo mapping for non-profit organizations
   const nonProfitLogos: { [key: string]: string } = {
@@ -535,6 +566,8 @@ const Clients: React.FC = () => {
                   className="max-w-full max-h-full object-contain"
                   loading="lazy"
                   draggable={false}
+                  width={200}
+                  height={120}
                   style={{
                     pointerEvents: "none",
                     willChange: "auto",
@@ -607,14 +640,14 @@ const Clients: React.FC = () => {
         </motion.div>
 
         {/* Tab Navigation */}
-        <motion.div
+            <motion.div
           className="mb-6 sm:mb-8 w-full"
           initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
+              whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          viewport={{ once: true }}
+              viewport={{ once: true }}
         >
-          <div className="grid grid-cols-3 gap-2 sm:gap-3 px-2 sm:px-4 max-w-2xl mx-auto">
+          <div className="grid grid-cols-3 lg:flex lg:flex-nowrap gap-2 sm:gap-3 px-2 sm:px-4 max-w-2xl lg:max-w-full lg:px-8 mx-auto lg:justify-center lg:items-center">
             {clientCategories.map((category, index) => {
               const Icon = category.icon;
               const isSelected = selectedCategory === index;
@@ -623,7 +656,7 @@ const Clients: React.FC = () => {
                   key={index}
                   onClick={() => setSelectedCategory(index)}
                   className={`
-                    flex items-center justify-center space-x-1.5 sm:space-x-2 px-2 sm:px-3 py-2 sm:py-2.5 rounded-lg font-medium transition-all duration-300 whitespace-nowrap text-xs sm:text-sm w-full
+                    flex flex-col lg:flex-row items-center justify-center space-y-1 lg:space-y-0 lg:space-x-2 px-1 sm:px-2 sm:px-3 lg:px-3 lg:px-4 py-2 sm:py-2.5 rounded-lg font-medium transition-all duration-300 text-xs sm:text-sm w-full lg:w-auto lg:whitespace-nowrap lg:flex-shrink-0 min-h-[60px] sm:min-h-0 lg:min-h-0
                     ${
                       isSelected
                         ? "bg-blue-600 text-white shadow-lg border-2 border-blue-400"
@@ -634,11 +667,11 @@ const Clients: React.FC = () => {
                   whileTap={{ scale: 0.95 }}
                 >
                   <Icon
-                    className={`w-3 h-3 sm:w-4 sm:h-4 flex-shrink-0 ${
+                    className={`w-3 h-3 sm:w-4 sm:h-4 lg:w-4 lg:h-4 flex-shrink-0 ${
                       isSelected ? "text-white" : "text-gray-600"
                     }`}
                   />
-                  <span className="truncate text-center">{category.title}</span>
+                  <span className="text-center lg:text-left leading-tight break-words lg:break-normal lg:whitespace-nowrap px-0.5 w-full lg:w-auto">{category.title}</span>
                 </motion.button>
               );
             })}
@@ -657,24 +690,24 @@ const Clients: React.FC = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.3 }}
-              >
-                {/* Category Header */}
+            >
+              {/* Category Header */}
                 <div className="bg-white p-6 sm:p-8 border-b border-gray-200">
-                  <div className="flex items-center space-x-4">
+                <div className="flex items-center space-x-4">
                     <div className="w-16 h-16 bg-blue-100 rounded-xl flex items-center justify-center">
                       <Icon className="w-8 h-8 text-blue-500" />
-                    </div>
-                    <div>
+                  </div>
+                  <div>
                       <h3 className="text-2xl sm:text-3xl font-bold text-gray-900">
                         {category.title} Sector
                       </h3>
                       <p className="text-gray-600 mt-1 text-sm sm:text-base">
                         Trusted by {category.clients.length} leading
                         organizations
-                      </p>
-                    </div>
+                    </p>
                   </div>
                 </div>
+              </div>
 
                 {/* Clients Grid or Logo Carousel */}
                 <div className="p-6 sm:p-8">
@@ -713,8 +746,8 @@ const Clients: React.FC = () => {
                       category.title === "Power"
                     }
                   />
-                </div>
-              </motion.div>
+              </div>
+            </motion.div>
             );
           })()}
 
@@ -771,7 +804,7 @@ const Clients: React.FC = () => {
                 International Clients
               </h4>
               <p className="text-gray-600 text-sm leading-relaxed">
-                Trusted by international organizations including Muslim Aid UK,
+                Trusted by international organizations including Muslim Aid UK, 
                 Michigan State University USA, and RAK College UAE
               </p>
             </motion.div>

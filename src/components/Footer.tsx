@@ -4,15 +4,10 @@ import {
   MapPin, 
   Phone, 
   Mail, 
-  Linkedin,
-  ArrowUp
+  Linkedin
 } from 'lucide-react';
 
 const Footer: React.FC = () => {
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
   const quickLinks = [
     { name: 'Home', href: '#home' },
     { name: 'About', href: '#about' },
@@ -125,37 +120,26 @@ const Footer: React.FC = () => {
 
         {/* Bottom Section */}
         <motion.div
-          className="border-t border-white/10 mt-8 sm:mt-10 md:mt-12 pt-6 sm:pt-7 md:pt-8 flex flex-col md:flex-row justify-between items-center gap-4"
+          className="border-t border-white/10 mt-8 sm:mt-10 md:mt-12 pt-6 sm:pt-7 md:pt-8 flex flex-col md:flex-row justify-between items-center gap-4 md:gap-6"
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
           viewport={{ once: true }}
         >
-          <div className="text-gray-400 text-xs xs:text-sm text-center md:text-left">
+          <div className="text-gray-400 text-xs xs:text-sm text-center md:text-left flex-1 min-w-0 pr-0 md:pr-6 break-words">
             © 2024 Nasir Absar & Co. All rights reserved. | Privacy Policy | Terms of Service
           </div>
           
-          <div className="flex items-center space-x-6">
-            <motion.a
-              href="https://pk.linkedin.com/company/nasir-absar-co"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-10 h-10 glass-light bg-white/10 rounded-full flex items-center justify-center text-gray-300 hover:text-white hover:bg-blue-600/80 transition-all duration-300 backdrop-blur-md border border-white/20"
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
-            >
-              <Linkedin size={20} />
-            </motion.a>
-            
-            <motion.button
-              onClick={scrollToTop}
-              className="w-10 h-10 glass-button rounded-full flex items-center justify-center text-white transition-all duration-300 backdrop-blur-md"
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
-            >
-              <ArrowUp size={20} />
-            </motion.button>
-          </div>
+          <motion.a
+            href="https://pk.linkedin.com/company/nasir-absar-co"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="w-10 h-10 glass-light bg-white/10 rounded-full flex items-center justify-center text-gray-300 hover:text-white hover:bg-blue-600/80 transition-all duration-300 backdrop-blur-md border border-white/20 flex-shrink-0"
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+          >
+            <Linkedin size={20} />
+          </motion.a>
         </motion.div>
       </div>
     </footer>
