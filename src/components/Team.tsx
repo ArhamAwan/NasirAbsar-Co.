@@ -71,14 +71,6 @@ const team = [
     bio: `CFA\nExperience: 22 years of professional experience in the field Audit.`,
   },
   {
-    name: "Ahsan Jamal",
-    lastName: "Jamal",
-    position: "Director Public Relations",
-    image: "",
-    linkedin: "https://pk.linkedin.com/company/nasir-absar-co",
-    bio: `MBA\nExperience: 16 years of professional experience in field of Business Promotion and investment advisor.`,
-  },
-  {
     name: "Syed Musharraf Imam",
     lastName: "Imam",
     position: "Director Corporate Registrations",
