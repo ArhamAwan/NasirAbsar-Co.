@@ -1,8 +1,12 @@
-import React, { Suspense, useState, useEffect } from 'react';
-import { Canvas } from '@react-three/fiber';
+import React, { Suspense, useState, useEffect, useRef } from 'react';
+import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { OrbitControls, Sphere, MeshDistortMaterial, Float } from '@react-three/drei';
 import { motion } from 'framer-motion';
 import { ArrowRight, Award, Users, TrendingUp } from 'lucide-react';
+import * as THREE from 'three';
+
+// Logo blue color: rgba(43, 149, 222)
+const LOGO_BLUE = new THREE.Color(0x2B95DE);
 
 // Typing animation hook
 const useTypingAnimation = (text: string, speed: number = 50, delay: number = 0) => {
@@ -37,8 +41,14 @@ const useTypingAnimation = (text: string, speed: number = 50, delay: number = 0)
 };
 
 const AnimatedSphere: React.FC = () => {
+  const meshRef = useRef<THREE.Mesh>(null);
+  const materialRef = useRef<THREE.MeshDistortMaterial>(null);
   const [scale, setScale] = useState(2.4);
   const [opacity, setOpacity] = useState(0.5);
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const targetPosition = useRef(new THREE.Vector3(0, 0, 0));
+  const currentPosition = useRef(new THREE.Vector3(0, 0, 0));
+  const mouseDistance = useRef(0);
 
   useEffect(() => {
     const handleResize = () => {
@@ -62,14 +72,74 @@ const AnimatedSphere: React.FC = () => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      // Normalize mouse position to -1 to 1 range
+      const x = (e.clientX / window.innerWidth) * 2 - 1;
+      const y = -(e.clientY / window.innerHeight) * 2 + 1;
+      
+      setMousePosition({ x, y });
+      
+      // Calculate distance from center (0, 0)
+      const distance = Math.sqrt(x * x + y * y);
+      mouseDistance.current = distance;
+      
+      // Update target position based on mouse (blob follows cursor with damping)
+      // The blob moves away from cursor when mouse is near center, moves towards when far
+      targetPosition.current.x = x * 2;
+      targetPosition.current.y = y * 2;
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, []);
+
+  useFrame((state, delta) => {
+    if (!meshRef.current || !materialRef.current) return;
+
+    const time = state.clock.getElapsedTime();
+    
+    // Smooth interpolation towards target position
+    currentPosition.current.lerp(targetPosition.current, 0.08);
+    
+    // Apply position with floating animation + mouse influence
+    meshRef.current.position.x = currentPosition.current.x + Math.sin(time * 0.5) * 0.3;
+    meshRef.current.position.y = currentPosition.current.y + Math.cos(time * 0.3) * 0.4;
+    meshRef.current.position.z = Math.sin(time * 0.4) * 0.2;
+    
+    // Dynamic rotation based on mouse movement and time
+    meshRef.current.rotation.x += (mousePosition.y * 0.001 + Math.sin(time * 0.2) * 0.001);
+    meshRef.current.rotation.y += (mousePosition.x * 0.001 + Math.cos(time * 0.15) * 0.001);
+    meshRef.current.rotation.z += Math.sin(time * 0.1) * 0.0005;
+    
+    // Scale pulsing effect that reacts to mouse distance
+    const basePulse = 1 + Math.sin(time * 1.2) * 0.05;
+    const mouseInfluence = 1 + mouseDistance.current * 0.1;
+    meshRef.current.scale.setScalar(scale * basePulse * mouseInfluence);
+    
+    // Dynamic distortion based on mouse movement
+    const distortAmount = 0.4 + Math.abs(mousePosition.x) * 0.2 + Math.abs(mousePosition.y) * 0.2;
+    materialRef.current.distort = Math.min(distortAmount, 0.8);
+    
+    // Dynamic opacity based on mouse proximity
+    const opacityVariation = 0.5 + mouseDistance.current * 0.1;
+    materialRef.current.opacity = Math.min(opacityVariation * opacity, opacity * 1.2);
+    
+    // Ensure color stays consistent
+    if (materialRef.current.color.getHex() !== LOGO_BLUE.getHex()) {
+      materialRef.current.color.copy(LOGO_BLUE);
+    }
+  });
+
   return (
-    <Float speed={1.4} rotationIntensity={1} floatIntensity={2}>
-      <Sphere args={[1, 100, 200]} scale={scale}>
+    <Float speed={1.4} rotationIntensity={0.5} floatIntensity={1.5}>
+      <Sphere ref={meshRef} args={[1, 100, 200]} scale={scale}>
         <MeshDistortMaterial
-          color="#3B82F6"
+          ref={materialRef}
+          color={LOGO_BLUE}
           attach="material"
-          distort={0.3}
-          speed={1.5}
+          distort={0.4}
+          speed={2.5}
           roughness={0}
           transparent
           opacity={opacity}
@@ -153,7 +223,17 @@ const Hero: React.FC = () => {
               style={{ willChange: 'transform, opacity' }}
             >
               <motion.a
-                href="#contact"
+                href="/contact"
+                onClick={(e) => {
+                  e.preventDefault();
+                  window.history.pushState({}, '', '/contact');
+                  const element = document.getElementById('contact');
+                  if (element) {
+                    setTimeout(() => {
+                      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }, 100);
+                  }
+                }}
                 className="glass-button text-white px-4 sm:px-5 md:px-6 py-2 sm:py-2.5 md:py-3 rounded-lg sm:rounded-xl font-semibold flex items-center justify-center space-x-1.5 sm:space-x-2 text-xs sm:text-sm md:text-base flex-1 sm:flex-initial"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
@@ -165,7 +245,17 @@ const Hero: React.FC = () => {
               </motion.a>
               
               <motion.a
-                href="#services"
+                href="/services"
+                onClick={(e) => {
+                  e.preventDefault();
+                  window.history.pushState({}, '', '/services');
+                  const element = document.getElementById('services');
+                  if (element) {
+                    setTimeout(() => {
+                      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }, 100);
+                  }
+                }}
                 className="glass border-2 border-white/30 text-white hover:bg-white/20 px-4 sm:px-5 md:px-6 py-2 sm:py-2.5 md:py-3 rounded-lg sm:rounded-xl font-semibold backdrop-blur-md text-xs sm:text-sm md:text-base flex-1 sm:flex-initial whitespace-nowrap"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}

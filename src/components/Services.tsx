@@ -19,11 +19,13 @@ import {
   ArrowRight
 } from 'lucide-react';
 import ServiceModal from './ServiceModal';
+import ConsultationModal from './ConsultationModal';
 
 const Services: React.FC = () => {
   const [expandedService, setExpandedService] = useState<number | null>(null);
   const [selectedService, setSelectedService] = useState<any>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isConsultationModalOpen, setIsConsultationModalOpen] = useState(false);
 
   const services = [
     {
@@ -422,6 +424,7 @@ const Services: React.FC = () => {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <motion.button
+                onClick={() => setIsConsultationModalOpen(true)}
                 className="glass-button text-white px-8 py-4 rounded-xl font-semibold transition-all duration-300 flex items-center justify-center space-x-2"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
@@ -446,6 +449,12 @@ const Services: React.FC = () => {
         isOpen={isModalOpen}
         onClose={closeModal}
         service={selectedService}
+      />
+
+      {/* Consultation Modal */}
+      <ConsultationModal
+        isOpen={isConsultationModalOpen}
+        onClose={() => setIsConsultationModalOpen(false)}
       />
     </section>
   );

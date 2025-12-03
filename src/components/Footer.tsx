@@ -1,29 +1,43 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import { 
-  MapPin, 
-  Phone, 
-  Mail, 
-  Linkedin
-} from 'lucide-react';
+import React from "react";
+import { motion } from "framer-motion";
+import { MapPin, Phone, Mail } from "lucide-react";
 
 const Footer: React.FC = () => {
   const quickLinks = [
-    { name: 'Home', href: '#home' },
-    { name: 'About', href: '#about' },
-    { name: 'Services', href: '#services' },
-    { name: 'Team', href: '#team' },
-    { name: 'Clients', href: '#clients' },
-    { name: 'Contact', href: '#contact' }
+    { name: "Home", href: "/" },
+    { name: "About", href: "/about" },
+    { name: "Services", href: "/services" },
+    { name: "Team", href: "/team" },
+    { name: "Clients", href: "/clients" },
+    { name: "Contact", href: "/contact" },
   ];
 
+  const handleLinkClick = (
+    e: React.MouseEvent<HTMLAnchorElement>,
+    href: string
+  ) => {
+    e.preventDefault();
+    if (href === "/") {
+      window.location.href = "/";
+    } else {
+      window.history.pushState({}, "", href);
+      const sectionId = href.slice(1);
+      const element = document.getElementById(sectionId);
+      if (element) {
+        setTimeout(() => {
+          element.scrollIntoView({ behavior: "smooth", block: "start" });
+        }, 100);
+      }
+    }
+  };
+
   const services = [
-    'Transaction Advisory',
-    'Corporate Law',
-    'Audit & Assurance',
-    'Tax Services',
-    'Business Consulting',
-    'IP Registration'
+    "Transaction Advisory",
+    "Corporate Law",
+    "Audit & Assurance",
+    "Tax Services",
+    "Business Consulting",
+    "IP Registration",
   ];
 
   return (
@@ -39,35 +53,53 @@ const Footer: React.FC = () => {
             className="sm:col-span-2"
           >
             <div className="flex items-center space-x-2 sm:space-x-3 mb-4 sm:mb-5 md:mb-6">
-              <img 
-                src="/image.png" 
-                alt="Nasir Absar & Co." 
+              <img
+                src="/logo.png"
+                alt="Nasir Absar & Co."
                 className="h-10 w-10 sm:h-12 sm:w-12 object-contain"
+                loading="lazy"
+                decoding="async"
+                onError={(e) => {
+                  const target = e.target as HTMLImageElement;
+                  console.error("Footer logo failed to load:", target.src);
+                }}
               />
               <div>
-                <h3 className="text-lg sm:text-xl md:text-2xl font-bold">Nasir Absar & Co.</h3>
-                <p className="text-xs sm:text-sm text-blue-300">Chartered Accountants</p>
+                <h3 className="text-lg sm:text-xl md:text-2xl font-bold">
+                  Nasir Absar & Co.
+                </h3>
+                <p className="text-xs sm:text-sm text-blue-300">
+                  Chartered Accountants
+                </p>
               </div>
             </div>
-            
+
             <p className="text-xs xs:text-sm sm:text-base text-gray-300 mb-4 sm:mb-5 md:mb-6 leading-relaxed">
-              With over 25 years of experience, Nasir Absar & Co. is a leading accounting firm 
-              in Islamabad, providing comprehensive financial services to businesses across Pakistan. 
-              Our commitment to excellence and integrity has made us a trusted partner for over 200 prestigious clients.
+              With over 25 years of experience, Nasir Absar & Co. is a leading
+              accounting firm in Islamabad, providing comprehensive financial
+              services to businesses across Pakistan. Our commitment to
+              excellence and integrity has made us a trusted partner for over
+              200 prestigious clients.
             </p>
-            
+
             <div className="space-y-2 sm:space-y-3">
               <div className="flex items-start sm:items-center space-x-2 sm:space-x-3">
                 <MapPin className="w-4 h-4 sm:w-5 sm:h-5 text-blue-400 flex-shrink-0 mt-0.5 sm:mt-0" />
-                <span className="text-xs xs:text-sm sm:text-base text-gray-300 break-words">I-8 Markaz, Islamabad, Pakistan</span>
+                <span className="text-xs xs:text-sm sm:text-base text-gray-300 break-words">
+                  I-8 Markaz, Islamabad, Pakistan
+                </span>
               </div>
               <div className="flex items-center space-x-2 sm:space-x-3">
                 <Phone className="w-4 h-4 sm:w-5 sm:h-5 text-blue-400 flex-shrink-0" />
-                <span className="text-xs xs:text-sm sm:text-base text-gray-300">+92-51-1234567</span>
+                <span className="text-xs xs:text-sm sm:text-base text-gray-300">
+                  +92-51-1234567
+                </span>
               </div>
               <div className="flex items-center space-x-2 sm:space-x-3">
                 <Mail className="w-4 h-4 sm:w-5 sm:h-5 text-blue-400 flex-shrink-0" />
-                <span className="text-xs xs:text-sm sm:text-base text-gray-300 break-all">info@nasirabsar.com</span>
+                <span className="text-xs xs:text-sm sm:text-base text-gray-300 break-all">
+                  info@nasirabsar.com
+                </span>
               </div>
             </div>
           </motion.div>
@@ -79,12 +111,15 @@ const Footer: React.FC = () => {
             transition={{ duration: 0.8, delay: 0.1 }}
             viewport={{ once: true }}
           >
-            <h4 className="text-base sm:text-lg md:text-xl font-bold mb-4 sm:mb-5 md:mb-6">Quick Links</h4>
+            <h4 className="text-base sm:text-lg md:text-xl font-bold mb-4 sm:mb-5 md:mb-6">
+              Quick Links
+            </h4>
             <ul className="space-y-2 sm:space-y-3">
               {quickLinks.map((link, index) => (
                 <li key={index}>
                   <motion.a
                     href={link.href}
+                    onClick={(e) => handleLinkClick(e, link.href)}
                     className="text-xs xs:text-sm sm:text-base text-gray-300 hover:text-blue-400 transition-colors duration-300"
                     whileHover={{ x: 5 }}
                   >
@@ -102,7 +137,9 @@ const Footer: React.FC = () => {
             transition={{ duration: 0.8, delay: 0.2 }}
             viewport={{ once: true }}
           >
-            <h4 className="text-base sm:text-lg md:text-xl font-bold mb-4 sm:mb-5 md:mb-6">Our Services</h4>
+            <h4 className="text-base sm:text-lg md:text-xl font-bold mb-4 sm:mb-5 md:mb-6">
+              Our Services
+            </h4>
             <ul className="space-y-2 sm:space-y-3">
               {services.map((service, index) => (
                 <li key={index}>
@@ -126,20 +163,10 @@ const Footer: React.FC = () => {
           transition={{ duration: 0.8 }}
           viewport={{ once: true }}
         >
-          <div className="text-gray-400 text-xs xs:text-sm text-center md:text-left flex-1 min-w-0 pr-0 md:pr-6 break-words">
-            © 2024 Nasir Absar & Co. All rights reserved. | Privacy Policy | Terms of Service
+          <div className="text-gray-400 text-xs xs:text-sm text-center md:text-left w-full">
+            © 2025 Nasir Absar & Co. All rights reserved. | Privacy Policy |
+            Terms of Service
           </div>
-          
-          <motion.a
-            href="https://pk.linkedin.com/company/nasir-absar-co"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="w-10 h-10 glass-light bg-white/10 rounded-full flex items-center justify-center text-gray-300 hover:text-white hover:bg-blue-600/80 transition-all duration-300 backdrop-blur-md border border-white/20 flex-shrink-0"
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.9 }}
-          >
-            <Linkedin size={20} />
-          </motion.a>
         </motion.div>
       </div>
     </footer>

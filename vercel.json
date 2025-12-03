@@ -103,6 +103,12 @@
         }
       ]
     }
+  ],
+  "rewrites": [
+    {
+      "source": "/((?!api|_next|.*\\..*|team|non-profit|manufacturing|education|health|construction|trading|services|mining|power).*)",
+      "destination": "/index.html"
+    }
   ]
 }
 

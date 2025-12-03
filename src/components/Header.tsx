@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { Menu, X, Phone, Mail, MapPin } from "lucide-react";
+import { useLocation } from "react-router-dom";
+import { Menu, X, Phone } from "lucide-react";
 import { motion } from "framer-motion";
 
 const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const location = useLocation();
 
   useEffect(() => {
     // Check initial scroll position
@@ -25,13 +27,35 @@ const Header: React.FC = () => {
   }, []);
 
   const navItems = [
-    { name: "Home", href: "#home" },
-    { name: "About", href: "#about" },
-    { name: "Services", href: "#services" },
-    { name: "Team", href: "#team" },
-    { name: "Clients", href: "#clients" },
-    { name: "Contact", href: "#contact" },
+    { name: "Home", href: "/" },
+    { name: "About", href: "/about" },
+    { name: "Services", href: "/services" },
+    { name: "Team", href: "/team" },
+    { name: "Clients", href: "/clients" },
+    { name: "Contact", href: "/contact" },
   ];
+
+  const handleNavClick = (
+    e: React.MouseEvent<HTMLAnchorElement>,
+    href: string
+  ) => {
+    e.preventDefault();
+    setIsMenuOpen(false);
+
+    if (href === "/") {
+      window.location.href = "/";
+    } else {
+      // Navigate to route, then scroll to section
+      window.history.pushState({}, "", href);
+      const sectionId = href.slice(1);
+      const element = document.getElementById(sectionId);
+      if (element) {
+        setTimeout(() => {
+          element.scrollIntoView({ behavior: "smooth", block: "start" });
+        }, 100);
+      }
+    }
+  };
 
   return (
     <motion.header
@@ -84,8 +108,14 @@ const Header: React.FC = () => {
               <motion.a
                 key={item.name}
                 href={item.href}
+                onClick={(e) => handleNavClick(e, item.href)}
                 className={`font-medium hover:text-blue-600 ${
                   isScrolled ? "text-gray-700" : "text-white"
+                } ${
+                  location.pathname === item.href ||
+                  (item.href === "/" && location.pathname === "/")
+                    ? "text-blue-600"
+                    : ""
                 }`}
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.95 }}
@@ -133,8 +163,11 @@ const Header: React.FC = () => {
                 <a
                   key={item.name}
                   href={item.href}
+                  onClick={(e) => {
+                    handleNavClick(e, item.href);
+                    setIsMenuOpen(false);
+                  }}
                   className="block px-4 py-3 text-gray-700 hover:text-blue-600 hover:bg-white/50 rounded-lg mx-2 transition-all duration-300 font-medium"
-                  onClick={() => setIsMenuOpen(false)}
                 >
                   {item.name}
                 </a>

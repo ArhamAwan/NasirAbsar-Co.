@@ -27,7 +27,7 @@ const team = [
     lastName: "Imran",
     position: "Director Tax & Corporate Regulatory Services",
     image: "/team/Imran.png",
-    linkedin: "https://pk.linkedin.com/company/nasir-absar-co",
+    linkedin: "https://pk.linkedin.com/in/sayidimran",
     bio: `Advocate High Courts\nExperience: 15 years of professional experience in field of Taxation and Corporate Regulatory Services.`,
   },
   {
@@ -35,7 +35,8 @@ const team = [
     lastName: "Khan",
     position: "Associate Chartered Accountant",
     image: "/team/Javed.jpg",
-    linkedin: "https://pk.linkedin.com/company/nasir-absar-co",
+    linkedin:
+      "https://www.linkedin.com/in/rana-javed-iqbal-khan-fca-51862418?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app",
     bio: `Fellow Member of Chartered Accountants\nExperience: 22 years of professional experience in field of Audit and transaction advisory.`,
   },
   {
@@ -43,7 +44,8 @@ const team = [
     lastName: "Saeed",
     position: "Associate Chartered Accountant",
     image: "/team/Rizwan Saeed.png",
-    linkedin: "https://pk.linkedin.com/company/nasir-absar-co",
+    linkedin:
+      "https://www.linkedin.com/in/rizwan-saeed-49251063?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app",
     bio: `Associate Member of Chartered Accountants\nExperience: 21 years of professional experience in field of Audit and Accounts.`,
   },
   {
@@ -51,7 +53,8 @@ const team = [
     lastName: "Ameen",
     position: "Management Consultant",
     image: "/team/Adil Ameen.png",
-    linkedin: "https://pk.linkedin.com/company/nasir-absar-co",
+    linkedin:
+      "https://www.linkedin.com/in/adil-ameen-324743b0?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app",
     bio: `Fellow Member of Institute of Cost and Management Accountants\nExperience: 20 years of professional experience in field of Management Consultancy.`,
   },
   {
@@ -59,7 +62,8 @@ const team = [
     lastName: "Shoaib",
     position: "Associate Chartered Accountant",
     image: "/team/Shahid Shoaib.png",
-    linkedin: "https://pk.linkedin.com/company/nasir-absar-co",
+    linkedin:
+      "https://www.linkedin.com/in/shahidshoaib82?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app",
     bio: `Fellow Member of Certified Chartered Accountants\nExperience: 20 years of professional experience in field of Transaction Advisory.`,
   },
   {
@@ -91,7 +95,7 @@ const team = [
     lastName: "Mehmood",
     position: "Manager Legal",
     image: "/team/Asad.png",
-    linkedin: "https://pk.linkedin.com/company/nasir-absar-co",
+    linkedin: "https://www.linkedin.com/in/asad-malik-246b5b108",
     bio: `Advocate High Courts\nExperience: 7 years of professional experience in the field of Law.`,
   },
 ];
