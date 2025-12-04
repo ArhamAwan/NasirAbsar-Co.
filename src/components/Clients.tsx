@@ -750,26 +750,14 @@ const Clients: React.FC = () => {
           .filter((client) => logoMap[client])
           .map((client) => {
             const logoPath = logoMap[client];
+            // Use paths as-is - Vite/Vercel handles spaces and special characters automatically
             // Ensure path starts with / for absolute paths
-            // URL encode only the filename part, keep folder path as-is
-            // This ensures folder names with hyphens (like "Non-Profit") work correctly
             const normalizedPath = logoPath.startsWith("/")
               ? logoPath
               : "/" + logoPath;
-            const lastSlashIndex = normalizedPath.lastIndexOf("/");
-            if (lastSlashIndex === -1) {
-              // No slash found, encode the entire path
-              return {
-                name: client,
-                logo: "/" + encodeURIComponent(normalizedPath),
-              };
-            }
-            const folderPath = normalizedPath.substring(0, lastSlashIndex + 1);
-            const fileName = normalizedPath.substring(lastSlashIndex + 1);
-            const encodedPath = folderPath + encodeURIComponent(fileName);
             return {
               name: client,
-              logo: encodedPath,
+              logo: normalizedPath,
             };
           })
       : clients.map((client) => ({
