@@ -23,7 +23,7 @@
       ]
     },
     {
-      "source": "/Non-Profit/(.*)",
+      "source": "/non-profit/(.*)",
       "headers": [
         {
           "key": "Cache-Control",
@@ -41,7 +41,7 @@
       ]
     },
     {
-      "source": "/Education/(.*)",
+      "source": "/education/(.*)",
       "headers": [
         {
           "key": "Cache-Control",
@@ -50,7 +50,7 @@
       ]
     },
     {
-      "source": "/Health/(.*)",
+      "source": "/health/(.*)",
       "headers": [
         {
           "key": "Cache-Control",
@@ -59,7 +59,7 @@
       ]
     },
     {
-      "source": "/Construction/(.*)",
+      "source": "/construction/(.*)",
       "headers": [
         {
           "key": "Cache-Control",
@@ -68,7 +68,7 @@
       ]
     },
     {
-      "source": "/Trading/(.*)",
+      "source": "/trading/(.*)",
       "headers": [
         {
           "key": "Cache-Control",
@@ -77,7 +77,7 @@
       ]
     },
     {
-      "source": "/Services/(.*)",
+      "source": "/services/(.*)",
       "headers": [
         {
           "key": "Cache-Control",
@@ -86,7 +86,7 @@
       ]
     },
     {
-      "source": "/Mining/(.*)",
+      "source": "/mining/(.*)",
       "headers": [
         {
           "key": "Cache-Control",
@@ -95,7 +95,7 @@
       ]
     },
     {
-      "source": "/Power/(.*)",
+      "source": "/power/(.*)",
       "headers": [
         {
           "key": "Cache-Control",
@@ -115,7 +115,7 @@
   ],
   "rewrites": [
     {
-      "source": "/((?!api|_next|.*\\..*|team|Non-Profit|manufacturing|Education|Health|Construction|Trading|Services|Mining|Power|IT|CompanyProfile).*)",
+      "source": "/((?!api|_next|.*\\..*|team|non-profit|manufacturing|education|health|construction|trading|services|mining|power|IT|CompanyProfile).*)",
       "destination": "/index.html"
     }
   ]
