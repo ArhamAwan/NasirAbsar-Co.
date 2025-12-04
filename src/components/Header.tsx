@@ -220,9 +220,9 @@ const Header: React.FC = () => {
                 alt="Nasir Absar & Co."
                 className="h-12 w-12 sm:h-16 sm:w-16 md:h-20 md:w-20 object-contain flex-shrink-0"
               />
-              <div className="hidden sm:block min-w-0">
+              <div className="flex flex-col min-w-0">
                 <h1
-                  className={`text-base sm:text-lg md:text-xl font-bold truncate ${
+                  className={`text-sm xs:text-base sm:text-lg md:text-xl font-bold truncate ${
                     isScrolled ? "text-gray-900" : "text-white"
                   }`}
                 >
