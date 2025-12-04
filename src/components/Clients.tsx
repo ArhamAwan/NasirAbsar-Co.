@@ -28,10 +28,10 @@ const Clients: React.FC = () => {
   const nonProfitLogos: { [key: string]: string } = {
     "National Testing Service - Pakistan (NTS)":
       "/non-profit/National Testing Service - Pakistan (NTS).png",
-    "Muslim Aid, UK": "/non-profit/Muslim Aid, UK.jfif",
+    "Muslim Aid, UK": "/non-profit/Muslim Aid, UK.png",
     "HelpAge International, UK": "/non-profit/HelpAge International , UK.png",
     "Consumer Rights Commission of Pakistan":
-      "/non-profit/Consumer Rights Commission of Pakistan.jfif",
+      "/non-profit/Consumer Rights Commission of Pakistan.png",
     "Michigan State University (MSU), USA":
       "/non-profit/Michigan_State_University.png",
     "Federation of Islamic Medical Associations":
@@ -43,13 +43,13 @@ const Clients: React.FC = () => {
     "Pakistan Islamic Medical Associations (PIMA)":
       "/non-profit/Pakistan Islamic Medical Associations (PIMA).png",
     "International Brotherhood Organization":
-      "/non-profit/International Brotherhood Organization.jfif",
+      "/non-profit/International Brotherhood Organization.png",
     "Madinah Foundation": "/non-profit/Madinah Foundation.png",
     "Khubaib Foundation": "/non-profit/Khubaib Foundation.png",
     "MEHARGARH Centre of Learning":
       "/non-profit/MEHARGARH centre of Learning.png",
     "Pak-China Institute": "/non-profit/Pak-China Institute.png",
-    "SAACH Foundation": "/non-profit/SAACH Foundation.jfif",
+    "SAACH Foundation": "/non-profit/SAACH Foundation.png",
     "Noor Educational & Economic Development (NEED) Foundation":
       "/non-profit/Noor Educational & Economic Development.jpg",
     "Task Force for Global Health, USA":
@@ -200,23 +200,23 @@ const Clients: React.FC = () => {
   // Logo mapping for services sector organizations
   const servicesLogos: { [key: string]: string } = {
     "Royal Airport Services (Pvt) Limited":
-      "/services/imagesRoyal Airport Services (Pvt) Limited.jfif",
+      "/services/imagesRoyal Airport Services (Pvt) Limited.png",
     "Royal Ease Travel (Pvt) Limited": "/services/RAS.jpg",
-    "AH Aviation (Pvt) Limited": "/services/AH Aviation (Pvt) Limited.png.jfif",
+    "AH Aviation (Pvt) Limited": "/services/AH Aviation (Pvt) Limited.png",
     "Appolo Telecom (Pvt) Limited":
-      "/services/Appolo Telecom (Pvt) Limite.jfif",
+      "/services/Appolo Telecom (Pvt) Limited.png",
     "Baarik Travels (Pvt) Limited":
-      "/services/Baarik Travels (Pvt) Limited.jfif",
+      "/services/Baarik Travels (Pvt) Limited.png",
     "Al-Fursan Travels (Pvt) Limited":
       "/services/Al-Fursan Travels (Pvt) Limited.png",
     "Qutbain International (Pvt) Limited":
-      "/services/Qutbain International (Pvt) Limited.jfif",
+      "/services/Qutbain International (Pvt) Limited.png",
     "Dedar-e Madina (Pvt) Limited":
-      "/services/Dedar-e Madina (Pvt) Limited.jfif",
+      "/services/Dedar-e Madina (Pvt) Limited.png",
     "Arjumand And Associates (AAA) (World Bank Consultant)":
       "/services/Designmen.jpg",
     "DAMCON Engineering Solutions (Pvt) Ltd":
-      "/services/DAMCON Engineering Solutions (Pvt) Ltd.jfif",
+      "/services/DAMCON Engineering Solutions (Pvt) Ltd.png",
     "Buzzard Securities (Pvt) Limited":
       "/services/Buzzard Securities (Pvt) Limited.png",
     "CFC Consultant (Pvt) Limited":
@@ -228,9 +228,9 @@ const Clients: React.FC = () => {
     "MAXNET (Pvt) Limited": "/services/MAXNET (Pvt) Limited.png",
     "SELECTUM (Pvt) Limited": "/services/SELECTUM (Pvt) Limited.png",
     "Seven Software Development (Pvt) Limited":
-      "/services/Seven Software Development (Pvt) Limited.jfif",
+      "/services/Seven Software Development (Pvt) Limited.png",
     "Converge Enterprise Services (Pvt) Limited":
-      "/services/Converge Enterprise Services (Pvt) Limited.jfif",
+      "/services/Converge Enterprise Services (Pvt) Limited.png",
     "Al-Khaleej Exchange Company – B (Pvt) Ltd":
       "/services/Echo Oil (Private) Limited.jpg",
     "Perception Safety Solutions (Pvt) Ltd":
@@ -250,7 +250,7 @@ const Clients: React.FC = () => {
   // Logo mapping for power sector organizations
   const powerLogos: { [key: string]: string } = {
     "Farooq Energy Company (Pvt) Limited (FARENCO) (500 MW Hydro Power Project, Chakkoti)":
-      "/power/Farooq Energy Company.jfif",
+      "/power/Farooq Energy Company.png",
     "Neelum Green Energy (Pvt) Limited (49 MW Hydro Power Project, Luat)":
       "/power/images.png",
     "Green Energy (Private) Limited (3 MW Raili-III Hydro Power Project)":
@@ -259,7 +259,7 @@ const Clients: React.FC = () => {
       "/power/Karimi Energy (Pvt.) Ltd.png",
     "(SHYDO), NWFP": "/power/SHYDO), NWFP.png",
     "Agha Khan Rural Support Programme (AKRSP)":
-      "/power/Agha Khan Rural Support Programmepng.jfif",
+      "/power/Agha Khan Rural Support Programme (AKRSP).png",
     PAEC: "/power/PAEC.logo.png",
     "S.K. Hydro Consortium": "/power/SK-HYDRO.png",
   };
