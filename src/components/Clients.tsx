@@ -748,10 +748,18 @@ const Clients: React.FC = () => {
     const logosWithClients = hasLogos
       ? clients
           .filter((client) => logoMap[client])
-          .map((client) => ({
-            name: client,
-            logo: logoMap[client],
-          }))
+          .map((client) => {
+            const logoPath = logoMap[client];
+            // URL encode the path to handle spaces and special characters
+            // Split the path and encode each segment separately (except the leading slash)
+            const pathParts = logoPath.split("/").filter(Boolean); // Remove empty strings
+            const encodedPath =
+              "/" + pathParts.map((part) => encodeURIComponent(part)).join("/");
+            return {
+              name: client,
+              logo: encodedPath,
+            };
+          })
       : clients.map((client) => ({
           name: client,
           logo: `data:image/svg+xml;base64,${btoa(`<svg width="200" height="120" xmlns="http://www.w3.org/2000/svg">
