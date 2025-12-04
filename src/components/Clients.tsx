@@ -14,6 +14,7 @@ import {
   TrendingUp,
   Globe,
   CheckCircle,
+  Monitor,
 } from "lucide-react";
 // Removed getVercelOptimizedImage import - using direct paths for Vercel auto-optimization
 
@@ -26,35 +27,38 @@ const Clients: React.FC = () => {
   // Logo mapping for non-profit organizations
   const nonProfitLogos: { [key: string]: string } = {
     "National Testing Service - Pakistan (NTS)":
-      "/non-profit/National Testing Service - Pakistan (NTS).png",
-    "Muslim Aid, UK": "/non-profit/Muslim Aid, UK.png",
-    "HelpAge International, UK": "/non-profit/HelpAge International , UK.png",
+      "/Non-Profit/National Testing Service - Pakistan (NTS).png",
+    "Muslim Aid, UK": "/Non-Profit/Muslim Aid, UK.jfif",
+    "HelpAge International, UK": "/Non-Profit/HelpAge International , UK.png",
     "Consumer Rights Commission of Pakistan":
-      "/non-profit/Consumer Rights Commission of Pakistan.png",
+      "/Non-Profit/Consumer Rights Commission of Pakistan.jfif",
     "Michigan State University (MSU), USA":
-      "/non-profit/Michigan_State_University.png",
+      "/Non-Profit/Michigan_State_University.png",
     "Federation of Islamic Medical Associations":
-      "/non-profit/Federation of Islamic Medical Associations.png",
+      "/Non-Profit/Federation of Islamic Medical Associations.png",
     "Institute of Social & Policy Sciences (I-SAPS)":
-      "/non-profit/Institute of Social & Policy Sciences (I-SAPS).png",
+      "/Non-Profit/Institute of Social & Policy Sciences (I-SAPS).png",
     "Islamic International Medical College Trust, Rawalpindi":
-      "/non-profit/Islamic International Medical College Trust,.png",
+      "/Non-Profit/Islamic International Medical College Trust,.png",
     "Pakistan Islamic Medical Associations (PIMA)":
-      "/non-profit/Pakistan Islamic Medical Associations (PIMA).png",
+      "/Non-Profit/Pakistan Islamic Medical Associations (PIMA).png",
     "International Brotherhood Organization":
-      "/non-profit/International Brotherhood Organization.png",
-    "Madinah Foundation": "/non-profit/Madinah Foundation.png",
-    "Khubaib Foundation": "/non-profit/Khubaib Foundation.png",
+      "/Non-Profit/International Brotherhood Organization.jfif",
+    "Madinah Foundation": "/Non-Profit/Madinah Foundation.png",
+    "Khubaib Foundation": "/Non-Profit/Khubaib Foundation.png",
     "MEHARGARH Centre of Learning":
-      "/non-profit/MEHARGARH centre of Learning.png",
-    "Pak-China Institute": "/non-profit/Pak-China Institute.png",
-    "SAACH Foundation": "/non-profit/SAACH Foundation.png",
+      "/Non-Profit/MEHARGARH centre of Learning.png",
+    "Pak-China Institute": "/Non-Profit/Pak-China Institute.png",
+    "SAACH Foundation": "/Non-Profit/SAACH Foundation.jfif",
     "Noor Educational & Economic Development (NEED) Foundation":
-      "/non-profit/Noor Educational & Economic Development.png",
+      "/Non-Profit/Noor Educational & Economic Development.jpg",
     "Task Force for Global Health, USA":
-      "/non-profit/Task Force for Global Health, USA.png",
-    "USAID several Projects in Pakistan": "/non-profit/USAID.png",
-    "DEFID several Projects in Pakistan": "/non-profit/DEFID.png",
+      "/Non-Profit/Task Force for Global Health, USA.png",
+    "USAID several Projects in Pakistan": "/Non-Profit/USAID.png",
+    "DEFID several Projects in Pakistan": "/Non-Profit/DEFID.jpg",
+    "American Institute for Research (AIR)":
+      "/Non-Profit/American Institute for Research (AIR).png",
+    FELTP: "/Non-Profit/FELTP .png",
   };
 
   // Logo mapping for manufacturing organizations
@@ -73,131 +77,309 @@ const Clients: React.FC = () => {
     "Hamza Sugar Mills Limited": "/manufacturing/Hamza Sugar Mills Limited.png",
     "Kisan Ghee Mills": "/manufacturing/Kisan Ghee Mills .png",
     "Sunlight Pakistan": "/manufacturing/Sunlight Pakistan.png",
-    "Marshal Press": "/manufacturing/Marshal Press.png",
     "SIGMA Motors Limited": "/manufacturing/SIGMA Motors Limited.png",
     "Chiniot Safety Fuse Manufacturing Company":
       "/manufacturing/Chiniot Safety Fuse Manufacturing Company.png",
+    "Filix Pharmaceuticals (Private) Limited":
+      "/manufacturing/Filix Pharmaceuticals (Private) Limited.png",
+    "Leads Pharma (Private) Limited":
+      "/manufacturing/Leads Pharma (Private) Limited.jpeg",
+    "Murgh Brand Masalajat": "/manufacturing/Murgh Brand Masalajat.png",
+    "Pakistan Steel Mills": "/manufacturing/Pakistan Steel Mills.png",
+    "Saibins Pharmaceuticals": "/manufacturing/Saibins Pharmaceuticals.jpg",
   };
 
   // Logo mapping for educational institutions
   const educationLogos: { [key: string]: string } = {
     "COMSATS Institute of Information Technology (CIIT)":
-      "/education/COMSATS Institute of Information.png",
+      "/Education/COMSATS Institute of Information.jpg",
     "Riphah International University, Islamabad":
-      "/education/Riphah International University, Islamabad.png",
+      "/Education/Riphah International University, Islamabad.png",
     "The University of Faisalabad":
-      "/education/The University of Faisalabad.png",
-    "Abasyn University": "/education/Abasyn University.png",
-    "Iqra University, Karachi": "/education/Iqra University, Karachi.png",
+      "/Education/The University of Faisalabad.png",
+    "Abasyn University": "/Education/Abasyn University.png",
+    "Iqra University, Karachi": "/Education/Iqra University, Karachi.png",
     "Islamic International Medical & Dental College":
-      "/education/Islamic International Medical & Dental.png",
+      "/Education/Islamic International Medical & Dental.png",
     "University Medical & Dental College, Faisalabad":
-      "/education/University Medical & Dental College.png",
+      "/Education/University Medical & Dental College.png",
     "RAK College of Dental Sciences, UAE":
-      "/education/RAK College of Dental Sciences, UAE.png",
-    "Connoisseur Grammar School": "/education/Connoisseur Grammar School.png",
-    "Askaria College, Rawalpindi": "/education/Askaria College, Rawalpindi.png",
+      "/Education/RAK College of Dental Sciences, UAE.png",
+    "Connoisseur Grammar School": "/Education/Connoisseur Grammar School.png",
+    "Askaria College, Rawalpindi": "/Education/Askaria College, Rawalpindi.png",
     "Cadet College Hummak, Islamabad":
-      "/education/Cadet College Hummak, Islamabad.png",
+      "/Education/Cadet College Hummak, Islamabad.png",
     "University Cambridge School, Faisalabad":
-      "/education/University Cambridge School, Faisalabad.png",
+      "/Education/University Cambridge School, Faisalabad.png",
     "Swedish College of Engineering & Technology":
-      "/education/Swedish College of Engineering & Technology.png",
-    "Siddique Public School": "/education/Siddique Public School.png",
-    "Muslim Youth University": "/education/Muslim Youth University.png",
+      "/Education/Swedish College of Engineering & Technology.png",
+    "Siddique Public School": "/Education/Siddique Public School.png",
+    "Muslim Youth University": "/Education/Muslim Youth University.png",
+    "Aeo Pakistan": "/Education/Aeo Pakistan.png",
+    EBC: "/Education/EBC.jpg",
+    FLS: "/Education/FLS.png",
+    Mentors: "/Education/Mentors.jpg",
+    Sirsyed: "/Education/Sirsyed.png",
+    "Trillium Montessori": "/Education/Trillium montessori.jpg",
   };
 
   // Logo mapping for health sector organizations
   const healthLogos: { [key: string]: string } = {
     "Pakistan Railways Hospital, Rawalpindi":
-      "/health/Pakistan Railways Hospital, Rawalpindi.png",
-    "IIDC Hospital, Islamabad": "/health/IIDC Hospital, Islamabad.png",
+      "/Health/Pakistan Railways Hospital, Rawalpindi.png",
+    "IIDC Hospital, Islamabad": "/Health/IIDC Hospital, Islamabad.png",
     "Max Health Hospital, Islamabad":
-      "/health/Max Health Hospital, Islamabad.png",
-    "PIMA Hospital": "/health/PIMA Hospital.png",
+      "/Health/Max Health Hospital, Islamabad.png",
+    "PIMA Hospital": "/Health/PIMA Hospital.png",
     "Raazi Hospital, Rawalpindi (Project of Al-Khidmat Foundation)":
-      "/health/Raazi Hospital, Rawalpindi.png",
+      "/Health/Raazi Hospital, Rawalpindi.png",
     "Riphah International Hospital, Islamabad":
-      "/health/Riphah International Hospital, Islamabad.png",
+      "/Health/Riphah International Hospital, Islamabad.png",
     "Pak Red Crescent Hospital, Lahore":
-      "/health/Pak Red Crescent Hospital, Lahore.png",
+      "/Health/Pak Red Crescent Hospital, Lahore.png",
     "Prime Health Pharma (Pvt) Limited":
-      "/health/Prime Health Pharma (Pvt) Limited.png",
+      "/Health/Prime Health Pharma (Pvt) Limited.png",
+    "Apex Industries (Private) Limited": "/Health/Apex Industries pvt ltd.jfif",
+    "Filix Pharmaceuticals (Private) Limited":
+      "/Health/Filix Pharmaceuticals (Private) Limited.png",
+    "Leads Pharma (Private) Limited":
+      "/Health/Leads Pharma (Private) Limited.jfif",
+    "Saibins Pharmaceuticals": "/Health/Saibins Pharmaceuticals.png",
   };
 
   // Logo mapping for construction organizations
   const constructionLogos: { [key: string]: string } = {
     "Suckh Chain Vellay (Pvt) Limited":
-      "/construction/Suckh Chain Vellay (Pvt) Limited.png",
+      "/Construction/Suckh Chain Vellay (Pvt) Limited.png",
     "Such Chain Garden (Pvt) Limited":
-      "/construction/Such Chain Garden (Pvt) Limited.png",
+      "/Construction/Such Chain Garden (Pvt) Limited.PNG",
     "Islamabad Corporative Housing Society":
-      "/construction/Islamabad Corporative Housing Society .png",
-    "Istanbul International": "/construction/Istanbul International.png",
-    "Built Robust": "/construction/Built Robust.png",
-    "AKRON (Pvt) Limited": "/construction/AKRON (Pvt) Limited.png",
-    "Perfect Builders": "/construction/Perfect Builders.png",
-    "LAC (PVT) LTD": "/construction/LAC (PVT) LTD.png",
-    "Aaj Sons (Pvt) Limited": "/construction/Aaj Sons (Pvt) Limited.png",
-    "Ultracon (Pvt) Ltd": "/construction/Ultracon (Pvt) Ltd.png",
-    "APEX Homes (Pvt) Ltd.": "/construction/APEX Homes (Pvt) Ltd..png",
-    "J7 Group": "/construction/J7 Group.png",
+      "/Construction/Islamabad Corporative Housing Society .png",
+    "Istanbul International": "/Construction/Istanbul International.png",
+    "Built Robust": "/Construction/Built Robust.png",
+    "AKRON (Pvt) Limited": "/Construction/AKRON (Pvt) Limited.png",
+    "Perfect Builders": "/Construction/Perfect Builders.png",
+    "LAC (PVT) LTD": "/Construction/LAC (PVT) LTD.png",
+    "Aaj Sons (Pvt) Limited": "/Construction/Aaj Sons (Pvt) Limited.png",
+    "Ultracon (Pvt) Ltd": "/Construction/Ultracon (Pvt) Ltd.png",
+    "APEX Homes (Pvt) Ltd.": "/Construction/APEX Homes (Pvt) Ltd..png",
+    "J7 Group": "/Construction/J7 Group.png",
     "Tahir Builders (Pvt) Limited":
-      "/construction/Tahir Builders (Pvt) Limited.png",
+      "/Construction/Tahir Builders (Pvt) Limited.png",
     "Faatir Engineers (Pvt) Limited":
-      "/construction/Faatir Engineers (Pvt) Limited.png",
+      "/Construction/Faatir Engineers (Pvt) Limited.png",
+    "Abul Qasim Builders & Developers":
+      "/Construction/Abul Qasim Builders & Developers.jpg",
+    "Haadi Developers": "/Construction/Haadi Developers.jpg",
   };
 
   // Logo mapping for trading sector organizations
   const tradingLogos: { [key: string]: string } = {
     "Al-Karam International, Rawalpindi":
-      "/trading/Al-Karam International, Rawalpindi.png",
+      "/Trading/Al-Karam International, Rawalpindi.png",
     "APEX Trading International (Private) Limited":
-      "/trading/APEX Trading International (Private) Limited.png",
-    "Sigma Motors Limited": "/trading/Sigma Motors Limited.png",
-    "Sky Traders": "/trading/Sky Traders.png",
-    "M.N. Traders": "/trading/M.N. Traders.png",
-    "Islamabad Pharma": "/trading/Islamabad Pharma.png",
+      "/Trading/APEX Trading International (Private) Limited.png",
+    "AHA Trading (Pvt) Limited":
+      "/Trading/American Gardens - Sole Distributor.jpg",
+    "Sigma Motors Limited": "/Trading/Sigma Motors Limited.png",
+    "Sky Traders": "/Trading/Sky Traders.png",
+    "M.N. Traders": "/Trading/MN traders.png",
+    "Islamabad Distributors (Pvt) Ltd": "/Trading/Nishat Linen.jpg",
+    "Islamabad Pharma": "/Trading/Islamabad Pharma.png",
     "Khyber Electric Co. (Pvt) Limited":
-      "/trading/Khyber Electric Co. (Pvt) Limited.png",
-    "Multitech Engineers, UK": "/trading/Multitech Engineers, UK.png",
-    "SMS Pakistan": "/trading/SMS Pakistan.png",
+      "/Trading/Khyber Electric Co. (Pvt) Limited.png",
+    "Multitech Engineers, UK": "/Trading/Multitech Engineers, UK.png",
+    "Gillion Pharmacy, Lahore": "/Trading/Khaadi.jpg",
+    "SMS Pakistan": "/Trading/SMS Pakistan.jpg",
     "IMCO Technologies (Pvt) Limited":
-      "/trading/IMCO Technologies (Pvt) Limited.png",
+      "/Trading/IMCO Technologies (Pvt) Limited.png",
+    "City Supermarket, Rawalpindi": "/Trading/Family cash and carry.png",
+    "Family Cash & Carry (FCC)": "/Trading/Family cash and carry.png",
   };
 
   // Logo mapping for services sector organizations
   const servicesLogos: { [key: string]: string } = {
+    "Royal Airport Services (Pvt) Limited":
+      "/Services/imagesRoyal Airport Services (Pvt) Limited.jfif",
+    "Royal Ease Travel (Pvt) Limited": "/Services/RAS.jpg",
+    "AH Aviation (Pvt) Limited": "/Services/AH Aviation (Pvt) Limited.png.jfif",
+    "Appolo Telecom (Pvt) Limited":
+      "/Services/Appolo Telecom (Pvt) Limite.jfif",
+    "Baarik Travels (Pvt) Limited":
+      "/Services/Baarik Travels (Pvt) Limited.jfif",
     "Al-Fursan Travels (Pvt) Limited":
-      "/services/Al-Fursan Travels (Pvt) Limited.png",
+      "/Services/Al-Fursan Travels (Pvt) Limited.png",
+    "Qutbain International (Pvt) Limited":
+      "/Services/Qutbain International (Pvt) Limited.jfif",
+    "Dedar-e Madina (Pvt) Limited":
+      "/Services/Dedar-e Madina (Pvt) Limited.jfif",
+    "Arjumand And Associates (AAA) (World Bank Consultant)":
+      "/Services/Designmen.jpg",
+    "DAMCON Engineering Solutions (Pvt) Ltd":
+      "/Services/DAMCON Engineering Solutions (Pvt) Ltd.jfif",
     "Buzzard Securities (Pvt) Limited":
-      "/services/Buzzard Securities (Pvt) Limited.png",
+      "/Services/Buzzard Securities (Pvt) Limited.png",
     "CFC Consultant (Pvt) Limited":
-      "/services/CFC Consultant (Pvt) Limited.png",
+      "/Services/CFC Consultant (Pvt) Limited.png",
     "ITC Communications (Pvt) Limited":
-      "/services/ITC Communications (Pvt) Limited.png",
-    "MAXNET (Pvt) Limited": "/services/MAXNET (Pvt) Limited.png",
-    "SELECTUM (Pvt) Limited": "/services/SELECTUM (Pvt) Limited.png",
+      "/Services/ITC Communications (Pvt) Limited.png",
     "Telezone Communication":
-      "/services/Telezone Communication (Pvt) Limited.png",
+      "/Services/Telezone Communication (Pvt) Limited.png",
+    "MAXNET (Pvt) Limited": "/Services/MAXNET (Pvt) Limited.png",
+    "SELECTUM (Pvt) Limited": "/Services/SELECTUM (Pvt) Limited.png",
+    "Seven Software Development (Pvt) Limited":
+      "/Services/Seven Software Development (Pvt) Limited.jfif",
+    "Converge Enterprise Services (Pvt) Limited":
+      "/Services/Converge Enterprise Services (Pvt) Limited.jfif",
+    "Al-Khaleej Exchange Company – B (Pvt) Ltd":
+      "/Services/Echo Oil (Private) Limited.jpg",
+    "Perception Safety Solutions (Pvt) Ltd":
+      "/Services/Skyways H. J (Private) Limited.jpeg",
   };
 
   // Logo mapping for mining organizations
   const miningLogos: { [key: string]: string } = {
     "AJK Coal Mining Company (Private) Limited":
-      "/mining/AJK Coal Mining Company (Private) Limited.png",
+      "/Mining/AJK Coal Mining Company (Private) Limited.png",
     "South Asia Mining Company (Private) Limited":
-      "/mining/South Asia Mining Company (Private) Limited.png",
-    "SGB Mining (Pvt) Limited": "/mining/SGB Mining (Pvt) Limited.png",
+      "/Mining/South Asia Mining Company (Private) Limited.png",
+    "SGB Mining (Pvt) Limited": "/Mining/SGB Mining (Pvt) Limited.png",
+    "Apex Industries": "/Mining/Apex Industries.jfif",
   };
 
   // Logo mapping for power sector organizations
   const powerLogos: { [key: string]: string } = {
+    "Farooq Energy Company (Pvt) Limited (FARENCO) (500 MW Hydro Power Project, Chakkoti)":
+      "/Power/Farooq Energy Company.jfif",
+    "Neelum Green Energy (Pvt) Limited (49 MW Hydro Power Project, Luat)":
+      "/Power/images.png",
+    "Green Energy (Private) Limited (3 MW Raili-III Hydro Power Project)":
+      "/Power/images (1).png",
     "Karimi Energy (Pvt.) Ltd. (4.3 MW Jabri Bedar Hydro Power Project)":
-      "/power/Karimi Energy (Pvt.) Ltd.png",
-    "(SHYDO), NWFP": "/power/SHYDO), NWFP.png",
-    PAEC: "/power/PAEC.logo.png",
-    "S.K. Hydro Consortium": "/power/SK-HYDRO.png",
+      "/Power/Karimi Energy (Pvt.) Ltd.png",
+    "(SHYDO), NWFP": "/Power/SHYDO), NWFP.png",
+    "Agha Khan Rural Support Programme (AKRSP)":
+      "/Power/Agha Khan Rural Support Programmepng.jfif",
+    PAEC: "/Power/PAEC.logo.png",
+    "S.K. Hydro Consortium": "/Power/SK-HYDRO.png",
+  };
+
+  // Logo mapping for IT organizations
+  const itLogos: { [key: string]: string } = {
+    "J Telemarketing": "/IT/J telemarketing.png",
+    "Newage Management (Pvt) Ltd": "/IT/Newage Management (Pvt) LTd.png",
+    "Seven Soft (Pvt) Ltd": "/IT/Seven Soft (Pvt) Ltd.webp",
+    "Simplicity Technologies (Pvt) Ltd":
+      "/IT/Simplicity Technologies (Pvt) Ltd.jpg",
+    "Siparadigm Diagnostic Informatics (Pvt) Limited":
+      "/IT/Siparadigm Diagnostic Informatics (Pvt) limited.png",
+    "Veyn (Private) Limited": "/IT/Veyn (Private) Limited.jpeg",
+    "We are Nova (Pvt) Ltd": "/IT/We are Nova (Pvt) Ltd.webp",
+  };
+
+  // Color mapping for category buttons
+  const getCategoryColor = (title: string) => {
+    const colorMap: {
+      [key: string]: {
+        bg: string;
+        hover: string;
+        border: string;
+        text: string;
+        icon: string;
+        hoverIcon: string;
+      };
+    } = {
+      Manufacturing: {
+        bg: "bg-gray-600",
+        hover: "hover:bg-gray-700",
+        border: "border-gray-500",
+        text: "text-white",
+        icon: "text-white",
+        hoverIcon: "group-hover:text-gray-600",
+      },
+      "Non-Profit": {
+        bg: "bg-green-600",
+        hover: "hover:bg-green-700",
+        border: "border-green-500",
+        text: "text-white",
+        icon: "text-white",
+        hoverIcon: "group-hover:text-green-600",
+      },
+      "Health Sector": {
+        bg: "bg-blue-600",
+        hover: "hover:bg-blue-700",
+        border: "border-blue-500",
+        text: "text-white",
+        icon: "text-white",
+        hoverIcon: "group-hover:text-blue-600",
+      },
+      "Educational Institutions": {
+        bg: "bg-purple-600",
+        hover: "hover:bg-purple-700",
+        border: "border-purple-500",
+        text: "text-white",
+        icon: "text-white",
+        hoverIcon: "group-hover:text-purple-600",
+      },
+      Construction: {
+        bg: "bg-orange-600",
+        hover: "hover:bg-orange-700",
+        border: "border-orange-500",
+        text: "text-white",
+        icon: "text-white",
+        hoverIcon: "group-hover:text-orange-600",
+      },
+      "Trading Sector": {
+        bg: "bg-emerald-600",
+        hover: "hover:bg-emerald-700",
+        border: "border-emerald-500",
+        text: "text-white",
+        icon: "text-white",
+        hoverIcon: "group-hover:text-emerald-600",
+      },
+      Services: {
+        bg: "bg-teal-600",
+        hover: "hover:bg-teal-700",
+        border: "border-teal-500",
+        text: "text-white",
+        icon: "text-white",
+        hoverIcon: "group-hover:text-teal-600",
+      },
+      Mining: {
+        bg: "bg-stone-700",
+        hover: "hover:bg-stone-800",
+        border: "border-stone-600",
+        text: "text-white",
+        icon: "text-white",
+        hoverIcon: "group-hover:text-stone-700",
+      },
+      Power: {
+        bg: "bg-yellow-500",
+        hover: "hover:bg-yellow-600",
+        border: "border-yellow-400",
+        text: "text-white",
+        icon: "text-white",
+        hoverIcon: "group-hover:text-yellow-500",
+      },
+      IT: {
+        bg: "bg-cyan-600",
+        hover: "hover:bg-cyan-700",
+        border: "border-cyan-500",
+        text: "text-white",
+        icon: "text-white",
+        hoverIcon: "group-hover:text-cyan-600",
+      },
+    };
+    return (
+      colorMap[title] || {
+        bg: "bg-blue-600",
+        hover: "hover:bg-blue-700",
+        border: "border-blue-500",
+        text: "text-white",
+        icon: "text-white",
+        hoverIcon: "group-hover:text-blue-600",
+      }
+    );
   };
 
   const clientCategories = [
@@ -216,10 +398,13 @@ const Clients: React.FC = () => {
         "Hamza Sugar Mills Limited",
         "Kisan Ghee Mills",
         "Sunlight Pakistan",
-        "Poonch Flour & General Mills",
-        "Marshal Press",
         "SIGMA Motors Limited",
         "Chiniot Safety Fuse Manufacturing Company",
+        "Filix Pharmaceuticals (Private) Limited",
+        "Leads Pharma (Private) Limited",
+        "Murgh Brand Masalajat",
+        "Pakistan Steel Mills",
+        "Saibins Pharmaceuticals",
       ],
     },
     {
@@ -263,6 +448,9 @@ const Clients: React.FC = () => {
         "Pak Red Crescent Hospital, Lahore",
         "Prime Health Pharma (Pvt) Limited",
         "Apex Industries (Private) Limited",
+        "Filix Pharmaceuticals (Private) Limited",
+        "Leads Pharma (Private) Limited",
+        "Saibins Pharmaceuticals",
       ],
     },
     {
@@ -286,6 +474,12 @@ const Clients: React.FC = () => {
         "Swedish College of Engineering & Technology",
         "Muslim Youth University",
         "Siddique Public School",
+        "Aeo Pakistan",
+        "EBC",
+        "FLS",
+        "Mentors",
+        "Sirsyed",
+        "Trillium Montessori",
       ],
     },
     {
@@ -307,6 +501,8 @@ const Clients: React.FC = () => {
         "J7 Group",
         "Tahir Builders (Pvt) Limited",
         "Faatir Engineers (Pvt) Limited",
+        "Abul Qasim Builders & Developers",
+        "Haadi Developers",
       ],
     },
     {
@@ -368,6 +564,7 @@ const Clients: React.FC = () => {
         "Pak-Kashmir Mineral Resources (Private) Limited",
         "South Asia Mining Company (Private) Limited",
         "SGB Mining (Pvt) Limited",
+        "Apex Industries",
       ],
     },
     {
@@ -389,11 +586,25 @@ const Clients: React.FC = () => {
         "BedRock (Pvt.) Ltd. (49.5 MW Gomat Nar Hydro Power Project)",
       ],
     },
+    {
+      icon: Monitor,
+      title: "IT",
+      color: "from-cyan-500 to-cyan-600",
+      clients: [
+        "J Telemarketing",
+        "Newage Management (Pvt) Ltd",
+        "Seven Soft (Pvt) Ltd",
+        "Simplicity Technologies (Pvt) Ltd",
+        "Siparadigm Diagnostic Informatics (Pvt) Limited",
+        "Veyn (Private) Limited",
+        "We are Nova (Pvt) Ltd",
+      ],
+    },
   ];
 
   const stats = [
     { icon: Users, value: "200+", label: "Prestigious Clients" },
-    { icon: Globe, value: "9", label: "Industry Sectors" },
+    { icon: Globe, value: "10", label: "Industry Sectors" },
     { icon: Award, value: "25+", label: "Years of Trust" },
     { icon: TrendingUp, value: "98%", label: "Client Retention" },
   ];
@@ -410,13 +621,18 @@ const Clients: React.FC = () => {
       servicesLogos,
       miningLogos,
       powerLogos,
+      itLogos,
     ];
-    
+
     // Collect all unique logo paths
     const allLogos = new Set<string>();
     allLogoMaps.forEach((logoMap) => {
       Object.values(logoMap).forEach((logoPath) => {
-        if (logoPath && !logoPath.startsWith('data:') && !logoPath.startsWith('http')) {
+        if (
+          logoPath &&
+          !logoPath.startsWith("data:") &&
+          !logoPath.startsWith("http")
+        ) {
           allLogos.add(logoPath);
         }
       });
@@ -426,24 +642,24 @@ const Clients: React.FC = () => {
     let logoIndex = 0;
     allLogos.forEach((logoPath) => {
       // Use link preload for better browser support
-      const link = document.createElement('link');
-      link.rel = 'preload';
-      link.as = 'image';
+      const link = document.createElement("link");
+      link.rel = "preload";
+      link.as = "image";
       link.href = logoPath;
       if (logoIndex < 20) {
-        link.setAttribute('fetchpriority', 'high');
+        link.setAttribute("fetchpriority", "high");
       } else {
-        link.setAttribute('fetchpriority', 'low');
+        link.setAttribute("fetchpriority", "low");
       }
       document.head.appendChild(link);
-      
+
       // Also preload via Image object for browser cache
       const img = new Image();
       img.src = logoPath;
       if (logoIndex < 20) {
-        img.fetchPriority = 'high';
+        img.fetchPriority = "high";
       } else {
-        img.fetchPriority = 'low';
+        img.fetchPriority = "low";
       }
       logoIndex++;
     });
@@ -669,38 +885,64 @@ const Clients: React.FC = () => {
         </motion.div>
 
         {/* Tab Navigation */}
-            <motion.div
+        <motion.div
           className="mb-6 sm:mb-8 w-full"
           initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
+          whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-              viewport={{ once: true }}
+          viewport={{ once: true }}
         >
-          <div className="grid grid-cols-3 lg:flex lg:flex-nowrap gap-2 sm:gap-3 px-2 sm:px-4 max-w-2xl lg:max-w-full lg:px-8 mx-auto lg:justify-center lg:items-center">
+          <div className="grid grid-cols-3 md:grid-cols-5 lg:grid-cols-5 xl:flex xl:flex-nowrap gap-2.5 sm:gap-3 md:gap-2.5 lg:gap-2.5 xl:gap-2 px-2 sm:px-4 md:px-4 lg:px-4 xl:px-4 max-w-2xl md:max-w-full mx-auto md:justify-items-center lg:justify-items-center xl:justify-center xl:items-center">
             {clientCategories.map((category, index) => {
               const Icon = category.icon;
               const isSelected = selectedCategory === index;
+              const isITButton = index === 9; // IT button is the 10th button (index 9)
+              const categoryColor = getCategoryColor(category.title);
               return (
                 <motion.button
                   key={index}
                   onClick={() => setSelectedCategory(index)}
                   className={`
-                    flex flex-col lg:flex-row items-center justify-center space-y-1 lg:space-y-0 lg:space-x-2 px-1 sm:px-2 sm:px-3 lg:px-3 lg:px-4 py-2 sm:py-2.5 rounded-lg font-medium transition-all duration-300 text-xs sm:text-sm w-full lg:w-auto lg:whitespace-nowrap lg:flex-shrink-0 min-h-[60px] sm:min-h-0 lg:min-h-0
-                    ${
-                      isSelected
-                        ? "bg-blue-600 text-white shadow-lg border-2 border-blue-400"
-                        : "bg-gray-100 text-gray-700 hover:bg-gray-200 border-2 border-transparent"
-                    }
-                  `}
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
+                      group relative flex flex-col items-center justify-center gap-1.5 sm:gap-2 xl:flex-row xl:gap-2
+                      px-2 sm:px-3 xl:px-3 py-3 sm:py-3.5 xl:py-2
+                      rounded-xl xl:rounded-lg
+                      font-semibold transition-all duration-300
+                      text-[10px] xs:text-[11px] sm:text-sm xl:text-xs
+                      w-full xl:w-auto xl:whitespace-nowrap xl:flex-shrink
+                      min-h-[70px] sm:min-h-[75px] md:min-h-0
+                      border-2
+                      ${
+                        isITButton
+                          ? "col-start-2 md:col-start-auto lg:col-start-auto xl:col-start-auto"
+                          : ""
+                      }
+                      ${
+                        isSelected
+                          ? `${categoryColor.bg} ${categoryColor.text} shadow-lg ${categoryColor.border} scale-105 xl:scale-100`
+                          : "bg-white text-gray-700 hover:bg-gray-50 hover:shadow-sm border-gray-200 hover:border-gray-300"
+                      }
+                    `}
+                  style={
+                    isSelected
+                      ? {
+                          boxShadow: `0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)`,
+                        }
+                      : {}
+                  }
+                  whileHover={!isSelected ? { scale: 1.02, y: -2 } : {}}
+                  whileTap={{ scale: 0.98 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 25 }}
                 >
                   <Icon
-                    className={`w-3 h-3 sm:w-4 sm:h-4 lg:w-4 lg:h-4 flex-shrink-0 ${
-                      isSelected ? "text-white" : "text-gray-600"
+                    className={`w-5 h-5 sm:w-6 sm:h-6 xl:w-4 xl:h-4 flex-shrink-0 transition-colors duration-300 ${
+                      isSelected
+                        ? categoryColor.icon
+                        : `text-gray-600 ${categoryColor.hoverIcon}`
                     }`}
                   />
-                  <span className="text-center lg:text-left leading-tight break-words lg:break-normal lg:whitespace-nowrap px-0.5 w-full lg:w-auto">{category.title}</span>
+                  <span className="text-center xl:text-left leading-tight break-words xl:break-normal xl:whitespace-nowrap px-0.5 w-full xl:w-auto">
+                    {category.title}
+                  </span>
                 </motion.button>
               );
             })}
@@ -719,24 +961,24 @@ const Clients: React.FC = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.3 }}
-            >
-              {/* Category Header */}
+              >
+                {/* Category Header */}
                 <div className="bg-white p-6 sm:p-8 border-b border-gray-200">
-                <div className="flex items-center space-x-4">
+                  <div className="flex items-center space-x-4">
                     <div className="w-16 h-16 bg-blue-100 rounded-xl flex items-center justify-center">
                       <Icon className="w-8 h-8 text-blue-500" />
-                  </div>
-                  <div>
+                    </div>
+                    <div>
                       <h3 className="text-2xl sm:text-3xl font-bold text-gray-900">
                         {category.title} Sector
                       </h3>
                       <p className="text-gray-600 mt-1 text-sm sm:text-base">
                         Trusted by {category.clients.length} leading
                         organizations
-                    </p>
+                      </p>
+                    </div>
                   </div>
                 </div>
-              </div>
 
                 {/* Clients Grid or Logo Carousel */}
                 <div className="p-6 sm:p-8">
@@ -761,6 +1003,8 @@ const Clients: React.FC = () => {
                         ? miningLogos
                         : category.title === "Power"
                         ? powerLogos
+                        : category.title === "IT"
+                        ? itLogos
                         : {}
                     }
                     hasLogos={
@@ -772,11 +1016,12 @@ const Clients: React.FC = () => {
                       category.title === "Trading Sector" ||
                       category.title === "Services" ||
                       category.title === "Mining" ||
-                      category.title === "Power"
+                      category.title === "Power" ||
+                      category.title === "IT"
                     }
                   />
-              </div>
-            </motion.div>
+                </div>
+              </motion.div>
             );
           })()}
 
@@ -833,7 +1078,7 @@ const Clients: React.FC = () => {
                 International Clients
               </h4>
               <p className="text-gray-600 text-sm leading-relaxed">
-                Trusted by international organizations including Muslim Aid UK, 
+                Trusted by international organizations including Muslim Aid UK,
                 Michigan State University USA, and RAK College UAE
               </p>
             </motion.div>

@@ -12,30 +12,36 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   const location = useLocation();
 
   useEffect(() => {
+    // Only handle initial load or direct URL access
+    const sectionId = location.pathname === '/' ? 'home' : location.pathname.slice(1);
+    
+    // Check if we just navigated (don't scroll if we're already handling it in Header)
+    // But actually, simpler is better: let's just check if hash matches or path matches
+    
     // Small delay to ensure DOM is ready
     const timer = setTimeout(() => {
-      if (location.pathname !== '/') {
-        // If it's a route like /about, scroll to that section
-        const sectionId = location.pathname.slice(1); // Remove leading /
+      if (location.pathname === '/') {
+        // Only scroll to top if we are strictly at root and NOT hash
+        if (!location.hash) {
+           window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+      } else {
         const element = document.getElementById(sectionId);
         if (element) {
-          const headerOffset = 80; // Account for fixed header
-          const elementPosition = element.getBoundingClientRect().top;
-          const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+          const headerOffset = 80;
+          const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
+          const offsetPosition = elementPosition - headerOffset;
 
           window.scrollTo({
             top: offsetPosition,
-            behavior: 'smooth'
+            behavior: 'smooth',
           });
         }
-      } else {
-        // If it's home, scroll to top
-        window.scrollTo({ top: 0, behavior: 'smooth' });
       }
     }, 100);
 
     return () => clearTimeout(timer);
-  }, [location]);
+  }, [location.pathname]); // Only run when pathname changes
 
   return (
     <div className="font-inter overflow-x-hidden w-full max-w-full">
@@ -48,4 +54,3 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
 };
 
 export default Layout;
-

@@ -432,13 +432,16 @@ const Services: React.FC = () => {
                 <span>Schedule Consultation</span>
                 <ArrowRight size={20} />
               </motion.button>
-              <motion.button
-                className="glass-card border-2 border-blue-600 text-blue-600 px-8 py-4 rounded-xl font-semibold hover:bg-blue-600 hover:text-white transition-all duration-300"
+              <motion.a
+                href="/CompanyProfile/Nasir Absar Profile 2024.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="glass-card border-2 border-blue-600 text-blue-600 px-8 py-4 rounded-xl font-semibold hover:bg-blue-600 hover:text-white transition-all duration-300 inline-block text-center"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
                 Download Service Brochure
-              </motion.button>
+              </motion.a>
             </div>
           </div>
         </motion.div>

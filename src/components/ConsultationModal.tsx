@@ -36,58 +36,22 @@ const ConsultationModal: React.FC<ConsultationModalProps> = ({
   useEffect(() => {
     if (!isOpen) return;
 
-    const handleWheel = (e: WheelEvent) => {
-      if (!modalRef.current || !contentRef.current) {
-        e.preventDefault();
-        return;
-      }
-      
-      const target = e.target as HTMLElement;
-      const isInsideModal = modalRef.current.contains(target);
-      
-      if (!isInsideModal) {
-        // Prevent scrolling outside modal
-        e.preventDefault();
-        e.stopPropagation();
-        return;
-      }
-      
-      // Inside modal - check if we can scroll
-      const contentEl = contentRef.current;
-      const isAtTop = contentEl.scrollTop <= 0;
-      const isAtBottom = contentEl.scrollTop + contentEl.clientHeight >= contentEl.scrollHeight - 1;
-      
-      // If at boundaries and trying to scroll further, prevent default
-      if ((e.deltaY < 0 && isAtTop) || (e.deltaY > 0 && isAtBottom)) {
-        e.preventDefault();
-        e.stopPropagation();
-      }
-    };
-
-    const handleTouchMove = (e: TouchEvent) => {
-      if (!modalRef.current) {
-        e.preventDefault();
-        return;
-      }
-      
-      const target = e.target as HTMLElement;
-      const isInsideModal = modalRef.current.contains(target);
-      
-      if (!isInsideModal) {
-        e.preventDefault();
-        e.stopPropagation();
-      }
-    };
-
-    // Use capture phase to catch events early
-    document.addEventListener('wheel', handleWheel, { passive: false, capture: true });
-    document.addEventListener('touchmove', handleTouchMove, { passive: false, capture: true });
-    document.body.style.overflow = 'hidden';
+    // Save current scroll position
+    const scrollY = window.scrollY;
+    document.body.style.position = "fixed";
+    document.body.style.top = `-${scrollY}px`;
+    document.body.style.width = "100%";
+    document.body.style.overflow = "hidden";
 
     return () => {
-      document.removeEventListener('wheel', handleWheel, { capture: true });
-      document.removeEventListener('touchmove', handleTouchMove, { capture: true });
-      document.body.style.overflow = '';
+      // Restore scroll position after a small delay to let React finish updating
+      requestAnimationFrame(() => {
+        document.body.style.position = "";
+        document.body.style.top = "";
+        document.body.style.width = "";
+        document.body.style.overflow = "";
+        window.scrollTo({ top: scrollY, behavior: 'instant' });
+      });
     };
   }, [isOpen]);
 
@@ -107,7 +71,10 @@ const ConsultationModal: React.FC<ConsultationModalProps> = ({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            onClick={onClose}
+            onClick={(e) => {
+              e.preventDefault();
+              onClose();
+            }}
             className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50"
           />
 
@@ -127,7 +94,12 @@ const ConsultationModal: React.FC<ConsultationModalProps> = ({
             >
               {/* Close Button */}
               <button
-                onClick={onClose}
+                type="button"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  onClose();
+                }}
                 className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full glass-light hover:bg-red-500/20 text-gray-600 hover:text-red-600 transition-all duration-300 z-10"
                 aria-label="Close modal"
               >

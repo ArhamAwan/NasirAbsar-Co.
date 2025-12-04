@@ -39,58 +39,22 @@ const ServiceModal: React.FC<ServiceModalProps> = ({ isOpen, onClose, service })
   React.useEffect(() => {
     if (!isOpen) return;
 
-    const handleWheel = (e: WheelEvent) => {
-      if (!modalRef.current || !contentRef.current) {
-        e.preventDefault();
-        return;
-      }
-      
-      const target = e.target as HTMLElement;
-      const isInsideModal = modalRef.current.contains(target);
-      
-      if (!isInsideModal) {
-        // Prevent scrolling outside modal
-        e.preventDefault();
-        e.stopPropagation();
-        return;
-      }
-      
-      // Inside modal - check if we can scroll
-      const contentEl = contentRef.current;
-      const isAtTop = contentEl.scrollTop <= 0;
-      const isAtBottom = contentEl.scrollTop + contentEl.clientHeight >= contentEl.scrollHeight - 1;
-      
-      // If at boundaries and trying to scroll further, prevent default
-      if ((e.deltaY < 0 && isAtTop) || (e.deltaY > 0 && isAtBottom)) {
-        e.preventDefault();
-        e.stopPropagation();
-      }
-    };
-
-    const handleTouchMove = (e: TouchEvent) => {
-      if (!modalRef.current) {
-        e.preventDefault();
-        return;
-      }
-      
-      const target = e.target as HTMLElement;
-      const isInsideModal = modalRef.current.contains(target);
-      
-      if (!isInsideModal) {
-        e.preventDefault();
-        e.stopPropagation();
-      }
-    };
-
-    // Use capture phase to catch events early
-    document.addEventListener('wheel', handleWheel, { passive: false, capture: true });
-    document.addEventListener('touchmove', handleTouchMove, { passive: false, capture: true });
-    document.body.style.overflow = 'hidden';
+    // Save current scroll position
+    const scrollY = window.scrollY;
+    document.body.style.position = "fixed";
+    document.body.style.top = `-${scrollY}px`;
+    document.body.style.width = "100%";
+    document.body.style.overflow = "hidden";
 
     return () => {
-      document.removeEventListener('wheel', handleWheel, { capture: true });
-      document.removeEventListener('touchmove', handleTouchMove, { capture: true });
-      document.body.style.overflow = '';
+      // Restore scroll position after a small delay to let React finish updating
+      requestAnimationFrame(() => {
+        document.body.style.position = "";
+        document.body.style.top = "";
+        document.body.style.width = "";
+        document.body.style.overflow = "";
+        window.scrollTo({ top: scrollY, behavior: 'instant' });
+      });
     };
   }, [isOpen]);
 
@@ -108,7 +72,10 @@ const ServiceModal: React.FC<ServiceModalProps> = ({ isOpen, onClose, service })
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
             className="fixed inset-0 bg-black/60 backdrop-blur-md z-[100]"
-            onClick={onClose}
+            onClick={(e) => {
+              e.preventDefault();
+              onClose();
+            }}
           />
           
           {/* Modal */}
@@ -143,7 +110,12 @@ const ServiceModal: React.FC<ServiceModalProps> = ({ isOpen, onClose, service })
                     </div>
                   </div>
                   <button
-                    onClick={onClose}
+                    type="button"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      onClose();
+                    }}
                     className="w-10 h-10 bg-white/30 rounded-full flex items-center justify-center hover:bg-white/40 transition-colors flex-shrink-0 ml-4"
                     aria-label="Close modal"
                   >

@@ -48,7 +48,7 @@ const Contact: React.FC = () => {
     {
       icon: Phone,
       title: "Phone Numbers",
-      details: ["+92-51-1234567", "+92-300-1234567", "Fax: +92-51-1234568"],
+      details: ["051-4861322"],
     },
     {
       icon: Mail,

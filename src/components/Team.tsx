@@ -285,68 +285,22 @@ const Team: React.FC = () => {
   useEffect(() => {
     if (selected === null) return;
 
-    const handleWheel = (e: WheelEvent) => {
-      if (!modalRef.current || !modalContentRef.current) {
-        e.preventDefault();
-        return;
-      }
-
-      const target = e.target as HTMLElement;
-      const isInsideModal = modalRef.current.contains(target);
-
-      if (!isInsideModal) {
-        // Prevent scrolling outside modal
-        e.preventDefault();
-        e.stopPropagation();
-        return;
-      }
-
-      // Inside modal - check if we can scroll
-      const contentEl = modalContentRef.current;
-      const isAtTop = contentEl.scrollTop <= 0;
-      const isAtBottom =
-        contentEl.scrollTop + contentEl.clientHeight >=
-        contentEl.scrollHeight - 1;
-
-      // If at boundaries and trying to scroll further, prevent default
-      if ((e.deltaY < 0 && isAtTop) || (e.deltaY > 0 && isAtBottom)) {
-        e.preventDefault();
-        e.stopPropagation();
-      }
-    };
-
-    const handleTouchMove = (e: TouchEvent) => {
-      if (!modalRef.current) {
-        e.preventDefault();
-        return;
-      }
-
-      const target = e.target as HTMLElement;
-      const isInsideModal = modalRef.current.contains(target);
-
-      if (!isInsideModal) {
-        e.preventDefault();
-        e.stopPropagation();
-      }
-    };
-
-    // Use capture phase to catch events early
-    document.addEventListener("wheel", handleWheel, {
-      passive: false,
-      capture: true,
-    });
-    document.addEventListener("touchmove", handleTouchMove, {
-      passive: false,
-      capture: true,
-    });
+    // Save current scroll position
+    const scrollY = window.scrollY;
+    document.body.style.position = "fixed";
+    document.body.style.top = `-${scrollY}px`;
+    document.body.style.width = "100%";
     document.body.style.overflow = "hidden";
 
     return () => {
-      document.removeEventListener("wheel", handleWheel, { capture: true });
-      document.removeEventListener("touchmove", handleTouchMove, {
-        capture: true,
+      // Restore scroll position after a small delay to let React finish updating
+      requestAnimationFrame(() => {
+        document.body.style.position = "";
+        document.body.style.top = "";
+        document.body.style.width = "";
+        document.body.style.overflow = "";
+        window.scrollTo({ top: scrollY, behavior: "instant" });
       });
-      document.body.style.overflow = "";
     };
   }, [selected]);
 
@@ -481,31 +435,39 @@ const Team: React.FC = () => {
         {selected !== null && (
           <motion.div
             ref={modalRef}
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-md"
+            className="fixed inset-0 z-[70] flex items-center justify-center bg-black/50 backdrop-blur-md"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            onClick={() => setSelected(null)}
+            onClick={(e) => {
+              e.preventDefault();
+              setSelected(null);
+            }}
           >
             <motion.div
               ref={modalContentRef}
-              className="glass-card rounded-2xl sm:rounded-3xl shadow-2xl max-w-lg w-full p-4 sm:p-6 md:p-8 relative overflow-y-auto max-h-[90vh] border border-white/50 backdrop-blur-xl mx-2 sm:mx-4"
+              className="glass-card rounded-xl sm:rounded-2xl md:rounded-3xl shadow-2xl max-w-[90vw] sm:max-w-md md:max-w-lg w-full p-3 sm:p-5 md:p-8 relative overflow-y-auto max-h-[85vh] sm:max-h-[90vh] border border-white/50 backdrop-blur-xl mx-2 sm:mx-4"
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
               onClick={(e) => e.stopPropagation()}
             >
               <button
+                type="button"
                 className="absolute top-2 right-2 sm:top-4 sm:right-4 glass-light rounded-full p-1.5 sm:p-2 hover:bg-white/80 backdrop-blur-md border border-white/30"
-                onClick={() => setSelected(null)}
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  setSelected(null);
+                }}
               >
                 <X className="w-5 h-5 sm:w-6 sm:h-6 text-gray-600" />
               </button>
-              <div className="flex flex-col items-center mb-4 sm:mb-5 md:mb-6">
+              <div className="flex flex-col items-center mb-3 sm:mb-4 md:mb-6">
                 <img
                   src={team[selected].image || placeholderImg}
                   alt={team[selected].name}
-                  className="w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 rounded-full object-cover border-2 sm:border-4 border-blue-600 shadow mb-3 sm:mb-4"
+                  className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 lg:w-28 lg:h-28 rounded-full object-cover border-2 sm:border-3 md:border-4 border-blue-600 shadow mb-2 sm:mb-3 md:mb-4"
                   width={112}
                   height={112}
                   loading="eager"
@@ -528,17 +490,17 @@ const Team: React.FC = () => {
                     ? team[selected].name.replace(displayLastName, "").trim()
                     : team[selected].name;
                   return (
-                    <h3 className="text-xl sm:text-2xl md:text-3xl font-extrabold text-gray-900 mb-2 sm:mb-3 tracking-tight text-center">
+                    <h3 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-extrabold text-gray-900 mb-1.5 sm:mb-2 md:mb-3 tracking-tight text-center">
                       {displayFirstName}{" "}
                       <span className="text-blue-600">{displayLastName}</span>
                     </h3>
                   );
                 })()}
-                <div className="text-gray-600 font-semibold text-base sm:text-lg md:text-xl mb-4 sm:mb-5 md:mb-6 text-center">
+                <div className="text-gray-600 font-semibold text-sm sm:text-base md:text-lg lg:text-xl mb-3 sm:mb-4 md:mb-6 text-center">
                   {team[selected].position}
                 </div>
               </div>
-              <div className="text-gray-700 text-sm sm:text-base leading-relaxed space-y-4 sm:space-y-5 text-left">
+              <div className="text-gray-700 text-xs sm:text-sm md:text-base leading-relaxed space-y-3 sm:space-y-4 md:space-y-5 text-left">
                 {team[selected].bio.split("\n\n").map((paragraph, index) => {
                   const trimmedParagraph = paragraph.trim();
                   if (!trimmedParagraph) return null;
@@ -557,7 +519,7 @@ const Team: React.FC = () => {
                     if (label.split(" ").length <= 4 && label.length < 25) {
                       return (
                         <div key={index} className="space-y-2">
-                          <h4 className="text-gray-900 font-bold text-base sm:text-lg uppercase tracking-wide">
+                          <h4 className="text-gray-900 font-bold text-sm sm:text-base md:text-lg uppercase tracking-wide">
                             {label}
                           </h4>
                           <div className="text-gray-700 leading-relaxed space-y-1">
@@ -574,12 +536,12 @@ const Team: React.FC = () => {
                                 return (
                                   <div
                                     key={lineIndex}
-                                    className="flex items-start pl-4"
+                                    className="flex items-start pl-3 sm:pl-4"
                                   >
-                                    <span className="text-blue-600 mr-2">
+                                    <span className="text-blue-600 mr-1.5 sm:mr-2">
                                       •
                                     </span>
-                                    <span className="text-sm sm:text-base">
+                                    <span className="text-xs sm:text-sm md:text-base">
                                       {trimmedLine.replace(
                                         /^[\*\-\d+\.\)]\s*/,
                                         ""
@@ -592,7 +554,7 @@ const Team: React.FC = () => {
                               return (
                                 <p
                                   key={lineIndex}
-                                  className="text-gray-700 text-sm sm:text-base"
+                                  className="text-gray-700 text-xs sm:text-sm md:text-base"
                                 >
                                   {trimmedLine}
                                 </p>
@@ -608,7 +570,7 @@ const Team: React.FC = () => {
                   return (
                     <p
                       key={index}
-                      className="text-gray-700 leading-relaxed text-sm sm:text-base text-left"
+                      className="text-gray-700 leading-relaxed text-xs sm:text-sm md:text-base text-left"
                     >
                       {trimmedParagraph
                         .split("\n")
