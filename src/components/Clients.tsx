@@ -749,15 +749,21 @@ const Clients: React.FC = () => {
       ? clients
           .filter((client) => logoMap[client])
           .map((client) => {
-            const logoPath = logoMap[client];
-            // Use paths as-is - Vite/Vercel handles spaces and special characters automatically
+            let logoPath = logoMap[client];
             // Ensure path starts with / for absolute paths
-            const normalizedPath = logoPath.startsWith("/")
-              ? logoPath
-              : "/" + logoPath;
+            if (!logoPath.startsWith("/")) {
+              logoPath = "/" + logoPath;
+            }
+            // URL encode the entire path to handle spaces and special characters
+            // This is necessary for Vercel to serve files with spaces correctly
+            const pathParts = logoPath.split("/").filter(Boolean);
+            const encodedParts = pathParts.map((part) =>
+              encodeURIComponent(part)
+            );
+            const encodedPath = "/" + encodedParts.join("/");
             return {
               name: client,
-              logo: normalizedPath,
+              logo: encodedPath,
             };
           })
       : clients.map((client) => ({
