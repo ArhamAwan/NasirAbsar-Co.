@@ -748,10 +748,30 @@ const Clients: React.FC = () => {
     const logosWithClients = hasLogos
       ? clients
           .filter((client) => logoMap[client])
-          .map((client) => ({
-            name: client,
-            logo: logoMap[client],
-          }))
+          .map((client) => {
+            const logoPath = logoMap[client];
+            // Ensure path starts with / for absolute paths
+            // URL encode only the filename part, keep folder path as-is
+            // This ensures folder names with hyphens (like "Non-Profit") work correctly
+            const normalizedPath = logoPath.startsWith("/")
+              ? logoPath
+              : "/" + logoPath;
+            const lastSlashIndex = normalizedPath.lastIndexOf("/");
+            if (lastSlashIndex === -1) {
+              // No slash found, encode the entire path
+              return {
+                name: client,
+                logo: "/" + encodeURIComponent(normalizedPath),
+              };
+            }
+            const folderPath = normalizedPath.substring(0, lastSlashIndex + 1);
+            const fileName = normalizedPath.substring(lastSlashIndex + 1);
+            const encodedPath = folderPath + encodeURIComponent(fileName);
+            return {
+              name: client,
+              logo: encodedPath,
+            };
+          })
       : clients.map((client) => ({
           name: client,
           logo: `data:image/svg+xml;base64,${btoa(`<svg width="200" height="120" xmlns="http://www.w3.org/2000/svg">
@@ -816,9 +836,23 @@ const Clients: React.FC = () => {
                   decoding="async"
                   onError={(e) => {
                     const target = e.target as HTMLImageElement;
+                    console.error(
+                      "Failed to load image:",
+                      target.src,
+                      "for client:",
+                      item.name
+                    );
                     if (target.src !== placeholderImg) {
                       target.src = placeholderImg;
                     }
+                  }}
+                  onLoad={() => {
+                    console.log(
+                      "Successfully loaded image:",
+                      item.logo,
+                      "for client:",
+                      item.name
+                    );
                   }}
                 />
               </div>
