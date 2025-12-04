@@ -152,7 +152,7 @@ const Clients: React.FC = () => {
     "Suckh Chain Vellay (Pvt) Limited":
       "/construction/Suckh Chain Vellay (Pvt) Limited.png",
     "Such Chain Garden (Pvt) Limited":
-      "/construction/Such Chain Garden (Pvt) Limited.PNG",
+      "/construction/Such Chain Garden (Pvt) Limited.jpg",
     "Islamabad Corporative Housing Society":
       "/construction/Islamabad Corporative Housing Society .png",
     "Istanbul International": "/construction/Istanbul International.png",
@@ -244,7 +244,7 @@ const Clients: React.FC = () => {
     "South Asia Mining Company (Private) Limited":
       "/mining/South Asia Mining Company (Private) Limited.png",
     "SGB Mining (Pvt) Limited": "/mining/SGB Mining (Pvt) Limited.png",
-    "Apex Industries": "/mining/Apex Industries.jfif",
+    "Apex Industries": "/mining/Apex Industries.png",
   };
 
   // Logo mapping for power sector organizations
