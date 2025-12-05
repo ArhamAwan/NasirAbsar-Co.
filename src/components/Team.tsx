@@ -147,31 +147,6 @@ const Team: React.FC = () => {
     });
   }, []);
 
-  // Center CEO at start
-  useEffect(() => {
-    if (scrollContainerRef.current && ceoCardRef.current) {
-      // Wait for layout to be ready
-      const timer = setTimeout(() => {
-        if (scrollContainerRef.current && ceoCardRef.current) {
-          const container = scrollContainerRef.current;
-          const card = ceoCardRef.current;
-          const containerWidth = container.clientWidth;
-          const cardLeft = card.offsetLeft;
-          const cardWidth = card.offsetWidth;
-
-          // Calculate scroll position to center the card
-          const scrollToPosition =
-            cardLeft - containerWidth / 2 + cardWidth / 2;
-
-          container.scrollLeft = Math.max(0, scrollToPosition);
-          lastScrollLeftRef.current = container.scrollLeft;
-        }
-      }, 200);
-
-      return () => clearTimeout(timer);
-    }
-  }, []);
-
   // Handle user scroll detection
   const handleUserScroll = () => {
     if (!isUserScrolling) {
@@ -385,7 +360,7 @@ const Team: React.FC = () => {
                       decoding="async"
                       width={320}
                       height={400}
-                      fetchPriority={idx < 4 ? "high" : "auto"}
+                      fetchpriority={idx < 4 ? "high" : "auto"}
                       style={{ willChange: "auto" }}
                       onError={(e) => {
                         // Fallback to placeholder if image fails to load
@@ -472,7 +447,7 @@ const Team: React.FC = () => {
                   height={112}
                   loading="eager"
                   decoding="async"
-                  fetchPriority="high"
+                  fetchpriority="high"
                   onError={(e) => {
                     // Fallback to placeholder if image fails to load
                     const target = e.target as HTMLImageElement;

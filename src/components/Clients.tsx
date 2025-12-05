@@ -22,7 +22,6 @@ const placeholderImg = "https://via.placeholder.com/200x120?text=Logo";
 
 const Clients: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState(0);
-  const carouselRef = useRef<HTMLDivElement>(null);
 
   // Logo mapping for non-profit organizations
   const nonProfitLogos: { [key: string]: string } = {
@@ -754,16 +753,9 @@ const Clients: React.FC = () => {
             if (!logoPath.startsWith("/")) {
               logoPath = "/" + logoPath;
             }
-            // URL encode the entire path to handle spaces and special characters
-            // This is necessary for Vercel to serve files with spaces correctly
-            const pathParts = logoPath.split("/").filter(Boolean);
-            const encodedParts = pathParts.map((part) =>
-              encodeURIComponent(part)
-            );
-            const encodedPath = "/" + encodedParts.join("/");
             return {
               name: client,
-              logo: encodedPath,
+              logo: logoPath,
             };
           })
       : clients.map((client) => ({
@@ -830,23 +822,9 @@ const Clients: React.FC = () => {
                   decoding="async"
                   onError={(e) => {
                     const target = e.target as HTMLImageElement;
-                    console.error(
-                      "Failed to load image:",
-                      target.src,
-                      "for client:",
-                      item.name
-                    );
                     if (target.src !== placeholderImg) {
                       target.src = placeholderImg;
                     }
-                  }}
-                  onLoad={() => {
-                    console.log(
-                      "Successfully loaded image:",
-                      item.logo,
-                      "for client:",
-                      item.name
-                    );
                   }}
                 />
               </div>

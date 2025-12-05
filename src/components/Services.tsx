@@ -4,7 +4,6 @@ import {
   Calculator, 
   FileText, 
   TrendingUp, 
-  Shield, 
   Users, 
   PieChart,
   Building,
@@ -13,8 +12,6 @@ import {
   Scale,
   Globe,
   Lightbulb,
-  Target,
-  BookOpen,
   Award,
   ArrowRight
 } from 'lucide-react';
@@ -22,7 +19,6 @@ import ServiceModal from './ServiceModal';
 import ConsultationModal from './ConsultationModal';
 
 const Services: React.FC = () => {
-  const [expandedService, setExpandedService] = useState<number | null>(null);
   const [selectedService, setSelectedService] = useState<any>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isConsultationModalOpen, setIsConsultationModalOpen] = useState(false);
@@ -208,10 +204,6 @@ const Services: React.FC = () => {
     }
   ];
 
-  const toggleExpanded = (index: number) => {
-    setExpandedService(expandedService === index ? null : index);
-  };
-
   const openModal = (service: any) => {
     setSelectedService(service);
     setIsModalOpen(true);
@@ -271,22 +263,8 @@ const Services: React.FC = () => {
                 
                 <p className="text-gray-600 mb-6 leading-relaxed">{service.description}</p>
                 
-                {expandedService === index && (
-                  <motion.div
-                    initial={{ opacity: 0, height: 0 }}
-                    animate={{ opacity: 1, height: 'auto' }}
-                    exit={{ opacity: 0, height: 0 }}
-                    transition={{ duration: 0.3 }}
-                    className="mb-6"
-                  >
-                    <p className="text-gray-600 mb-4 leading-relaxed italic">
-                      {service.detailedDescription}
-                    </p>
-                  </motion.div>
-                )}
-                
                 <div className="flex flex-col gap-3 mb-6 flex-grow">
-                  {service.features.slice(0, expandedService === index ? service.features.length : 4).map((feature, featureIndex) => (
+                  {service.features.slice(0, 4).map((feature, featureIndex) => (
                     <div key={featureIndex} className="flex items-start space-x-3">
                       <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0 mt-0.5" />
                       <span className="text-gray-700 text-sm leading-relaxed">{feature}</span>
@@ -294,7 +272,7 @@ const Services: React.FC = () => {
                   ))}
                 </div>
 
-                {service.features.length > 4 && expandedService !== index && (
+                {service.features.length > 4 && (
                   <p className="text-blue-600 text-sm mb-4">
                     +{service.features.length - 4} more services...
                   </p>
