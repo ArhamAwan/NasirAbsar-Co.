@@ -1,4 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -33,16 +32,11 @@ body {
   background: #f9fafb;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  /* Prevent layout shifts during font loading */
-  font-display: swap;
+  text-rendering: optimizeLegibility;
   overflow-x: hidden;
   width: 100%;
   max-width: 100vw;
   position: relative;
-  /* Performance optimizations */
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
 }
 
 /* Optimize images for performance */
@@ -76,12 +70,7 @@ img[loading="lazy"] {
   height: 0;
 }
 
-/* Performance optimizations */
-* {
-  /* Reduce repaints */
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
+/* Performance optimizations - font smoothing handled in body */
 
 /* Optimize animations */
 [data-framer-component] {

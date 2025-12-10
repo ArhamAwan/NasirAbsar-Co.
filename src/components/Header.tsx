@@ -13,7 +13,7 @@ const Header: React.FC = () => {
   // Handle scroll effect for header transparency
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
+      setIsScrolled(window.scrollY > 100);
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
@@ -197,32 +197,214 @@ const Header: React.FC = () => {
 
   return (
     <>
+      {/* Hero Header - Logo + Floating Nav (Desktop only, when not scrolled) */}
+      <AnimatePresence>
+        {!isScrolled && (
+          <>
+            {/* Logo in top left - Desktop */}
+            <motion.div
+              initial={{ x: -50, opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              exit={{ x: -50, opacity: 0 }}
+              transition={{ type: "spring", damping: 25, stiffness: 200 }}
+              className="fixed top-5 left-6 z-[60] hidden lg:flex items-center space-x-3 cursor-pointer"
+              onClick={(e) => handleNavClick(e, "/")}
+            >
+              <img
+                src="/logo.webp"
+                srcSet="/logo.webp 1x, /logo.png 1x"
+                alt="Nasir Absar & Co."
+                className="h-14 w-14 object-contain flex-shrink-0"
+                width="56"
+                height="56"
+                loading="eager"
+                fetchPriority="high"
+                onError={(e) => {
+                  const target = e.target as HTMLImageElement;
+                  if (target.src !== '/logo.png') {
+                    target.src = '/logo.png';
+                  }
+                }}
+              />
+              <div className="flex flex-col min-w-0">
+                <h1 className="text-lg font-bold text-white truncate">
+                  Nasir Absar & Co.
+                </h1>
+                <p className="text-sm text-blue-100 truncate">
+                  Chartered Accountants
+                </p>
+              </div>
+            </motion.div>
+
+            {/* Floating Nav - Centered */}
+            <motion.div
+              initial={{ y: -50, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ y: -50, opacity: 0 }}
+              transition={{ type: "spring", damping: 25, stiffness: 200 }}
+              className="fixed top-5 left-0 right-0 z-[60] hidden lg:flex items-center justify-center pointer-events-none"
+            >
+              <nav
+                className="flex items-center gap-2 px-2 py-2 rounded-full pointer-events-auto"
+                style={{
+                  background: "rgba(255, 255, 255, 0.1)",
+                  backdropFilter: "blur(20px)",
+                  WebkitBackdropFilter: "blur(20px)",
+                  border: "1px solid rgba(255, 255, 255, 0.2)",
+                  boxShadow: "0 8px 32px rgba(0, 0, 0, 0.1)",
+                }}
+              >
+                {navItems.map((item) => {
+                  const sectionId =
+                    item.href === "/" ? "home" : item.href.slice(1);
+                  const isActive = activeSection === sectionId;
+                  return (
+                    <motion.a
+                      key={item.name}
+                      href={item.href}
+                      onClick={(e) => handleNavClick(e, item.href)}
+                      className={`px-5 py-2.5 rounded-full font-medium text-sm transition-all duration-300 ${
+                        isActive
+                          ? "bg-white text-blue-600 shadow-lg"
+                          : "text-white hover:bg-white/20"
+                      }`}
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                    >
+                      {item.name}
+                    </motion.a>
+                  );
+                })}
+              </nav>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
+
+      {/* Full Header - Visible when scrolled on Desktop */}
+      <motion.header
+        initial={{ y: -100, opacity: 0 }}
+        animate={{ 
+          y: isScrolled ? 0 : -100, 
+          opacity: isScrolled ? 1 : 0 
+        }}
+        transition={{ type: "spring", damping: 25, stiffness: 200 }}
+        className={`fixed top-0 left-0 right-0 z-[60] overflow-x-hidden w-full max-w-full transition-all duration-300 hidden lg:block ${
+          isScrolled
+            ? "glass-light shadow-xl border-b border-white/20"
+            : "bg-transparent pointer-events-none"
+        }`}
+      >
+        <div className="container mx-auto px-4 w-full max-w-full">
+          <div className="relative flex items-center justify-between h-16 sm:h-20">
+            {/* Logo */}
+            <motion.div
+              className="flex items-center space-x-3 cursor-pointer z-10"
+              whileHover={{ scale: 1.05 }}
+              onClick={(e) => handleNavClick(e, "/")}
+            >
+              <img
+                src="/logo.webp"
+                srcSet="/logo.webp 1x, /logo.png 1x"
+                alt="Nasir Absar & Co."
+                className="h-12 w-12 sm:h-16 sm:w-16 md:h-20 md:w-20 object-contain flex-shrink-0"
+                width="80"
+                height="80"
+                loading="eager"
+                fetchPriority="high"
+                onError={(e) => {
+                  const target = e.target as HTMLImageElement;
+                  if (target.src !== '/logo.png') {
+                    target.src = '/logo.png';
+                  }
+                }}
+              />
+              <div className="flex flex-col min-w-0">
+                <h1 className="text-sm xs:text-base sm:text-lg md:text-xl font-bold truncate text-gray-900">
+                  Nasir Absar & Co.
+                </h1>
+                <p className="text-xs sm:text-sm truncate text-gray-600">
+                  Chartered Accountants
+                </p>
+              </div>
+            </motion.div>
+
+            {/* Desktop Navigation - Centered */}
+            <nav className="hidden lg:flex items-center space-x-8 absolute left-1/2 transform -translate-x-1/2">
+              {navItems.map((item) => {
+                const sectionId =
+                  item.href === "/" ? "home" : item.href.slice(1);
+                const isActive = activeSection === sectionId;
+                return (
+                  <motion.a
+                    key={item.name}
+                    href={item.href}
+                    onClick={(e) => handleNavClick(e, item.href)}
+                    className={`font-medium hover:text-blue-600 transition-colors ${
+                      isActive ? "text-blue-600" : "text-gray-700"
+                    }`}
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    {item.name}
+                  </motion.a>
+                );
+              })}
+            </nav>
+
+            {/* Contact */}
+            <div className="flex items-center space-x-4 z-10">
+              <motion.a
+                href="tel:051-4861322"
+                className="hidden lg:flex items-center space-x-2 text-sm text-gray-600"
+                whileHover={{ scale: 1.05 }}
+              >
+                <Phone size={16} />
+                <span>051-4861322</span>
+              </motion.a>
+            </div>
+          </div>
+        </div>
+      </motion.header>
+
+      {/* Mobile Header - Always visible on mobile */}
       <motion.header
         initial={{ y: -100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ type: "spring", damping: 25, stiffness: 200 }}
-        className={`fixed top-0 left-0 right-0 z-[60] overflow-x-hidden w-full max-w-full transition-all duration-300 ${
+        className={`fixed top-0 left-0 right-0 z-[60] overflow-x-hidden w-full max-w-full transition-all duration-300 lg:hidden ${
           isScrolled
             ? "glass-light shadow-xl border-b border-white/20"
             : "bg-transparent"
         }`}
       >
         <div className="container mx-auto px-4 w-full max-w-full">
-          <div className="flex items-center justify-between h-16 sm:h-20">
+          <div className="relative flex items-center justify-between h-16 sm:h-20">
             {/* Logo */}
             <motion.div
-              className="flex items-center space-x-3 cursor-pointer"
+              className="flex items-center space-x-3 cursor-pointer z-10"
               whileHover={{ scale: 1.05 }}
               onClick={(e) => handleNavClick(e, "/")}
             >
               <img
-                src="/logo.png"
+                src="/logo.webp"
+                srcSet="/logo.webp 1x, /logo.png 1x"
                 alt="Nasir Absar & Co."
-                className="h-12 w-12 sm:h-16 sm:w-16 md:h-20 md:w-20 object-contain flex-shrink-0"
+                className="h-12 w-12 sm:h-16 sm:w-16 object-contain flex-shrink-0"
+                width="64"
+                height="64"
+                loading="eager"
+                fetchPriority="high"
+                onError={(e) => {
+                  const target = e.target as HTMLImageElement;
+                  if (target.src !== '/logo.png') {
+                    target.src = '/logo.png';
+                  }
+                }}
               />
               <div className="flex flex-col min-w-0">
                 <h1
-                  className={`text-sm xs:text-base sm:text-lg md:text-xl font-bold truncate ${
+                  className={`text-sm xs:text-base sm:text-lg font-bold truncate ${
                     isScrolled ? "text-gray-900" : "text-white"
                   }`}
                 >
@@ -238,60 +420,20 @@ const Header: React.FC = () => {
               </div>
             </motion.div>
 
-            {/* Desktop Navigation */}
-            <nav className="hidden lg:flex items-center space-x-8">
-              {navItems.map((item) => {
-                const sectionId =
-                  item.href === "/" ? "home" : item.href.slice(1);
-                const isActive = activeSection === sectionId;
-                return (
-                  <motion.a
-                    key={item.name}
-                    href={item.href}
-                    onClick={(e) => handleNavClick(e, item.href)}
-                    className={`font-medium hover:text-blue-600 transition-colors ${
-                      isActive
-                        ? "text-blue-600"
-                        : isScrolled
-                        ? "text-gray-700"
-                        : "text-white"
-                    }`}
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.95 }}
-                  >
-                    {item.name}
-                  </motion.a>
-                );
-              })}
-            </nav>
-
-            {/* Contact & Mobile Toggle */}
-            <div className="flex items-center space-x-4">
-              <motion.a
-                href="tel:051-4861322"
-                className={`hidden lg:flex items-center space-x-2 text-sm ${
-                  isScrolled ? "text-gray-600" : "text-blue-100"
-                }`}
-                whileHover={{ scale: 1.05 }}
-              >
-                <Phone size={16} />
-                <span>051-4861322</span>
-              </motion.a>
-
-              <button
-                type="button"
-                className={`lg:hidden p-2 ${
-                  isScrolled ? "text-gray-900" : "text-white"
-                }`}
-                onClick={(e) => {
-                  e.preventDefault();
-                  setIsMenuOpen(!isMenuOpen);
-                }}
-                aria-label="Toggle menu"
-              >
-                {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
-              </button>
-            </div>
+            {/* Mobile Toggle */}
+            <button
+              type="button"
+              className={`p-2 ${
+                isScrolled ? "text-gray-900" : "text-white"
+              }`}
+              onClick={(e) => {
+                e.preventDefault();
+                setIsMenuOpen(!isMenuOpen);
+              }}
+              aria-label="Toggle menu"
+            >
+              {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+            </button>
           </div>
         </div>
       </motion.header>
@@ -336,9 +478,20 @@ const Header: React.FC = () => {
               >
                 <div className="flex items-center space-x-3">
                   <img
-                    src="/logo.png"
+                    src="/logo.webp"
+                    srcSet="/logo.webp 1x, /logo.png 1x"
                     alt="Nasir Absar & Co."
                     className="h-10 w-10 object-contain"
+                    width="40"
+                    height="40"
+                    loading="eager"
+                    fetchPriority="high"
+                    onError={(e) => {
+                      const target = e.target as HTMLImageElement;
+                      if (target.src !== '/logo.png') {
+                        target.src = '/logo.png';
+                      }
+                    }}
                   />
                   <div>
                     <h1 className="text-sm font-bold text-gray-900 drop-shadow-sm">

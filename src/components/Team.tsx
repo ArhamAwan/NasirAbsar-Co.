@@ -17,7 +17,7 @@ const team = [
   {
     name: "Absar Nasir",
     lastName: "Nasir",
-    position: "Executive Director",
+    position: "COO",
     image: "/team/Absar Nasir 1.png",
     linkedin: "https://pk.linkedin.com/company/nasir-absar-co",
     bio: `Profession: Corporate and Tax Consultant\nNationality: Pakistani\nContact: 092 300 9569379\nEmail: absar@nasirabsar.com\n\nExperience: As Partner of Nasir Absar & Co. (Pvt) Limited (the Company), share responsibilities with other Directors, for all types of professional work carried out by the Firm. However, specifically responsible for Tax, Corporate, Intellectual Property Laws, share registrar and NPO Legal Frame work.\n\nKey qualifications: Several distinctions in LLM (Master in Corporate Law). Position holder in the LLB (Graduate in Law). Distinction in Finance during MBA. First Position in Bachelor of Commerce.\n\nEmployment Record: 2001 – to-date: Executive Director, Nasir Absar & Co. (Pvt) Limited. 1997 – 2001 : Manager Tax & Corporate in Nadeem Ahmed & Co. Islamabad.`,
@@ -25,7 +25,7 @@ const team = [
   {
     name: "Syed Muhammad Imran",
     lastName: "Imran",
-    position: "Director Tax & Corporate Regulatory Services",
+    position: "CCO",
     image: "/team/Imran.png",
     linkedin: "https://pk.linkedin.com/in/sayidimran",
     bio: `Advocate High Courts\nExperience: 15 years of professional experience in field of Taxation and Corporate Regulatory Services.`,
@@ -33,7 +33,7 @@ const team = [
   {
     name: "Muhammad Jawaid Iqbal Khan",
     lastName: "Khan",
-    position: "Associate Chartered Accountant",
+    position: "CIA",
     image: "/team/Javed.jpg",
     linkedin:
       "https://www.linkedin.com/in/rana-javed-iqbal-khan-fca-51862418?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app",
@@ -42,7 +42,7 @@ const team = [
   {
     name: "Rizwan Saeed",
     lastName: "Saeed",
-    position: "Associate Chartered Accountant",
+    position: "CFO",
     image: "/team/Rizwan Saeed.png",
     linkedin:
       "https://www.linkedin.com/in/rizwan-saeed-49251063?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app",
@@ -69,7 +69,7 @@ const team = [
   {
     name: "Asif Gulzar",
     lastName: "Gulzar",
-    position: "Director Audit",
+    position: "CAO",
     image: "/team/Asif Gulzar.jpg",
     linkedin: "https://pk.linkedin.com/company/nasir-absar-co",
     bio: `CFA\nExperience: 22 years of professional experience in the field Audit.`,
@@ -77,7 +77,7 @@ const team = [
   {
     name: "Syed Musharraf Imam",
     lastName: "Imam",
-    position: "Director Corporate Registrations",
+    position: "CTO",
     image: "/team/Musharraf Imam.png",
     linkedin: "https://pk.linkedin.com/company/nasir-absar-co",
     bio: `Experience: 20 years of professional experience in field of Business Promotion.`,
@@ -121,30 +121,34 @@ const Team: React.FC = () => {
   const modalContentRef = useRef<HTMLDivElement>(null);
   const ceoCardRef = useRef<HTMLDivElement>(null);
 
-  // Preload all team member images with priority handling
+  // Preload team member images only when component is mounted (since it's lazy loaded)
+  // Use Intersection Observer to preload images when section is about to be visible
   useEffect(() => {
-    team.forEach((member, idx) => {
-      if (member.image) {
-        // Use both link preload and Image object for maximum browser support
-        const link = document.createElement("link");
-        link.rel = "preload";
-        link.as = "image";
-        link.href = member.image;
-        if (idx < 4) {
-          link.setAttribute("fetchpriority", "high");
-        }
-        document.head.appendChild(link);
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            // Preload images only when section is about to be visible
+            team.forEach((member, idx) => {
+              if (member.image) {
+                const img = new Image();
+                img.src = member.image;
+                img.fetchPriority = idx < 4 ? "high" : "low";
+              }
+            });
+            observer.disconnect();
+          }
+        });
+      },
+      { rootMargin: "200px" } // Start preloading 200px before section is visible
+    );
 
-        // Also preload via Image object for browser cache
-        const img = new Image();
-        img.src = member.image;
-        if (idx < 4) {
-          img.fetchPriority = "high";
-        } else {
-          img.fetchPriority = "low";
-        }
-      }
-    });
+    const sectionElement = document.getElementById("team");
+    if (sectionElement) {
+      observer.observe(sectionElement);
+    }
+
+    return () => observer.disconnect();
   }, []);
 
   // Handle user scroll detection
@@ -360,7 +364,7 @@ const Team: React.FC = () => {
                       decoding="async"
                       width={320}
                       height={400}
-                      fetchpriority={idx < 4 ? "high" : "auto"}
+                      fetchPriority={idx < 4 ? "high" : "auto"}
                       style={{ willChange: "auto" }}
                       onError={(e) => {
                         // Fallback to placeholder if image fails to load
@@ -447,7 +451,7 @@ const Team: React.FC = () => {
                   height={112}
                   loading="eager"
                   decoding="async"
-                  fetchpriority="high"
+                  fetchPriority="high"
                   onError={(e) => {
                     // Fallback to placeholder if image fails to load
                     const target = e.target as HTMLImageElement;

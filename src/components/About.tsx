@@ -36,21 +36,25 @@ const About: React.FC = () => {
               <Briefcase className="w-6 h-6 sm:w-7 sm:h-7 text-blue-600" />
             </div>
             <h3 className="text-xl xs:text-2xl sm:text-3xl font-bold text-gray-900 mb-4 sm:mb-6">Our Story</h3>
-            <p className="text-sm xs:text-base text-gray-600 mb-4 sm:mb-5 leading-relaxed">
-              Founded with a vision to provide comprehensive and reliable accounting services, 
-              Nasir Absar & Co. has grown to become one of the most trusted names in financial 
-              consulting in Islamabad.
-            </p>
-            <p className="text-sm xs:text-base text-gray-600 mb-4 sm:mb-5 leading-relaxed">
-              Our firm is strategically located in I-8, serving clients across Pakistan and 
-              maintaining a strong reputation for dedication and expertise.
-            </p>
-            <p className="text-sm xs:text-base text-gray-600 mb-6 sm:mb-8 leading-relaxed">
-              With a team of qualified Chartered Accountants and financial experts, we have 
-              successfully served over 500 clients, ranging from small businesses to large 
-              corporations, helping them achieve their financial goals through strategic planning 
-              and meticulous execution.
-            </p>
+            <div className="space-y-4 sm:space-y-5 mb-6 sm:mb-8">
+              <p className="text-sm xs:text-base text-gray-600 leading-relaxed text-justify">
+                Nasir Absar is a group of independently owned and managed professional firms delivering
+                high-quality and specialised management consultancy services in Pakistan. Over the years, the
+                firm has built a strong domestic and international network that allows it to offer specialist
+                consultancy services across various functions and sectors.
+              </p>
+              <p className="text-sm xs:text-base text-gray-600 leading-relaxed text-justify">
+                With a deep focus on corporate responsibility and professional integrity, the firm ensures its
+                professionals stay updated with developments and changes in relevant Laws and Standards. This
+                commitment helps guarantee that clients receive advice that is technically correct and aligned
+                with the industries in which they operate.
+              </p>
+              <p className="text-sm xs:text-base text-gray-600 leading-relaxed text-justify">
+                We take pride in not being just another consultancy firm, but one that adds real value by
+                providing solutions best suited to each business context and emphasising the implementation of
+                our recommendations.
+              </p>
+            </div>
             <div className="flex flex-wrap items-center gap-4 sm:gap-6 pt-4 sm:pt-6 border-t border-gray-200">
               <div className="text-center flex-1 min-w-[80px]">
                 <div className="text-2xl xs:text-3xl font-bold text-blue-600">25+</div>
@@ -83,10 +87,12 @@ const About: React.FC = () => {
                 </div>
                 <h4 className="text-xl xs:text-2xl sm:text-3xl font-bold text-white">Our Mission</h4>
               </div>
-              <p className="text-white text-sm xs:text-base sm:text-lg leading-relaxed">
-                To provide exceptional accounting and financial services that empower businesses 
-                to make informed decisions, achieve sustainable growth, and maintain financial 
-                health through professional expertise and innovative solutions.
+              <p className="text-white text-sm xs:text-base sm:text-lg leading-relaxed text-justify">
+                To add value to our clients’ businesses by delivering specialised consultancy services tailored
+                to their specific business contexts. We aim to ensure our professionals remain aware of all relevant
+                developments in Laws and Standards, enabling us to provide accurate, high-quality advice. Our mission
+                is to provide solutions that are not only strategically sound but also practical to implement,
+                strengthening long-term partnerships with every client we serve.
               </p>
             </div>
 
@@ -98,10 +104,11 @@ const About: React.FC = () => {
                 </div>
                 <h4 className="text-xl xs:text-2xl sm:text-3xl font-bold text-white">Our Vision</h4>
               </div>
-              <p className="text-white text-sm xs:text-base sm:text-lg leading-relaxed">
-                To be the most trusted and preferred accounting firm in Pakistan, known for our 
-                integrity, expertise, and commitment to client success in an ever-evolving 
-                financial landscape.
+              <p className="text-white text-sm xs:text-base sm:text-lg leading-relaxed text-justify">
+                To uphold corporate responsibility and professional integrity by ensuring that all consultancy
+                services provided are technically correct, relevant to industry standards, and supported by a strong
+                domestic and international network. We strive to maintain one of the highest client retention rates in
+                the industry through long-term, trust-based relationships.
               </p>
             </div>
           </motion.div>

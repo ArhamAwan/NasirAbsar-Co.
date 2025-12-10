@@ -11,6 +11,7 @@ interface ServiceModalProps {
     description: string;
     features: string[];
     detailedDescription: string;
+    learnMoreSections?: { title: string; content: string }[];
   } | null;
 }
 
@@ -144,38 +145,31 @@ const ServiceModal: React.FC<ServiceModalProps> = ({ isOpen, onClose, service })
                   </div>
                 </div>
 
-                {/* Benefits Section */}
-                <motion.div 
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.4 }}
-                  className="glass-light bg-white/80 rounded-2xl p-6 border border-white/50 backdrop-blur-sm"
-                >
-                  <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-6">Why Choose Our {service.title}?</h3>
-                  <div className="grid md:grid-cols-3 gap-6">
-                    <div className="text-center">
-                      <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                        <CheckCircle className="w-6 h-6 text-blue-600" />
-                      </div>
-                      <h4 className="font-semibold text-gray-900 mb-2 text-base sm:text-lg">Expert Team</h4>
-                      <p className="text-gray-600 text-sm">Qualified professionals with extensive experience</p>
+                {/* Learn More Sections */}
+                {service.learnMoreSections && service.learnMoreSections.length > 0 && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.4 }}
+                    className="glass-light bg-white/80 rounded-2xl p-6 border border-white/50 backdrop-blur-sm"
+                  >
+                    <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-6">Learn More</h3>
+                    <div className="space-y-4">
+                      {service.learnMoreSections.map((section, idx) => (
+                        <div
+                          key={idx}
+                          className="flex items-start space-x-3 p-3 sm:p-4 rounded-xl border border-white/40 bg-white/70"
+                        >
+                          <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
+                          <div className="space-y-1">
+                            <h4 className="font-semibold text-gray-900 text-base sm:text-lg">{section.title}</h4>
+                            <p className="text-gray-700 text-sm sm:text-base leading-relaxed">{section.content}</p>
+                          </div>
+                        </div>
+                      ))}
                     </div>
-                    <div className="text-center">
-                      <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                        <CheckCircle className="w-6 h-6 text-blue-600" />
-                      </div>
-                      <h4 className="font-semibold text-gray-900 mb-2 text-base sm:text-lg">Proven Results</h4>
-                      <p className="text-gray-600 text-sm">25+ years of successful client outcomes</p>
-                    </div>
-                    <div className="text-center">
-                      <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                        <CheckCircle className="w-6 h-6 text-blue-600" />
-                      </div>
-                      <h4 className="font-semibold text-gray-900 mb-2 text-base sm:text-lg">Tailored Solutions</h4>
-                      <p className="text-gray-600 text-sm">Customized approach for your specific needs</p>
-                    </div>
-                  </div>
-                </motion.div>
+                  </motion.div>
+                )}
               </div>
             </div>
           </motion.div>
