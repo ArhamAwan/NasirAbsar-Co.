@@ -15,7 +15,7 @@ const team = [
     position: "CEO",
     image: "/team/Muhammad Nasir.webp",
     linkedin: "https://pk.linkedin.com/company/nasir-absar-co",
-    bio: `Profession: Chartered Accountant\nNationality: Pakistani\nContact: +92 321 5216303\nEmail: nasir@nasirabsar.com\n\nExperience: As Financial Management Consultant (FMC) for business development and establishment of new ventures...\n\nKey qualifications: As Senior Partner of Nasir Absar & Co. (the Firm), share responsibilities with other partners, for all types of professional work carried out by the Firm. However, specifically responsible for accounting system development, computerization (IT), financial restructuring, mergers and acquisition accounting.\n\nEmployment Record: 2001 - to-date: CEO in Nasir Absar & Co. (Pvt) Ltd. (Auditors, Accountants, Corporate, Financial, Management & Tax Consultants)\n1998 - 2005 : Finance Controller and Director Finance in Islamic International Medical College Trust and Riphah International University, Islamabad, respectively.\n1996 - 1998 : Manager Audit & Tax in Jawaid Qadeer Rashid & Co. Chartered Accountants.\n\nSocial Services: Ex-Member Finance, Prime Minister's Task Force for Gems and Jewelry, Ex-Member Management Committee – Pakistan Red Crescent Society, Punjab, Ex-Member Board of Governors – Pak Red Crescent Medical & Dental College, Lahore, and more.`,
+    bio: `Seasoned Financial Management Consultant with 20+ years guiding business development and new ventures. Leads financial management assessments, system strengthening, and implementation of administrative, financial, and accounting policies. Specializes in accounting system design, IT enablement, financial restructuring, and M&A accounting.`,
   },
   {
     name: "Absar Nasir",
@@ -23,24 +23,24 @@ const team = [
     position: "COO",
     image: "/team/Absar Nasir 1.webp",
     linkedin: "https://pk.linkedin.com/company/nasir-absar-co",
-    bio: `Profession: Corporate and Tax Consultant\nNationality: Pakistani\nContact: 092 300 9569379\nEmail: absar@nasirabsar.com\n\nExperience: As Partner of Nasir Absar & Co. (Pvt) Limited (the Company), share responsibilities with other Directors, for all types of professional work carried out by the Firm. However, specifically responsible for Tax, Corporate, Intellectual Property Laws, share registrar and NPO Legal Frame work.\n\nKey qualifications: Several distinctions in LLM (Master in Corporate Law). Position holder in the LLB (Graduate in Law). Distinction in Finance during MBA. First Position in Bachelor of Commerce.\n\nEmployment Record: 2001 – to-date: Executive Director, Nasir Absar & Co. (Pvt) Limited. 1997 – 2001 : Manager Tax & Corporate in Nadeem Ahmed & Co. Islamabad.`,
+    bio: `Corporate and tax specialist known for expert guidance on structuring, compliance, and tax planning. Advocate High Court with LLM and MBA, providing opinion on corporate frameworks, tax strategy, and regulatory matters.`,
   },
   {
-    name: "Syed Muhammad Imran",
+    name: "Syed M. Imran",
     lastName: "Imran",
     position: "CCO",
     image: "/team/Imran.webp",
     linkedin: "https://pk.linkedin.com/in/sayidimran",
-    bio: `Advocate High Courts\nExperience: 15 years of professional experience in field of Taxation and Corporate Regulatory Services.`,
+    bio: `Management Consultant, Associate Tax Advisor, licensed Tax Practitioner, and Advocate High Court with 10+ years across corporate, taxation, and financial laws. Strong grounding in GAAP, IFRS, and auditing standards; pursuing Bar of England and Wales.`,
   },
   {
-    name: "Muhammad Jawaid Iqbal Khan",
+    name: "M. Javed Iqbal Khan",
     lastName: "Khan",
     position: "CIA",
     image: "/team/Javed.webp",
     linkedin:
       "https://www.linkedin.com/in/rana-javed-iqbal-khan-fca-51862418?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app",
-    bio: `Fellow Member of Chartered Accountants\nExperience: 22 years of professional experience in field of Audit and transaction advisory.`,
+    bio: `Fellow Chartered Accountant with 20+ years across food, real estate, construction, and technology. Leads audit and transaction advisory with a focus on controls, risk, and financial reporting quality.`,
   },
   {
     name: "Rizwan Saeed",
@@ -49,7 +49,7 @@ const team = [
     image: "/team/Rizwan Saeed.webp",
     linkedin:
       "https://www.linkedin.com/in/rizwan-saeed-49251063?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app",
-    bio: `Associate Member of Chartered Accountants\nExperience: 21 years of professional experience in field of Audit and Accounts.`,
+    bio: `Fellow Chartered Accountant with 20+ years spanning automotive, food, technology, and defense industries. Drives financial strategy, controls, and reporting with a proven delivery record.`,
   },
   {
     name: "Aadil Ameen",
@@ -75,7 +75,7 @@ const team = [
     position: "CAO",
     image: "/team/Asif Gulzar.webp",
     linkedin: "https://pk.linkedin.com/company/nasir-absar-co",
-    bio: `CFA\nExperience: 22 years of professional experience in the field Audit.`,
+    bio: `Licensed tax practitioner (FBR, Pakistan) with 20+ years of diversified industry practice. Focused on compliance, advisory, and strengthening tax governance for complex organizations.`,
   },
   {
     name: "Syed Musharraf Imam",
@@ -83,7 +83,7 @@ const team = [
     position: "CTO",
     image: "/team/Musharraf Imam.webp",
     linkedin: "https://pk.linkedin.com/company/nasir-absar-co",
-    bio: `Experience: 20 years of professional experience in field of Business Promotion.`,
+    bio: `Technology leader with 20+ years across multinational environments and varied industries. Experienced in scaling IT architectures and delivering secure, resilient technology solutions.`,
   },
   {
     name: "Tariq Jamal",
@@ -482,7 +482,7 @@ const Team: React.FC = () => {
                   {team[selected].position}
                 </div>
               </div>
-              <div className="text-gray-700 text-xs sm:text-sm md:text-base leading-relaxed space-y-3 sm:space-y-4 md:space-y-5 text-left">
+              <div className="text-gray-700 text-xs sm:text-sm md:text-base leading-relaxed space-y-3 sm:space-y-4 md:space-y-5 text-left text-justify">
                 {team[selected].bio.split("\n\n").map((paragraph, index) => {
                   const trimmedParagraph = paragraph.trim();
                   if (!trimmedParagraph) return null;
@@ -504,7 +504,7 @@ const Team: React.FC = () => {
                           <h4 className="text-gray-900 font-bold text-sm sm:text-base md:text-lg uppercase tracking-wide">
                             {label}
                           </h4>
-                          <div className="text-gray-700 leading-relaxed space-y-1">
+                          <div className="text-gray-700 leading-relaxed space-y-1 text-justify">
                             {content.split("\n").map((line, lineIndex) => {
                               const trimmedLine = line.trim();
                               if (!trimmedLine) return null;
@@ -536,7 +536,7 @@ const Team: React.FC = () => {
                               return (
                                 <p
                                   key={lineIndex}
-                                  className="text-gray-700 text-xs sm:text-sm md:text-base"
+                                  className="text-gray-700 text-xs sm:text-sm md:text-base text-justify"
                                 >
                                   {trimmedLine}
                                 </p>
@@ -552,7 +552,7 @@ const Team: React.FC = () => {
                   return (
                     <p
                       key={index}
-                      className="text-gray-700 leading-relaxed text-xs sm:text-sm md:text-base text-left"
+                      className="text-gray-700 leading-relaxed text-xs sm:text-sm md:text-base text-justify"
                     >
                       {trimmedParagraph
                         .split("\n")
