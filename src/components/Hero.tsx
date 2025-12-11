@@ -104,55 +104,61 @@ const Hero: React.FC = () => {
             </div>
 
             {/* Stats Section */}
-            <div className="flex flex-row items-center justify-center gap-3 sm:gap-4 md:gap-6 mb-6 sm:mb-6 md:mb-8 w-full max-w-4xl mx-auto">
+            <div className="flex flex-row items-stretch justify-center gap-3 sm:gap-4 md:gap-6 mb-6 sm:mb-6 md:mb-8 w-full max-w-4xl mx-auto">
               <div
-                className="relative z-10 rounded-lg sm:rounded-xl p-3 xs:p-3 sm:p-4 md:p-5 shadow-xl text-center flex-1"
+                className="relative z-10 rounded-lg sm:rounded-xl p-3 xs:p-3 sm:p-4 md:p-5 shadow-xl text-center flex-1 flex flex-col items-center justify-center"
                 style={{
                   background: "rgba(255, 255, 255, 0.1)",
                   backdropFilter: "blur(20px)",
                   WebkitBackdropFilter: "blur(20px)",
                   border: "1px solid rgba(255, 255, 255, 0.2)",
                   boxShadow: "0 8px 32px 0 rgba(31, 38, 135, 0.37)",
+                  minHeight: "90px",
+                  height: "100%",
                 }}
               >
                 <div className="text-xl xs:text-2xl sm:text-3xl md:text-4xl font-bold text-blue-400 mb-1">
                   25+
                 </div>
-                <div className="text-xs xs:text-xs sm:text-sm md:text-base text-white/90 font-medium">
+                <div className="text-xs xs:text-xs sm:text-sm md:text-base text-white/90 font-medium leading-tight whitespace-nowrap">
                   Years Experience
                 </div>
               </div>
               <div
-                className="relative z-10 rounded-lg sm:rounded-xl p-3 xs:p-3 sm:p-4 md:p-5 shadow-xl text-center flex-1"
+                className="relative z-10 rounded-lg sm:rounded-xl p-3 xs:p-3 sm:p-4 md:p-5 shadow-xl text-center flex-1 flex flex-col items-center justify-center"
                 style={{
                   background: "rgba(255, 255, 255, 0.1)",
                   backdropFilter: "blur(20px)",
                   WebkitBackdropFilter: "blur(20px)",
                   border: "1px solid rgba(255, 255, 255, 0.2)",
                   boxShadow: "0 8px 32px 0 rgba(31, 38, 135, 0.37)",
+                  minHeight: "90px",
+                  height: "100%",
                 }}
               >
                 <div className="text-xl xs:text-2xl sm:text-3xl md:text-4xl font-bold text-blue-400 mb-1">
                   500+
                 </div>
-                <div className="text-xs xs:text-xs sm:text-sm md:text-base text-white/90 font-medium">
+                <div className="text-xs xs:text-xs sm:text-sm md:text-base text-white/90 font-medium leading-tight whitespace-nowrap">
                   Happy Clients
                 </div>
               </div>
               <div
-                className="relative z-10 rounded-lg sm:rounded-xl p-3 xs:p-3 sm:p-4 md:p-5 shadow-xl text-center flex-1"
+                className="relative z-10 rounded-lg sm:rounded-xl p-3 xs:p-3 sm:p-4 md:p-5 shadow-xl text-center flex-1 flex flex-col items-center justify-center"
                 style={{
                   background: "rgba(255, 255, 255, 0.1)",
                   backdropFilter: "blur(20px)",
                   WebkitBackdropFilter: "blur(20px)",
                   border: "1px solid rgba(255, 255, 255, 0.2)",
                   boxShadow: "0 8px 32px 0 rgba(31, 38, 135, 0.37)",
+                  minHeight: "90px",
+                  height: "100%",
                 }}
               >
                 <div className="text-xl xs:text-2xl sm:text-3xl md:text-4xl font-bold text-blue-400 mb-1">
                   98%
                 </div>
-                <div className="text-xs xs:text-xs sm:text-sm md:text-base text-white/90 font-medium">
+                <div className="text-xs xs:text-xs sm:text-sm md:text-base text-white/90 font-medium leading-tight whitespace-nowrap">
                   Success Rate
                 </div>
               </div>
