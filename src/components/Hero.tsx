@@ -7,9 +7,21 @@ const Aurora = lazy(() => import("./Aurora"));
 
 const Hero: React.FC = () => {
   const taglines = [
-    "Redefining Technology with NASIR ABSAR: Unlock the Possibilities.",
-    "Your Trusted Advocates - Let NASIR ABSAR Help You Win Your Case!",
-    "Investing in Your Future with NASIR ABSAR",
+    <>
+      Redefining Technology with <span className="text-blue-300">NASIR ABSAR:</span>
+      <br />
+      Unlock the Possibilities.
+    </>,
+    <>
+      Your Trusted Advocates
+      <br />
+      <span className="text-blue-300">Let NASIR ABSAR</span> Help You Win Your Case!
+    </>,
+    <>
+      Investing in Your Future
+      <br />
+      <span className="text-blue-300">with NASIR ABSAR</span>
+    </>,
   ];
   const [currentTagline, setCurrentTagline] = useState(0);
 
@@ -58,30 +70,95 @@ const Hero: React.FC = () => {
             className="text-white flex flex-col items-center text-center w-full"
             style={{ willChange: "auto" }}
           >
-            <h1
-              className="text-4xl xs:text-5xl sm:text-6xl md:text-7xl lg:text-7xl xl:text-8xl font-extrabold mb-3 sm:mb-3 md:mb-4 leading-tight"
+            <div
+              className="relative z-10 rounded-xl sm:rounded-2xl p-6 xs:p-6 sm:p-8 md:p-10 w-full max-w-4xl mx-auto mb-6 sm:mb-6 md:mb-8 shadow-xl"
               style={{
-                willChange: "auto",
-                contentVisibility: "auto",
+                background: "rgba(255, 255, 255, 0.1)",
+                backdropFilter: "blur(20px)",
+                WebkitBackdropFilter: "blur(20px)",
+                border: "1px solid rgba(255, 255, 255, 0.2)",
+                boxShadow: "0 8px 32px 0 rgba(31, 38, 135, 0.37)",
               }}
             >
-              Excellence in
-              <span className="text-blue-300 block">Financial Services</span>
-            </h1>
+              <div
+                className="text-2xl xs:text-3xl sm:text-4xl md:text-5xl lg:text-5xl xl:text-6xl font-bold leading-relaxed min-h-[8rem] xs:min-h-[9rem] sm:min-h-[10rem] md:min-h-[11rem] lg:min-h-[11rem] xl:min-h-[12rem] flex items-center justify-center"
+                style={{
+                  willChange: "auto",
+                  contentVisibility: "auto",
+                }}
+              >
+                <AnimatePresence mode="wait">
+                  <motion.h1
+                    key={currentTagline}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.6, ease: "easeInOut" }}
+                    className="text-white text-center w-full"
+                    style={{ whiteSpace: "pre-line" }}
+                  >
+                    {taglines[currentTagline]}
+                  </motion.h1>
+                </AnimatePresence>
+              </div>
+            </div>
 
-            <motion.div
-              className="flex flex-col sm:flex-row gap-3 sm:gap-3 md:gap-4 mb-2 sm:mb-3 md:mb-4 w-full justify-center max-w-xl"
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{
-                delay: 0.3,
-                type: "spring",
-                damping: 25,
-                stiffness: 100,
-                duration: 0.8,
-              }}
-              style={{ willChange: "transform, opacity" }}
-            >
+            {/* Stats Section */}
+            <div className="flex flex-row items-center justify-center gap-3 sm:gap-4 md:gap-6 mb-6 sm:mb-6 md:mb-8 w-full max-w-4xl mx-auto">
+              <div
+                className="relative z-10 rounded-lg sm:rounded-xl p-3 xs:p-3 sm:p-4 md:p-5 shadow-xl text-center flex-1"
+                style={{
+                  background: "rgba(255, 255, 255, 0.1)",
+                  backdropFilter: "blur(20px)",
+                  WebkitBackdropFilter: "blur(20px)",
+                  border: "1px solid rgba(255, 255, 255, 0.2)",
+                  boxShadow: "0 8px 32px 0 rgba(31, 38, 135, 0.37)",
+                }}
+              >
+                <div className="text-xl xs:text-2xl sm:text-3xl md:text-4xl font-bold text-blue-400 mb-1">
+                  25+
+                </div>
+                <div className="text-xs xs:text-xs sm:text-sm md:text-base text-white/90 font-medium">
+                  Years Experience
+                </div>
+              </div>
+              <div
+                className="relative z-10 rounded-lg sm:rounded-xl p-3 xs:p-3 sm:p-4 md:p-5 shadow-xl text-center flex-1"
+                style={{
+                  background: "rgba(255, 255, 255, 0.1)",
+                  backdropFilter: "blur(20px)",
+                  WebkitBackdropFilter: "blur(20px)",
+                  border: "1px solid rgba(255, 255, 255, 0.2)",
+                  boxShadow: "0 8px 32px 0 rgba(31, 38, 135, 0.37)",
+                }}
+              >
+                <div className="text-xl xs:text-2xl sm:text-3xl md:text-4xl font-bold text-blue-400 mb-1">
+                  500+
+                </div>
+                <div className="text-xs xs:text-xs sm:text-sm md:text-base text-white/90 font-medium">
+                  Happy Clients
+                </div>
+              </div>
+              <div
+                className="relative z-10 rounded-lg sm:rounded-xl p-3 xs:p-3 sm:p-4 md:p-5 shadow-xl text-center flex-1"
+                style={{
+                  background: "rgba(255, 255, 255, 0.1)",
+                  backdropFilter: "blur(20px)",
+                  WebkitBackdropFilter: "blur(20px)",
+                  border: "1px solid rgba(255, 255, 255, 0.2)",
+                  boxShadow: "0 8px 32px 0 rgba(31, 38, 135, 0.37)",
+                }}
+              >
+                <div className="text-xl xs:text-2xl sm:text-3xl md:text-4xl font-bold text-blue-400 mb-1">
+                  98%
+                </div>
+                <div className="text-xs xs:text-xs sm:text-sm md:text-base text-white/90 font-medium">
+                  Success Rate
+                </div>
+              </div>
+            </div>
+
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-3 md:gap-4 mb-2 sm:mb-3 md:mb-4 w-full justify-center max-w-xl">
               <motion.a
                 href="/contact"
                 onClick={(e) => {
@@ -133,48 +210,8 @@ const Hero: React.FC = () => {
               >
                 Our Services
               </motion.a>
-            </motion.div>
-          </div>
-
-          <motion.div
-            className="relative w-full flex items-center justify-center"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{
-              type: "spring",
-              damping: 25,
-              stiffness: 100,
-              duration: 0.8,
-              delay: 0.35,
-            }}
-            style={{ willChange: "transform, opacity" }}
-          >
-            <div
-              className="relative z-10 rounded-xl sm:rounded-2xl p-5 xs:p-5 sm:p-6 border border-white/60 shadow-2xl backdrop-blur-3xl w-full max-w-xl mx-auto"
-              style={{
-                background: "rgba(255, 255, 255, 0.25)",
-                backdropFilter: "blur(30px) saturate(100%)",
-                WebkitBackdropFilter: "blur(30px) saturate(100%)",
-                boxShadow:
-                  "0 8px 32px 0 rgba(31, 38, 135, 0.2), inset 0 1px 1px 0 rgba(255, 255, 255, 0.5), inset 0 -1px 1px 0 rgba(255, 255, 255, 0.2)",
-              }}
-            >
-              <div className="flex flex-col items-center text-center space-y-3 sm:space-y-4">
-                <AnimatePresence mode="wait">
-                  <motion.p
-                    key={currentTagline}
-                    initial={{ opacity: 0, y: 12 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -12 }}
-                    transition={{ duration: 0.6, ease: "easeInOut" }}
-                    className="text-lg xs:text-xl sm:text-2xl md:text-3xl font-semibold text-white leading-snug drop-shadow-lg min-h-24 sm:min-h-28 md:min-h-32 flex items-center justify-center text-center"
-                  >
-                    {taglines[currentTagline]}
-                  </motion.p>
-                </AnimatePresence>
-              </div>
             </div>
-          </motion.div>
+          </div>
         </div>
       </div>
 

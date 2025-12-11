@@ -3,14 +3,17 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Linkedin, X } from "lucide-react";
 // Removed getVercelOptimizedImage import - using direct paths for Vercel auto-optimization
 
-const placeholderImg = "https://via.placeholder.com/300x400?text=No+Image";
+const placeholderImg = `data:image/svg+xml;base64,${btoa(`<svg width="300" height="400" xmlns="http://www.w3.org/2000/svg">
+  <rect width="300" height="400" fill="#E5E7EB" rx="8"/>
+  <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" fill="#6B7280" font-weight="500">No Image</text>
+</svg>`)}`;
 
 const team = [
   {
     name: "Muhammad Nasir",
     lastName: "Nasir",
     position: "CEO",
-    image: "/team/Muhammad Nasir.jpeg",
+    image: "/team/Muhammad Nasir.webp",
     linkedin: "https://pk.linkedin.com/company/nasir-absar-co",
     bio: `Profession: Chartered Accountant\nNationality: Pakistani\nContact: +92 321 5216303\nEmail: nasir@nasirabsar.com\n\nExperience: As Financial Management Consultant (FMC) for business development and establishment of new ventures...\n\nKey qualifications: As Senior Partner of Nasir Absar & Co. (the Firm), share responsibilities with other partners, for all types of professional work carried out by the Firm. However, specifically responsible for accounting system development, computerization (IT), financial restructuring, mergers and acquisition accounting.\n\nEmployment Record: 2001 - to-date: CEO in Nasir Absar & Co. (Pvt) Ltd. (Auditors, Accountants, Corporate, Financial, Management & Tax Consultants)\n1998 - 2005 : Finance Controller and Director Finance in Islamic International Medical College Trust and Riphah International University, Islamabad, respectively.\n1996 - 1998 : Manager Audit & Tax in Jawaid Qadeer Rashid & Co. Chartered Accountants.\n\nSocial Services: Ex-Member Finance, Prime Minister's Task Force for Gems and Jewelry, Ex-Member Management Committee – Pakistan Red Crescent Society, Punjab, Ex-Member Board of Governors – Pak Red Crescent Medical & Dental College, Lahore, and more.`,
   },
@@ -18,7 +21,7 @@ const team = [
     name: "Absar Nasir",
     lastName: "Nasir",
     position: "COO",
-    image: "/team/Absar Nasir 1.png",
+    image: "/team/Absar Nasir 1.webp",
     linkedin: "https://pk.linkedin.com/company/nasir-absar-co",
     bio: `Profession: Corporate and Tax Consultant\nNationality: Pakistani\nContact: 092 300 9569379\nEmail: absar@nasirabsar.com\n\nExperience: As Partner of Nasir Absar & Co. (Pvt) Limited (the Company), share responsibilities with other Directors, for all types of professional work carried out by the Firm. However, specifically responsible for Tax, Corporate, Intellectual Property Laws, share registrar and NPO Legal Frame work.\n\nKey qualifications: Several distinctions in LLM (Master in Corporate Law). Position holder in the LLB (Graduate in Law). Distinction in Finance during MBA. First Position in Bachelor of Commerce.\n\nEmployment Record: 2001 – to-date: Executive Director, Nasir Absar & Co. (Pvt) Limited. 1997 – 2001 : Manager Tax & Corporate in Nadeem Ahmed & Co. Islamabad.`,
   },
@@ -26,7 +29,7 @@ const team = [
     name: "Syed Muhammad Imran",
     lastName: "Imran",
     position: "CCO",
-    image: "/team/Imran.png",
+    image: "/team/Imran.webp",
     linkedin: "https://pk.linkedin.com/in/sayidimran",
     bio: `Advocate High Courts\nExperience: 15 years of professional experience in field of Taxation and Corporate Regulatory Services.`,
   },
@@ -34,7 +37,7 @@ const team = [
     name: "Muhammad Jawaid Iqbal Khan",
     lastName: "Khan",
     position: "CIA",
-    image: "/team/Javed.jpg",
+    image: "/team/Javed.webp",
     linkedin:
       "https://www.linkedin.com/in/rana-javed-iqbal-khan-fca-51862418?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app",
     bio: `Fellow Member of Chartered Accountants\nExperience: 22 years of professional experience in field of Audit and transaction advisory.`,
@@ -43,7 +46,7 @@ const team = [
     name: "Rizwan Saeed",
     lastName: "Saeed",
     position: "CFO",
-    image: "/team/Rizwan Saeed.png",
+    image: "/team/Rizwan Saeed.webp",
     linkedin:
       "https://www.linkedin.com/in/rizwan-saeed-49251063?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app",
     bio: `Associate Member of Chartered Accountants\nExperience: 21 years of professional experience in field of Audit and Accounts.`,
@@ -52,7 +55,7 @@ const team = [
     name: "Aadil Ameen",
     lastName: "Ameen",
     position: "Management Consultant",
-    image: "/team/Adil Ameen.png",
+    image: "/team/Adil Ameen.webp",
     linkedin:
       "https://www.linkedin.com/in/adil-ameen-324743b0?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app",
     bio: `Fellow Member of Institute of Cost and Management Accountants\nExperience: 20 years of professional experience in field of Management Consultancy.`,
@@ -61,7 +64,7 @@ const team = [
     name: "Shahid Shoaib",
     lastName: "Shoaib",
     position: "Associate Chartered Accountant",
-    image: "/team/Shahid Shoaib.png",
+    image: "/team/Shahid Shoaib.webp",
     linkedin:
       "https://www.linkedin.com/in/shahidshoaib82?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app",
     bio: `Fellow Member of Certified Chartered Accountants\nExperience: 20 years of professional experience in field of Transaction Advisory.`,
@@ -70,7 +73,7 @@ const team = [
     name: "Asif Gulzar",
     lastName: "Gulzar",
     position: "CAO",
-    image: "/team/Asif Gulzar.jpg",
+    image: "/team/Asif Gulzar.webp",
     linkedin: "https://pk.linkedin.com/company/nasir-absar-co",
     bio: `CFA\nExperience: 22 years of professional experience in the field Audit.`,
   },
@@ -78,7 +81,7 @@ const team = [
     name: "Syed Musharraf Imam",
     lastName: "Imam",
     position: "CTO",
-    image: "/team/Musharraf Imam.png",
+    image: "/team/Musharraf Imam.webp",
     linkedin: "https://pk.linkedin.com/company/nasir-absar-co",
     bio: `Experience: 20 years of professional experience in field of Business Promotion.`,
   },
@@ -86,7 +89,7 @@ const team = [
     name: "Tariq Jamal",
     lastName: "Jamal",
     position: "Manager Taxation",
-    image: "/team/Tariq Jamal.png",
+    image: "/team/Tariq Jamal.webp",
     linkedin: "https://pk.linkedin.com/company/nasir-absar-co",
     bio: `CA-Finalist\nExperience: 7 years of professional experience in field of Taxation.`,
   },
@@ -94,7 +97,7 @@ const team = [
     name: "Asad Mehmood",
     lastName: "Mehmood",
     position: "Manager Legal",
-    image: "/team/Asad.png",
+    image: "/team/Asad.webp",
     linkedin: "https://www.linkedin.com/in/asad-malik-246b5b108",
     bio: `Advocate High Courts\nExperience: 7 years of professional experience in the field of Law.`,
   },

@@ -18,7 +18,10 @@ import {
 } from "lucide-react";
 // Removed getVercelOptimizedImage import - using direct paths for Vercel auto-optimization
 
-const placeholderImg = "https://via.placeholder.com/200x120?text=Logo";
+const placeholderImg = `data:image/svg+xml;base64,${btoa(`<svg width="200" height="120" xmlns="http://www.w3.org/2000/svg">
+  <rect width="200" height="120" fill="#E5E7EB" rx="8"/>
+  <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" fill="#6B7280" font-weight="500">Logo</text>
+</svg>`)}`;
 
 const Clients: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState(0);
@@ -26,253 +29,255 @@ const Clients: React.FC = () => {
   // Logo mapping for non-profit organizations
   const nonProfitLogos: { [key: string]: string } = {
     "National Testing Service - Pakistan (NTS)":
-      "/non-profit/National Testing Service - Pakistan (NTS).png",
-    "Muslim Aid, UK": "/non-profit/Muslim Aid, UK.png",
-    "HelpAge International, UK": "/non-profit/HelpAge International , UK.png",
+      "/non-profit/National Testing Service - Pakistan (NTS).webp",
+    "Muslim Aid, UK": "/non-profit/Muslim Aid, UK.webp",
+    "HelpAge International, UK": "/non-profit/HelpAge International , UK.webp",
     "Consumer Rights Commission of Pakistan":
-      "/non-profit/Consumer Rights Commission of Pakistan.png",
+      "/non-profit/Consumer Rights Commission of Pakistan.webp",
     "Michigan State University (MSU), USA":
-      "/non-profit/Michigan_State_University.png",
+      "/non-profit/Michigan_State_University.webp",
     "Federation of Islamic Medical Associations":
-      "/non-profit/Federation of Islamic Medical Associations.png",
+      "/non-profit/Federation of Islamic Medical Associations.webp",
     "Institute of Social & Policy Sciences (I-SAPS)":
-      "/non-profit/Institute of Social & Policy Sciences (I-SAPS).png",
+      "/non-profit/Institute of Social & Policy Sciences (I-SAPS).webp",
     "Islamic International Medical College Trust, Rawalpindi":
-      "/non-profit/Islamic International Medical College Trust,.png",
+      "/non-profit/Islamic International Medical College Trust,.webp",
     "Pakistan Islamic Medical Associations (PIMA)":
-      "/non-profit/Pakistan Islamic Medical Associations (PIMA).png",
+      "/non-profit/Pakistan Islamic Medical Associations (PIMA).webp",
     "International Brotherhood Organization":
-      "/non-profit/International Brotherhood Organization.png",
-    "Madinah Foundation": "/non-profit/Madinah Foundation.png",
-    "Khubaib Foundation": "/non-profit/Khubaib Foundation.png",
+      "/non-profit/International Brotherhood Organization.webp",
+    "Madinah Foundation": "/non-profit/Madinah Foundation.webp",
+    "Khubaib Foundation": "/non-profit/Khubaib Foundation.webp",
     "MEHARGARH Centre of Learning":
-      "/non-profit/MEHARGARH centre of Learning.png",
-    "Pak-China Institute": "/non-profit/Pak-China Institute.png",
-    "SAACH Foundation": "/non-profit/SAACH Foundation.png",
+      "/non-profit/MEHARGARH centre of Learning.webp",
+    "Pak-China Institute": "/non-profit/Pak-China Institute.webp",
+    "SAACH Foundation": "/non-profit/SAACH Foundation.webp",
     "Noor Educational & Economic Development (NEED) Foundation":
-      "/non-profit/Noor Educational & Economic Development.jpg",
+      "/non-profit/Noor Educational & Economic Development.webp",
     "Task Force for Global Health, USA":
-      "/non-profit/Task Force for Global Health, USA.png",
-    "USAID several Projects in Pakistan": "/non-profit/USAID.png",
-    "DEFID several Projects in Pakistan": "/non-profit/DEFID.jpg",
+      "/non-profit/Task Force for Global Health, USA.webp",
+    "USAID several Projects in Pakistan": "/non-profit/USAID.webp",
+    "DEFID several Projects in Pakistan": "/non-profit/DEFID.webp",
     "American Institute for Research (AIR)":
-      "/non-profit/American Institute for Research (AIR).png",
-    FELTP: "/non-profit/FELTP .png",
+      "/non-profit/American Institute for Research (AIR).webp",
+    FELTP: "/non-profit/FELTP .webp",
   };
 
   // Logo mapping for manufacturing organizations
   const manufacturingLogos: { [key: string]: string } = {
     "Apex Polymers (Pvt) Limited":
-      "/manufacturing/Apex Polymers (Pvt) Limited.png",
-    "Apex Industries (Pvt) Limited": "/manufacturing/APEX.png",
+      "/manufacturing/Apex Polymers (Pvt) Limited.webp",
+    "Apex Industries (Pvt) Limited": "/manufacturing/APEX.webp",
     "Decent Furnishers (Pvt) Limited":
-      "/manufacturing/Decent Furnishers (Pvt) Limited.png",
+      "/manufacturing/Decent Furnishers (Pvt) Limited.webp",
     "JX Compressors (Private) Limited":
-      "/manufacturing/JX Compressors (Private) Limited.png",
+      "/manufacturing/JX Compressors (Private) Limited.webp",
     "Suhail Jute Mills Limited (Listed Company)":
-      "/manufacturing/Suhail Jute Mills Limited .png",
+      "/manufacturing/Suhail Jute Mills Limited .webp",
     "Madina Group of Industries":
-      "/manufacturing/Madina Group of Industries.png",
-    "Hamza Sugar Mills Limited": "/manufacturing/Hamza Sugar Mills Limited.png",
-    "Kisan Ghee Mills": "/manufacturing/Kisan Ghee Mills .png",
-    "Sunlight Pakistan": "/manufacturing/Sunlight Pakistan.png",
-    "SIGMA Motors Limited": "/manufacturing/SIGMA Motors Limited.png",
+      "/manufacturing/Madina Group of Industries.webp",
+    "Hamza Sugar Mills Limited":
+      "/manufacturing/Hamza Sugar Mills Limited.webp",
+    "Kisan Ghee Mills": "/manufacturing/Kisan Ghee Mills .webp",
+    "Sunlight Pakistan": "/manufacturing/Sunlight Pakistan.webp",
+    "SIGMA Motors Limited": "/manufacturing/SIGMA Motors Limited.webp",
     "Chiniot Safety Fuse Manufacturing Company":
-      "/manufacturing/Chiniot Safety Fuse Manufacturing Company.png",
+      "/manufacturing/Chiniot Safety Fuse Manufacturing Company.webp",
     "Filix Pharmaceuticals (Private) Limited":
-      "/manufacturing/Filix Pharmaceuticals (Private) Limited.png",
+      "/manufacturing/Filix Pharmaceuticals (Private) Limited.webp",
     "Leads Pharma (Private) Limited":
-      "/manufacturing/Leads Pharma (Private) Limited.jpeg",
-    "Murgh Brand Masalajat": "/manufacturing/Murgh Brand Masalajat.png",
-    "Pakistan Steel Mills": "/manufacturing/Pakistan Steel Mills.png",
-    "Saibins Pharmaceuticals": "/manufacturing/Saibins Pharmaceuticals.jpg",
+      "/manufacturing/Leads Pharma (Private) Limited.webp",
+    "Murgh Brand Masalajat": "/manufacturing/Murgh Brand Masalajat.webp",
+    "Pakistan Steel Mills": "/manufacturing/Pakistan Steel Mills.webp",
+    "Saibins Pharmaceuticals": "/manufacturing/Saibins Pharmaceuticals.webp",
   };
 
   // Logo mapping for educational institutions
   const educationLogos: { [key: string]: string } = {
     "COMSATS Institute of Information Technology (CIIT)":
-      "/education/COMSATS Institute of Information.jpg",
+      "/education/COMSATS Institute of Information.webp",
     "Riphah International University, Islamabad":
-      "/education/Riphah International University, Islamabad.png",
+      "/education/Riphah International University, Islamabad.webp",
     "The University of Faisalabad":
-      "/education/The University of Faisalabad.png",
-    "Abasyn University": "/education/Abasyn University.png",
-    "Iqra University, Karachi": "/education/Iqra University, Karachi.png",
+      "/education/The University of Faisalabad.webp",
+    "Abasyn University": "/education/Abasyn University.webp",
+    "Iqra University, Karachi": "/education/Iqra University, Karachi.webp",
     "Islamic International Medical & Dental College":
-      "/education/Islamic International Medical & Dental.png",
+      "/education/Islamic International Medical & Dental.webp",
     "University Medical & Dental College, Faisalabad":
-      "/education/University Medical & Dental College.png",
+      "/education/University Medical & Dental College.webp",
     "RAK College of Dental Sciences, UAE":
-      "/education/RAK College of Dental Sciences, UAE.png",
-    "Connoisseur Grammar School": "/education/Connoisseur Grammar School.png",
-    "Askaria College, Rawalpindi": "/education/Askaria College, Rawalpindi.png",
+      "/education/RAK College of Dental Sciences, UAE.webp",
+    "Connoisseur Grammar School": "/education/Connoisseur Grammar School.webp",
+    "Askaria College, Rawalpindi":
+      "/education/Askaria College, Rawalpindi.webp",
     "Cadet College Hummak, Islamabad":
-      "/education/Cadet College Hummak, Islamabad.png",
+      "/education/Cadet College Hummak, Islamabad.webp",
     "University Cambridge School, Faisalabad":
-      "/education/University Cambridge School, Faisalabad.png",
+      "/education/University Cambridge School, Faisalabad.webp",
     "Swedish College of Engineering & Technology":
-      "/education/Swedish College of Engineering & Technology.png",
-    "Siddique Public School": "/education/Siddique Public School.png",
-    "Muslim Youth University": "/education/Muslim Youth University.png",
-    "Aeo Pakistan": "/education/Aeo Pakistan.png",
-    EBC: "/education/EBC.jpg",
-    FLS: "/education/FLS.png",
-    Mentors: "/education/Mentors.jpg",
-    Sirsyed: "/education/Sirsyed.png",
-    "Trillium Montessori": "/education/Trillium montessori.jpg",
+      "/education/Swedish College of Engineering & Technology.webp",
+    "Siddique Public School": "/education/Siddique Public School.webp",
+    "Muslim Youth University": "/education/Muslim Youth University.webp",
+    "Aeo Pakistan": "/education/Aeo Pakistan.webp",
+    EBC: "/education/EBC.webp",
+    FLS: "/education/FLS.webp",
+    Mentors: "/education/Mentors.webp",
+    Sirsyed: "/education/Sirsyed.webp",
+    "Trillium Montessori": "/education/Trillium montessori.webp",
   };
 
   // Logo mapping for health sector organizations
   const healthLogos: { [key: string]: string } = {
     "Pakistan Railways Hospital, Rawalpindi":
-      "/health/Pakistan Railways Hospital, Rawalpindi.png",
-    "IIDC Hospital, Islamabad": "/health/IIDC Hospital, Islamabad.png",
+      "/health/Pakistan Railways Hospital, Rawalpindi.webp",
+    "IIDC Hospital, Islamabad": "/health/IIDC Hospital, Islamabad.webp",
     "Max Health Hospital, Islamabad":
-      "/health/Max Health Hospital, Islamabad.png",
-    "PIMA Hospital": "/health/PIMA Hospital.png",
+      "/health/Max Health Hospital, Islamabad.webp",
+    "PIMA Hospital": "/health/PIMA Hospital.webp",
     "Raazi Hospital, Rawalpindi (Project of Al-Khidmat Foundation)":
-      "/health/Raazi Hospital, Rawalpindi.png",
+      "/health/Raazi Hospital, Rawalpindi.webp",
     "Riphah International Hospital, Islamabad":
-      "/health/Riphah International Hospital, Islamabad.png",
+      "/health/Riphah International Hospital, Islamabad.webp",
     "Pak Red Crescent Hospital, Lahore":
-      "/health/Pak Red Crescent Hospital, Lahore.png",
+      "/health/Pak Red Crescent Hospital, Lahore.webp",
     "Prime Health Pharma (Pvt) Limited":
-      "/health/Prime Health Pharma (Pvt) Limited.png",
-    "Apex Industries (Private) Limited": "/health/Apex Industries pvt ltd.jfif",
+      "/health/Prime Health Pharma (Pvt) Limited.webp",
+    "Apex Industries (Private) Limited": "/health/Apex Industries pvt ltd.webp",
     "Filix Pharmaceuticals (Private) Limited":
-      "/health/Filix Pharmaceuticals (Private) Limited.png",
+      "/health/Filix Pharmaceuticals (Private) Limited.webp",
     "Leads Pharma (Private) Limited":
-      "/health/Leads Pharma (Private) Limited.jfif",
-    "Saibins Pharmaceuticals": "/health/Saibins Pharmaceuticals.png",
+      "/health/Leads Pharma (Private) Limited.webp",
+    "Saibins Pharmaceuticals": "/health/Saibins Pharmaceuticals.webp",
   };
 
   // Logo mapping for construction organizations
   const constructionLogos: { [key: string]: string } = {
     "Suckh Chain Vellay (Pvt) Limited":
-      "/construction/Suckh Chain Vellay (Pvt) Limited.png",
+      "/construction/Suckh Chain Vellay (Pvt) Limited.webp",
     "Such Chain Garden (Pvt) Limited":
-      "/construction/Such Chain Garden (Pvt) Limited.jpg",
+      "/construction/Such Chain Garden (Pvt) Limited.webp",
     "Islamabad Corporative Housing Society":
-      "/construction/Islamabad Corporative Housing Society .png",
-    "Istanbul International": "/construction/Istanbul International.png",
-    "Built Robust": "/construction/Built Robust.png",
-    "AKRON (Pvt) Limited": "/construction/AKRON (Pvt) Limited.png",
-    "Perfect Builders": "/construction/Perfect Builders.png",
-    "LAC (PVT) LTD": "/construction/LAC (PVT) LTD.png",
-    "Aaj Sons (Pvt) Limited": "/construction/Aaj Sons (Pvt) Limited.png",
-    "Ultracon (Pvt) Ltd": "/construction/Ultracon (Pvt) Ltd.png",
-    "APEX Homes (Pvt) Ltd.": "/construction/APEX Homes (Pvt) Ltd..png",
-    "J7 Group": "/construction/J7 Group.png",
+      "/construction/Islamabad Corporative Housing Society .webp",
+    "Istanbul International": "/construction/Istanbul International.webp",
+    "Built Robust": "/construction/Built Robust.webp",
+    "AKRON (Pvt) Limited": "/construction/AKRON (Pvt) Limited.webp",
+    "Perfect Builders": "/construction/Perfect Builders.webp",
+    "LAC (PVT) LTD": "/construction/LAC (PVT) LTD.webp",
+    "Aaj Sons (Pvt) Limited": "/construction/Aaj Sons (Pvt) Limited.webp",
+    "Ultracon (Pvt) Ltd": "/construction/Ultracon (Pvt) Ltd.webp",
+    "APEX Homes (Pvt) Ltd.": "/construction/APEX Homes (Pvt) Ltd..webp",
+    "J7 Group": "/construction/J7 Group.webp",
     "Tahir Builders (Pvt) Limited":
-      "/construction/Tahir Builders (Pvt) Limited.png",
+      "/construction/Tahir Builders (Pvt) Limited.webp",
     "Faatir Engineers (Pvt) Limited":
-      "/construction/Faatir Engineers (Pvt) Limited.png",
+      "/construction/Faatir Engineers (Pvt) Limited.webp",
     "Abul Qasim Builders & Developers":
-      "/construction/Abul Qasim Builders & Developers.jpg",
-    "Haadi Developers": "/construction/Haadi Developers.jpg",
+      "/construction/Abul Qasim Builders & Developers.webp",
+    "Haadi Developers": "/construction/Haadi Developers.webp",
   };
 
   // Logo mapping for trading sector organizations
   const tradingLogos: { [key: string]: string } = {
     "Al-Karam International, Rawalpindi":
-      "/trading/Al-Karam International, Rawalpindi.png",
+      "/trading/Al-Karam International, Rawalpindi.webp",
     "APEX Trading International (Private) Limited":
-      "/trading/APEX Trading International (Private) Limited.png",
+      "/trading/APEX Trading International (Private) Limited.webp",
     "AHA Trading (Pvt) Limited":
-      "/trading/American Gardens - Sole Distributor.jpg",
-    "Sigma Motors Limited": "/trading/Sigma Motors Limited.png",
-    "Sky Traders": "/trading/Sky Traders.png",
-    "M.N. Traders": "/trading/MN traders.png",
-    "Islamabad Distributors (Pvt) Ltd": "/trading/Nishat Linen.jpg",
-    "Islamabad Pharma": "/trading/Islamabad Pharma.png",
+      "/trading/American Gardens - Sole Distributor.webp",
+    "Sigma Motors Limited": "/trading/Sigma Motors Limited.webp",
+    "Sky Traders": "/trading/Sky Traders.webp",
+    "M.N. Traders": "/trading/MN traders.webp",
+    "Islamabad Distributors (Pvt) Ltd": "/trading/Nishat Linen.webp",
+    "Islamabad Pharma": "/trading/Islamabad Pharma.webp",
     "Khyber Electric Co. (Pvt) Limited":
-      "/trading/Khyber Electric Co. (Pvt) Limited.png",
-    "Multitech Engineers, UK": "/trading/Multitech Engineers, UK.png",
-    "Gillion Pharmacy, Lahore": "/trading/Khaadi.jpg",
-    "SMS Pakistan": "/trading/SMS Pakistan.jpg",
+      "/trading/Khyber Electric Co. (Pvt) Limited.webp",
+    "Multitech Engineers, UK": "/trading/Multitech Engineers, UK.webp",
+    "Gillion Pharmacy, Lahore": "/trading/Khaadi.webp",
+    "SMS Pakistan": "/trading/SMS Pakistan.webp",
     "IMCO Technologies (Pvt) Limited":
-      "/trading/IMCO Technologies (Pvt) Limited.png",
-    "City Supermarket, Rawalpindi": "/trading/Family cash and carry.png",
-    "Family Cash & Carry (FCC)": "/trading/Family cash and carry.png",
+      "/trading/IMCO Technologies (Pvt) Limited.webp",
+    "City Supermarket, Rawalpindi": "/trading/Family cash and carry.webp",
+    "Family Cash & Carry (FCC)": "/trading/Family cash and carry.webp",
   };
 
   // Logo mapping for services sector organizations
   const servicesLogos: { [key: string]: string } = {
     "Royal Airport Services (Pvt) Limited":
-      "/services/imagesRoyal Airport Services (Pvt) Limited.png",
-    "Royal Ease Travel (Pvt) Limited": "/services/RAS.jpg",
-    "AH Aviation (Pvt) Limited": "/services/AH Aviation (Pvt) Limited.png",
+      "/services/imagesRoyal Airport Services (Pvt) Limited.webp",
+    "Royal Ease Travel (Pvt) Limited": "/services/RAS.webp",
+    "AH Aviation (Pvt) Limited": "/services/AH Aviation (Pvt) Limited.webp",
     "Appolo Telecom (Pvt) Limited":
-      "/services/Appolo Telecom (Pvt) Limited.png",
+      "/services/Appolo Telecom (Pvt) Limited.webp",
     "Baarik Travels (Pvt) Limited":
-      "/services/Baarik Travels (Pvt) Limited.png",
+      "/services/Baarik Travels (Pvt) Limited.webp",
     "Al-Fursan Travels (Pvt) Limited":
-      "/services/Al-Fursan Travels (Pvt) Limited.png",
+      "/services/Al-Fursan Travels (Pvt) Limited.webp",
     "Qutbain International (Pvt) Limited":
-      "/services/Qutbain International (Pvt) Limited.png",
+      "/services/Qutbain International (Pvt) Limited.webp",
     "Dedar-e Madina (Pvt) Limited":
-      "/services/Dedar-e Madina (Pvt) Limited.png",
+      "/services/Dedar-e Madina (Pvt) Limited.webp",
     "Arjumand And Associates (AAA) (World Bank Consultant)":
-      "/services/Designmen.jpg",
+      "/services/Designmen.webp",
     "DAMCON Engineering Solutions (Pvt) Ltd":
-      "/services/DAMCON Engineering Solutions (Pvt) Ltd.png",
+      "/services/DAMCON Engineering Solutions (Pvt) Ltd.webp",
     "Buzzard Securities (Pvt) Limited":
-      "/services/Buzzard Securities (Pvt) Limited.png",
+      "/services/Buzzard Securities (Pvt) Limited.webp",
     "CFC Consultant (Pvt) Limited":
-      "/services/CFC Consultant (Pvt) Limited.png",
+      "/services/CFC Consultant (Pvt) Limited.webp",
     "ITC Communications (Pvt) Limited":
-      "/services/ITC Communications (Pvt) Limited.png",
+      "/services/ITC Communications (Pvt) Limited.webp",
     "Telezone Communication":
-      "/services/Telezone Communication (Pvt) Limited.png",
-    "MAXNET (Pvt) Limited": "/services/MAXNET (Pvt) Limited.png",
-    "SELECTUM (Pvt) Limited": "/services/SELECTUM (Pvt) Limited.png",
+      "/services/Telezone Communication (Pvt) Limited.webp",
+    "MAXNET (Pvt) Limited": "/services/MAXNET (Pvt) Limited.webp",
+    "SELECTUM (Pvt) Limited": "/services/SELECTUM (Pvt) Limited.webp",
     "Seven Software Development (Pvt) Limited":
-      "/services/Seven Software Development (Pvt) Limited.png",
+      "/services/Seven Software Development (Pvt) Limited.webp",
     "Converge Enterprise Services (Pvt) Limited":
-      "/services/Converge Enterprise Services (Pvt) Limited.png",
+      "/services/Converge Enterprise Services (Pvt) Limited.webp",
     "Al-Khaleej Exchange Company – B (Pvt) Ltd":
-      "/services/Echo Oil (Private) Limited.jpg",
+      "/services/Echo Oil (Private) Limited.webp",
     "Perception Safety Solutions (Pvt) Ltd":
-      "/services/Skyways H. J (Private) Limited.jpeg",
+      "/services/Skyways H. J (Private) Limited.webp",
   };
 
   // Logo mapping for mining organizations
   const miningLogos: { [key: string]: string } = {
     "AJK Coal Mining Company (Private) Limited":
-      "/mining/AJK Coal Mining Company (Private) Limited.png",
+      "/mining/AJK Coal Mining Company (Private) Limited.webp",
     "South Asia Mining Company (Private) Limited":
-      "/mining/South Asia Mining Company (Private) Limited.png",
-    "SGB Mining (Pvt) Limited": "/mining/SGB Mining (Pvt) Limited.png",
-    "Apex Industries": "/mining/Apex Industries.png",
+      "/mining/South Asia Mining Company (Private) Limited.webp",
+    "SGB Mining (Pvt) Limited": "/mining/SGB Mining (Pvt) Limited.webp",
+    "Apex Industries": "/mining/Apex Industries.webp",
   };
 
   // Logo mapping for power sector organizations
   const powerLogos: { [key: string]: string } = {
     "Farooq Energy Company (Pvt) Limited (FARENCO) (500 MW Hydro Power Project, Chakkoti)":
-      "/power/Farooq Energy Company.png",
+      "/power/Farooq Energy Company.webp",
     "Neelum Green Energy (Pvt) Limited (49 MW Hydro Power Project, Luat)":
-      "/power/images.png",
+      "/power/images.webp",
     "Green Energy (Private) Limited (3 MW Raili-III Hydro Power Project)":
-      "/power/images (1).png",
+      "/power/images (1).webp",
     "Karimi Energy (Pvt.) Ltd. (4.3 MW Jabri Bedar Hydro Power Project)":
-      "/power/Karimi Energy (Pvt.) Ltd.png",
-    "(SHYDO), NWFP": "/power/SHYDO), NWFP.png",
+      "/power/Karimi Energy (Pvt.) Ltd.webp",
+    "(SHYDO), NWFP": "/power/SHYDO), NWFP.webp",
     "Agha Khan Rural Support Programme (AKRSP)":
-      "/power/Agha Khan Rural Support Programme (AKRSP).png",
-    PAEC: "/power/PAEC.logo.png",
-    "S.K. Hydro Consortium": "/power/SK-HYDRO.png",
+      "/power/Agha Khan Rural Support Programme (AKRSP).webp",
+    PAEC: "/power/PAEC.logo.webp",
+    "S.K. Hydro Consortium": "/power/SK-HYDRO.webp",
   };
 
   // Logo mapping for IT organizations
   const itLogos: { [key: string]: string } = {
-    "J Telemarketing": "/IT/J telemarketing.png",
-    "Newage Management (Pvt) Ltd": "/IT/Newage Management (Pvt) LTd.png",
+    "J Telemarketing": "/IT/J telemarketing.webp",
+    "Newage Management (Pvt) Ltd": "/IT/Newage Management (Pvt) LTd.webp",
     "Seven Soft (Pvt) Ltd": "/IT/Seven Soft (Pvt) Ltd.webp",
     "Simplicity Technologies (Pvt) Ltd":
-      "/IT/Simplicity Technologies (Pvt) Ltd.jpg",
+      "/IT/Simplicity Technologies (Pvt) Ltd.webp",
     "Siparadigm Diagnostic Informatics (Pvt) Limited":
-      "/IT/Siparadigm Diagnostic Informatics (Pvt) limited.png",
-    "Veyn (Private) Limited": "/IT/Veyn (Private) Limited.jpeg",
+      "/IT/Siparadigm Diagnostic Informatics (Pvt) limited.webp",
+    "Veyn (Private) Limited": "/IT/Veyn (Private) Limited.webp",
     "We are Nova (Pvt) Ltd": "/IT/We are Nova (Pvt) Ltd.webp",
   };
 
@@ -753,6 +758,8 @@ const Clients: React.FC = () => {
             if (!logoPath.startsWith("/")) {
               logoPath = "/" + logoPath;
             }
+            // Ensure path doesn't have double slashes
+            logoPath = logoPath.replace(/\/+/g, "/");
             return {
               name: client,
               logo: logoPath,
@@ -822,8 +829,35 @@ const Clients: React.FC = () => {
                   decoding="async"
                   onError={(e) => {
                     const target = e.target as HTMLImageElement;
-                    if (target.src !== placeholderImg) {
-                      target.src = placeholderImg;
+                    const currentSrc = target.src;
+                    // Only replace with placeholder if:
+                    // 1. It's not already the placeholder
+                    // 2. The original src was not a data URI
+                    // 3. We haven't already tried to load it
+                    if (
+                      currentSrc !== placeholderImg &&
+                      !item.logo.startsWith("data:") &&
+                      !currentSrc.includes("placeholder")
+                    ) {
+                      // Try to construct the full URL to debug
+                      const fullUrl = new URL(item.logo, window.location.origin)
+                        .href;
+                      console.warn(
+                        `Failed to load image: ${item.logo} for ${item.name}. Full URL: ${fullUrl}`
+                      );
+                      // Only set placeholder after a small delay to avoid race conditions
+                      setTimeout(() => {
+                        if (target.src === currentSrc) {
+                          target.src = placeholderImg;
+                        }
+                      }, 100);
+                    }
+                  }}
+                  onLoad={(e) => {
+                    // Image loaded successfully
+                    const target = e.target as HTMLImageElement;
+                    if (target) {
+                      target.style.opacity = "1";
                     }
                   }}
                 />

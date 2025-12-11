@@ -55,20 +55,6 @@ const About: React.FC = () => {
                 our recommendations.
               </p>
             </div>
-            <div className="flex flex-wrap items-center gap-4 sm:gap-6 pt-4 sm:pt-6 border-t border-gray-200">
-              <div className="text-center flex-1 min-w-[80px]">
-                <div className="text-2xl xs:text-3xl font-bold text-blue-600">25+</div>
-                <div className="text-xs xs:text-sm text-gray-600">Years Experience</div>
-              </div>
-              <div className="text-center flex-1 min-w-[80px]">
-                <div className="text-2xl xs:text-3xl font-bold text-blue-600">500+</div>
-                <div className="text-xs xs:text-sm text-gray-600">Happy Clients</div>
-              </div>
-              <div className="text-center flex-1 min-w-[80px]">
-                <div className="text-2xl xs:text-3xl font-bold text-blue-600">98%</div>
-                <div className="text-xs xs:text-sm text-gray-600">Success Rate</div>
-              </div>
-            </div>
           </motion.div>
 
           {/* Right Column: Mission and Vision Cards */}

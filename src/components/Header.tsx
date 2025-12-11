@@ -211,8 +211,8 @@ const Header: React.FC = () => {
               onClick={(e) => handleNavClick(e, "/")}
             >
               <img
-                src="/logo.webp"
-                srcSet="/logo.webp 1x, /logo.png 1x"
+                src="/logo-small.webp"
+                srcSet="/logo-small.webp 1x, /logo.webp 2x, /logo.png 1x"
                 alt="Nasir Absar & Co."
                 className="h-14 w-14 object-contain flex-shrink-0"
                 width="56"
@@ -304,8 +304,8 @@ const Header: React.FC = () => {
               onClick={(e) => handleNavClick(e, "/")}
             >
               <img
-                src="/logo.webp"
-                srcSet="/logo.webp 1x, /logo.png 1x"
+                src="/logo-small.webp"
+                srcSet="/logo-small.webp 1x, /logo.webp 2x, /logo.png 1x"
                 alt="Nasir Absar & Co."
                 className="h-12 w-12 sm:h-16 sm:w-16 md:h-20 md:w-20 object-contain flex-shrink-0"
                 width="80"
@@ -387,8 +387,8 @@ const Header: React.FC = () => {
               onClick={(e) => handleNavClick(e, "/")}
             >
               <img
-                src="/logo.webp"
-                srcSet="/logo.webp 1x, /logo.png 1x"
+                src="/logo-small.webp"
+                srcSet="/logo-small.webp 1x, /logo.webp 2x, /logo.png 1x"
                 alt="Nasir Absar & Co."
                 className="h-12 w-12 sm:h-16 sm:w-16 object-contain flex-shrink-0"
                 width="64"
