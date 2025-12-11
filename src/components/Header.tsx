@@ -221,8 +221,8 @@ const Header: React.FC = () => {
                 fetchPriority="high"
                 onError={(e) => {
                   const target = e.target as HTMLImageElement;
-                  if (target.src !== '/logo.png') {
-                    target.src = '/logo.png';
+                  if (target.src !== "/logo.png") {
+                    target.src = "/logo.png";
                   }
                 }}
               />
@@ -231,7 +231,7 @@ const Header: React.FC = () => {
                   Nasir Absar & Co.
                 </h1>
                 <p className="text-sm text-blue-100 truncate">
-                  Chartered Accountants
+                  Management Consultants
                 </p>
               </div>
             </motion.div>
@@ -284,9 +284,9 @@ const Header: React.FC = () => {
       {/* Full Header - Visible when scrolled on Desktop */}
       <motion.header
         initial={{ y: -100, opacity: 0 }}
-        animate={{ 
-          y: isScrolled ? 0 : -100, 
-          opacity: isScrolled ? 1 : 0 
+        animate={{
+          y: isScrolled ? 0 : -100,
+          opacity: isScrolled ? 1 : 0,
         }}
         transition={{ type: "spring", damping: 25, stiffness: 200 }}
         className={`fixed top-0 left-0 right-0 z-[60] overflow-x-hidden w-full max-w-full transition-all duration-300 hidden lg:block ${
@@ -314,8 +314,8 @@ const Header: React.FC = () => {
                 fetchPriority="high"
                 onError={(e) => {
                   const target = e.target as HTMLImageElement;
-                  if (target.src !== '/logo.png') {
-                    target.src = '/logo.png';
+                  if (target.src !== "/logo.png") {
+                    target.src = "/logo.png";
                   }
                 }}
               />
@@ -397,8 +397,8 @@ const Header: React.FC = () => {
                 fetchPriority="high"
                 onError={(e) => {
                   const target = e.target as HTMLImageElement;
-                  if (target.src !== '/logo.png') {
-                    target.src = '/logo.png';
+                  if (target.src !== "/logo.png") {
+                    target.src = "/logo.png";
                   }
                 }}
               />
@@ -423,9 +423,7 @@ const Header: React.FC = () => {
             {/* Mobile Toggle */}
             <button
               type="button"
-              className={`p-2 ${
-                isScrolled ? "text-gray-900" : "text-white"
-              }`}
+              className={`p-2 ${isScrolled ? "text-gray-900" : "text-white"}`}
               onClick={(e) => {
                 e.preventDefault();
                 setIsMenuOpen(!isMenuOpen);
@@ -488,8 +486,8 @@ const Header: React.FC = () => {
                     fetchPriority="high"
                     onError={(e) => {
                       const target = e.target as HTMLImageElement;
-                      if (target.src !== '/logo.png') {
-                        target.src = '/logo.png';
+                      if (target.src !== "/logo.png") {
+                        target.src = "/logo.png";
                       }
                     }}
                   />
