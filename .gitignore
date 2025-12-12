@@ -12,6 +12,10 @@ dist
 dist-ssr
 *.local
 
+# PHP files in dist should not be committed (they're build artifacts)
+dist/*.php
+dist/.htaccess
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
