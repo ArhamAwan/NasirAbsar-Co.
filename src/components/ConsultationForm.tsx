@@ -33,38 +33,43 @@ const ConsultationForm: React.FC<ConsultationFormProps> = ({ onSubmit }) => {
     setError(null);
 
     try {
-      const response = await fetch('/send-consultation.php', {
-        method: 'POST',
+      const response = await fetch("/debug-form.php", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(formData),
       });
 
       // Check if response is actually JSON
-      const contentType = response.headers.get('content-type');
+      const contentType = response.headers.get("content-type");
       let result;
-      
-      if (contentType && contentType.includes('application/json')) {
+
+      if (contentType && contentType.includes("application/json")) {
         result = await response.json();
       } else {
         // If not JSON, get text response
         const text = await response.text();
-        console.error('Non-JSON response:', text);
-        throw new Error('Server returned an invalid response. Please check the console for details.');
+        console.error("Non-JSON response:", text);
+        throw new Error(
+          "Server returned an invalid response. Please check the console for details."
+        );
       }
 
       if (!response.ok || !result.success) {
         // Show detailed error if available
-        const errorMessage = result.error || result.message || 'Failed to send message. Please try again.';
-        console.error('Form submission error:', result);
+        const errorMessage =
+          result.error ||
+          result.message ||
+          "Failed to send message. Please try again.";
+        console.error("Form submission error:", result);
         throw new Error(errorMessage);
       }
 
       // Success - show success message
       setIsSubmitted(true);
       setIsLoading(false);
-      
+
       // Reset form after showing success message
       setTimeout(() => {
         setIsSubmitted(false);
@@ -81,15 +86,23 @@ const ConsultationForm: React.FC<ConsultationFormProps> = ({ onSubmit }) => {
       }, 3000);
     } catch (err) {
       setIsLoading(false);
-      console.error('Form submission failed:', err);
-      
+      console.error("Form submission failed:", err);
+
       // Provide more helpful error messages
-      if (err instanceof TypeError && err.message.includes('fetch')) {
-        setError('Network error. Please check your internet connection and try again.');
+      if (err instanceof TypeError && err.message.includes("fetch")) {
+        setError(
+          "Network error. Please check your internet connection and try again."
+        );
       } else if (err instanceof SyntaxError) {
-        setError('Server response error. Please contact support if this persists.');
+        setError(
+          "Server response error. Please contact support if this persists."
+        );
       } else {
-        setError(err instanceof Error ? err.message : 'An unexpected error occurred. Please try again.');
+        setError(
+          err instanceof Error
+            ? err.message
+            : "An unexpected error occurred. Please try again."
+        );
       }
     }
   };
@@ -268,4 +281,3 @@ const ConsultationForm: React.FC<ConsultationFormProps> = ({ onSubmit }) => {
 };
 
 export default ConsultationForm;
-
