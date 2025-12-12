@@ -38,6 +38,9 @@ const ConsultationForm: React.FC<ConsultationFormProps> = ({ onSubmit }) => {
         ? "https://www.nasirabsar.com/send-consultation.php"
         : "/send-consultation.php";
 
+      console.log("🚀 Sending request to:", apiUrl);
+      console.log("📦 Request data:", formData);
+
       const response = await fetch(apiUrl, {
         method: "POST",
         headers: {
@@ -47,27 +50,42 @@ const ConsultationForm: React.FC<ConsultationFormProps> = ({ onSubmit }) => {
       });
 
       // Log response for debugging
-      console.log("Response status:", response.status);
+      console.log("✅ Response received - Status:", response.status);
       console.log(
-        "Response headers:",
+        "📋 Response headers:",
         Object.fromEntries(response.headers.entries())
       );
 
       const contentType = response.headers.get("content-type");
       const isJson = contentType && contentType.includes("application/json");
+      console.log("📄 Content-Type:", contentType, "Is JSON:", isJson);
 
       // Try to get response text first for debugging
-      const responseText = await response.text();
-      console.log("Response text:", responseText);
+      let responseText = "";
+      let result = null;
 
-      const result = isJson ? JSON.parse(responseText) : null;
+      try {
+        responseText = await response.text();
+        console.log("📝 Response text:", responseText);
+
+        if (isJson && responseText) {
+          result = JSON.parse(responseText);
+          console.log("🔍 Parsed result:", result);
+        }
+      } catch (parseError) {
+        console.error("❌ Error parsing response:", parseError);
+        console.error("Raw response text:", responseText);
+      }
 
       if (!response.ok || !result?.success) {
-        const errorMessage =
-          result?.error || result?.message || result?.debug
-            ? JSON.stringify(result.debug, null, 2)
-            : "Failed to send message. Please try again.";
-        console.error("Error response:", result);
+        const errorMessage = result?.debug
+          ? `Error: ${
+              result.error || result.message
+            }\n\nDebug Info:\n${JSON.stringify(result.debug, null, 2)}`
+          : result?.error ||
+            result?.message ||
+            "Failed to send message. Please try again.";
+        console.error("❌ Error response:", result);
         throw new Error(errorMessage);
       }
 
