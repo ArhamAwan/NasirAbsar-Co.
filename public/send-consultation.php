@@ -9,10 +9,20 @@ error_reporting(E_ALL);
 ini_set('display_errors', 0); // Don't display errors, but log them
 ini_set('log_errors', 1);
 
+// Handle CORS preflight (OPTIONS request)
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    header('Access-Control-Allow-Origin: *');
+    header('Access-Control-Allow-Methods: POST, OPTIONS');
+    header('Access-Control-Allow-Headers: Content-Type');
+    header('Access-Control-Max-Age: 86400');
+    http_response_code(200);
+    exit;
+}
+
 // Set headers for JSON response and CORS
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
-header('Access-Control-Allow-Methods: POST');
+header('Access-Control-Allow-Methods: POST, OPTIONS');
 header('Access-Control-Allow-Headers: Content-Type');
 
 // Debug mode - set to true to see detailed error messages
@@ -21,7 +31,7 @@ $debugMode = isset($_GET['debug']) && $_GET['debug'] === 'true';
 // Only allow POST requests
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     http_response_code(405);
-    echo json_encode(['success' => false, 'error' => 'Method not allowed']);
+    echo json_encode(['success' => false, 'error' => 'Method not allowed. Only POST requests are accepted.']);
     exit;
 }
 
