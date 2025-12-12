@@ -41,10 +41,24 @@ const ConsultationForm: React.FC<ConsultationFormProps> = ({ onSubmit }) => {
         body: JSON.stringify(formData),
       });
 
-      const result = await response.json();
+      // Check if response is actually JSON
+      const contentType = response.headers.get('content-type');
+      let result;
+      
+      if (contentType && contentType.includes('application/json')) {
+        result = await response.json();
+      } else {
+        // If not JSON, get text response
+        const text = await response.text();
+        console.error('Non-JSON response:', text);
+        throw new Error('Server returned an invalid response. Please check the console for details.');
+      }
 
       if (!response.ok || !result.success) {
-        throw new Error(result.error || 'Failed to send message. Please try again.');
+        // Show detailed error if available
+        const errorMessage = result.error || result.message || 'Failed to send message. Please try again.';
+        console.error('Form submission error:', result);
+        throw new Error(errorMessage);
       }
 
       // Success - show success message
@@ -67,7 +81,16 @@ const ConsultationForm: React.FC<ConsultationFormProps> = ({ onSubmit }) => {
       }, 3000);
     } catch (err) {
       setIsLoading(false);
-      setError(err instanceof Error ? err.message : 'An unexpected error occurred. Please try again.');
+      console.error('Form submission failed:', err);
+      
+      // Provide more helpful error messages
+      if (err instanceof TypeError && err.message.includes('fetch')) {
+        setError('Network error. Please check your internet connection and try again.');
+      } else if (err instanceof SyntaxError) {
+        setError('Server response error. Please contact support if this persists.');
+      } else {
+        setError(err instanceof Error ? err.message : 'An unexpected error occurred. Please try again.');
+      }
     }
   };
 

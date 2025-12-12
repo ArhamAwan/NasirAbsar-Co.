@@ -27,21 +27,60 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 
 // Get JSON input
 $input = file_get_contents('php://input');
-$data = json_decode($input, true);
+$data = null;
+$jsonError = null;
 
-// Fallback to form data if JSON parsing fails
-if (!$data) {
+// Try to parse JSON first
+if (!empty($input)) {
+    $data = json_decode($input, true);
+    if (json_last_error() !== JSON_ERROR_NONE) {
+        $jsonError = json_last_error_msg();
+        // If JSON parsing fails, try to get form data
+        parse_str($input, $data);
+        if (empty($data)) {
+            $data = $_POST;
+        }
+    }
+} else {
+    // No input, try POST data
     $data = $_POST;
+}
+
+// Log what we received (for debugging)
+if ($debugMode) {
+    error_log('Received data: ' . print_r($data, true));
+    error_log('Input raw: ' . $input);
+    error_log('JSON error: ' . ($jsonError ?: 'none'));
+}
+
+// Check if we have any data at all
+if (empty($data) || !is_array($data)) {
+    http_response_code(400);
+    echo json_encode([
+        'success' => false, 
+        'error' => 'No data received',
+        'debug' => $debugMode ? ['input' => $input, 'post' => $_POST, 'json_error' => $jsonError] : null
+    ]);
+    exit;
 }
 
 // Validate required fields
 $required = ['name', 'email', 'message'];
+$missingFields = [];
 foreach ($required as $field) {
     if (empty($data[$field])) {
-        http_response_code(400);
-        echo json_encode(['success' => false, 'error' => "Field '$field' is required"]);
-        exit;
+        $missingFields[] = $field;
     }
+}
+
+if (!empty($missingFields)) {
+    http_response_code(400);
+    echo json_encode([
+        'success' => false, 
+        'error' => 'Missing required fields: ' . implode(', ', $missingFields),
+        'debug' => $debugMode ? ['received_data' => $data, 'missing' => $missingFields] : null
+    ]);
+    exit;
 }
 
 // Sanitize input
