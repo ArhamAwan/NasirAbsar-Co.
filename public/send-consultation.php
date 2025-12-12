@@ -20,17 +20,39 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 $actualMethod = $_SERVER['REQUEST_METHOD'] ?? 'UNKNOWN';
 $requestUri = $_SERVER['REQUEST_URI'] ?? 'UNKNOWN';
 
+// Accept POST requests (and temporarily GET for debugging)
+$requestMethod = $_SERVER['REQUEST_METHOD'] ?? 'UNKNOWN';
+
+// If GET request, return debug info
+if ($requestMethod === 'GET') {
+    http_response_code(200);
+    echo json_encode([
+        'success' => false,
+        'error' => 'This endpoint only accepts POST requests',
+        'debug' => [
+            'received_method' => $requestMethod,
+            'server_method' => $_SERVER['REQUEST_METHOD'] ?? 'not set',
+            'request_uri' => $requestUri,
+            'php_version' => phpversion(),
+            'test' => 'PHP is executing correctly'
+        ]
+    ]);
+    exit;
+}
+
 // Only allow POST requests
-if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+if ($requestMethod !== 'POST') {
     http_response_code(405);
     echo json_encode([
         'success' => false, 
         'error' => 'Method not allowed. Only POST requests are accepted.',
         'debug' => [
             'received_method' => $actualMethod,
+            'server_method' => $_SERVER['REQUEST_METHOD'] ?? 'not set',
             'request_uri' => $requestUri,
             'content_type' => $_SERVER['CONTENT_TYPE'] ?? 'not set',
-            'content_length' => $_SERVER['CONTENT_LENGTH'] ?? 'not set'
+            'content_length' => $_SERVER['CONTENT_LENGTH'] ?? 'not set',
+            'all_server_vars' => array_keys($_SERVER)
         ]
     ]);
     exit;

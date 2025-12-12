@@ -44,15 +44,26 @@ const Contact: React.FC = () => {
         body: JSON.stringify(formData),
       });
 
+      // Log response for debugging
+      console.log("Response status:", response.status);
+      console.log("Response headers:", Object.fromEntries(response.headers.entries()));
+
       const contentType = response.headers.get('content-type');
       const isJson = contentType && contentType.includes('application/json');
-      const result = isJson ? await response.json() : null;
+      
+      // Try to get response text first for debugging
+      const responseText = await response.text();
+      console.log("Response text:", responseText);
+      
+      const result = isJson ? JSON.parse(responseText) : null;
 
       if (!response.ok || !result?.success) {
         const errorMessage =
           result?.error ||
           result?.message ||
+          result?.debug ? JSON.stringify(result.debug, null, 2) :
           'Failed to send message. Please try again.';
+        console.error("Error response:", result);
         throw new Error(errorMessage);
       }
 
