@@ -79,7 +79,8 @@ const Footer: React.FC = () => {
                   style={{ color: "#EC4899" }}
                 />
                 <span className="text-xs xs:text-sm sm:text-base text-white/70 break-words">
-                  I-8, Islamabad, Pakistan
+                  I-8 Markaz, Islamabad, Pakistan<br />
+                  Postal Code: 44000
                 </span>
               </div>
               <div className="flex items-center space-x-2 sm:space-x-3">
@@ -91,14 +92,19 @@ const Footer: React.FC = () => {
                   051-4861322
                 </span>
               </div>
-              <div className="flex items-center space-x-2 sm:space-x-3">
+              <div className="flex items-start space-x-2 sm:space-x-3">
                 <Mail
-                  className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0"
+                  className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0 mt-0.5"
                   style={{ color: "#EC4899" }}
                 />
-                <span className="text-xs xs:text-sm sm:text-base text-white/70 break-all">
-                  info@nasirabsar.com
-                </span>
+                <div className="flex flex-col space-y-1">
+                  <span className="text-xs xs:text-sm sm:text-base text-white/70 break-all">
+                    info@nasirabsar.com
+                  </span>
+                  <span className="text-xs xs:text-sm sm:text-base text-white/70 break-all">
+                    contact@nasirabsar.com
+                  </span>
+                </div>
               </div>
             </div>
           </motion.div>
