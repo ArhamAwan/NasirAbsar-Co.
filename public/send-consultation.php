@@ -4,36 +4,19 @@
  * Sends form submissions to contact@nasirabsar.com
  */
 
-// For GET requests, show a simple test page (like test-email.php)
-if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-    header('Content-Type: text/html; charset=UTF-8');
-    ?>
-    <!DOCTYPE html>
-    <html>
-    <head>
-        <title>Consultation Form Handler</title>
-        <style>
-            body { font-family: Arial, sans-serif; max-width: 600px; margin: 50px auto; padding: 20px; }
-            .success { background: #d4edda; color: #155724; padding: 20px; border-radius: 5px; margin: 20px 0; }
-        </style>
-    </head>
-    <body>
-        <div class="success">
-            <h2>✅ PHP is Executing!</h2>
-            <p>This endpoint is working. Use POST requests to submit forms.</p>
-            <p><strong>PHP Version:</strong> <?php echo phpversion(); ?></p>
-        </div>
-    </body>
-    </html>
-    <?php
-    exit;
-}
+// Enable error reporting for debugging (disable in production)
+error_reporting(E_ALL);
+ini_set('display_errors', 0); // Don't display errors, but log them
+ini_set('log_errors', 1);
 
 // Set headers for JSON response and CORS
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: POST, OPTIONS');
 header('Access-Control-Allow-Headers: Content-Type');
+
+// Debug mode - set to true to see detailed error messages
+$debugMode = isset($_GET['debug']) && $_GET['debug'] === 'true';
 
 // Handle CORS preflight (OPTIONS request)
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
@@ -157,24 +140,47 @@ Message:
 Submitted on: " . date('F j, Y, g:i a') . "
 ";
 
-// Email headers (same as test-email.php)
-$headers = "From: noreply@nasirabsar.com\r\n";
-$headers .= "Reply-To: {$email}\r\n";
-$headers .= "X-Mailer: PHP/" . phpversion();
-$headers .= "\r\nMIME-Version: 1.0\r\n";
-$headers .= "Content-Type: text/html; charset=UTF-8\r\n";
+// Email headers
+$headers = [
+    'MIME-Version: 1.0',
+    'Content-Type: text/html; charset=UTF-8',
+    'From: Nasir Absar Website <noreply@nasirabsar.com>',
+    'Reply-To: ' . $email,
+    'X-Mailer: PHP/' . phpversion()
+];
 
-// Try to send email using PHPMailer if available (same as test-email.php)
+// Try to send email using PHPMailer if available, otherwise use native mail()
 $mailSent = false;
+$errorDetails = [];
+$mailMethod = 'none';
 
+// Check if PHPMailer is available (common on cPanel)
 if (class_exists('PHPMailer\\PHPMailer\\PHPMailer')) {
     try {
         $mail = new PHPMailer\PHPMailer\PHPMailer(true);
-        $mail->isSMTP();
-        $mail->Host = 'localhost';
-        $mail->SMTPAuth = false;
-        $mail->Port = 25;
         
+        // Enable verbose debug output if in debug mode
+        if ($debugMode) {
+            $mail->SMTPDebug = 2;
+            $mail->Debugoutput = function($str, $level) use (&$errorDetails) {
+                $errorDetails[] = "PHPMailer Debug: $str";
+            };
+        }
+        
+        // SMTP configuration (cPanel default settings)
+        $mail->isSMTP();
+        $mail->Host = 'localhost'; // cPanel typically uses localhost
+        $mail->SMTPAuth = false; // Usually not required for localhost
+        $mail->Port = 25;
+        $mail->SMTPOptions = array(
+            'ssl' => array(
+                'verify_peer' => false,
+                'verify_peer_name' => false,
+                'allow_self_signed' => true
+            )
+        );
+        
+        // Email settings
         $mail->setFrom('noreply@nasirabsar.com', 'Nasir Absar Website');
         $mail->addAddress($to);
         $mail->addReplyTo($email, $name);
@@ -184,24 +190,75 @@ if (class_exists('PHPMailer\\PHPMailer\\PHPMailer')) {
         $mail->Body = $emailBody;
         $mail->AltBody = $textBody;
         
-        if ($mail->send()) {
-            $mailSent = true;
-        }
+        $mail->send();
+        $mailSent = true;
+        $mailMethod = 'PHPMailer';
     } catch (Exception $e) {
-        // Fall through to mail() function
+        // Fall back to native mail() if PHPMailer fails
+        $errorDetails[] = 'PHPMailer error: ' . $mail->ErrorInfo;
+        $errorDetails[] = 'Exception: ' . $e->getMessage();
+        error_log('PHPMailer error: ' . $mail->ErrorInfo);
     }
 }
 
-// Fallback to native mail() function (same as test-email.php)
-if (!$mailSent && function_exists('mail')) {
-    $mailSent = @mail($to, $subject, $emailBody, $headers);
+// Fallback to native mail() function
+if (!$mailSent) {
+    $headersString = implode("\r\n", $headers);
+    
+    // Check if mail() function is available
+    if (!function_exists('mail')) {
+        $errorDetails[] = 'mail() function is not available on this server';
+    } else {
+        // Try sending with mail()
+        $lastError = error_get_last();
+        $mailSent = @mail($to, $subject, $emailBody, $headersString);
+        
+        if (!$mailSent) {
+            $lastError = error_get_last();
+            if ($lastError && $lastError['message']) {
+                $errorDetails[] = 'mail() error: ' . $lastError['message'];
+            } else {
+                $errorDetails[] = 'mail() returned false - email may not have been sent';
+            }
+        } else {
+            $mailMethod = 'mail()';
+        }
+    }
 }
+
+// Log the attempt
+$logMessage = sprintf(
+    "Email send attempt - Method: %s, Success: %s, To: %s, From: %s",
+    $mailMethod,
+    $mailSent ? 'YES' : 'NO',
+    $to,
+    $email
+);
+error_log($logMessage);
 
 if ($mailSent) {
     http_response_code(200);
-    echo json_encode(['success' => true, 'message' => 'Email sent successfully']);
+    $response = ['success' => true, 'message' => 'Email sent successfully'];
+    if ($debugMode) {
+        $response['debug'] = [
+            'method' => $mailMethod,
+            'to' => $to,
+            'from' => $email
+        ];
+    }
+    echo json_encode($response);
 } else {
     http_response_code(500);
-    echo json_encode(['success' => false, 'error' => 'Failed to send email. Please try again later.']);
+    $response = ['success' => false, 'error' => 'Failed to send email. Please try again later.'];
+    if ($debugMode) {
+        $response['debug'] = [
+            'method' => $mailMethod,
+            'errors' => $errorDetails,
+            'php_version' => phpversion(),
+            'mail_function_exists' => function_exists('mail'),
+            'phpmailer_available' => class_exists('PHPMailer\\PHPMailer\\PHPMailer')
+        ];
+    }
+    echo json_encode($response);
 }
 ?>
