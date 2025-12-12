@@ -4,6 +4,31 @@
  * Sends form submissions to contact@nasirabsar.com
  */
 
+// For GET requests, show a simple test page (like test-email.php)
+if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+    header('Content-Type: text/html; charset=UTF-8');
+    ?>
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>Consultation Form Handler</title>
+        <style>
+            body { font-family: Arial, sans-serif; max-width: 600px; margin: 50px auto; padding: 20px; }
+            .success { background: #d4edda; color: #155724; padding: 20px; border-radius: 5px; margin: 20px 0; }
+        </style>
+    </head>
+    <body>
+        <div class="success">
+            <h2>✅ PHP is Executing!</h2>
+            <p>This endpoint is working. Use POST requests to submit forms.</p>
+            <p><strong>PHP Version:</strong> <?php echo phpversion(); ?></p>
+        </div>
+    </body>
+    </html>
+    <?php
+    exit;
+}
+
 // Set headers for JSON response and CORS
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
