@@ -31,7 +31,12 @@ const Contact: React.FC = () => {
     setError(null);
 
     try {
-      const response = await fetch('/send-consultation.php', {
+      // Use absolute URL for production (cPanel domain)
+      const apiUrl = import.meta.env.PROD 
+        ? 'https://www.nasirabsar.com/send-consultation.php'
+        : '/send-consultation.php';
+      
+      const response = await fetch(apiUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

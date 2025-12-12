@@ -16,10 +16,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit;
 }
 
+// Debug: Log the actual request method received
+$actualMethod = $_SERVER['REQUEST_METHOD'] ?? 'UNKNOWN';
+$requestUri = $_SERVER['REQUEST_URI'] ?? 'UNKNOWN';
+
 // Only allow POST requests
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     http_response_code(405);
-    echo json_encode(['success' => false, 'error' => 'Method not allowed. Only POST requests are accepted.']);
+    echo json_encode([
+        'success' => false, 
+        'error' => 'Method not allowed. Only POST requests are accepted.',
+        'debug' => [
+            'received_method' => $actualMethod,
+            'request_uri' => $requestUri,
+            'content_type' => $_SERVER['CONTENT_TYPE'] ?? 'not set',
+            'content_length' => $_SERVER['CONTENT_LENGTH'] ?? 'not set'
+        ]
+    ]);
     exit;
 }
 
