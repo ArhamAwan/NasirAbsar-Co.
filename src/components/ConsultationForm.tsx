@@ -33,9 +33,10 @@ const ConsultationForm: React.FC<ConsultationFormProps> = ({ onSubmit }) => {
     setError(null);
 
     try {
-      // Use absolute URL for production (cPanel domain)
+      // Use root domain (without www) for production - points to cPanel
+      // www.nasirabsar.com points to Vercel, nasirabsar.com points to cPanel
       const apiUrl = import.meta.env.PROD
-        ? "https://www.nasirabsar.com/send-consultation.php"
+        ? "https://nasirabsar.com/send-consultation.php"
         : "/send-consultation.php";
 
       console.log("🚀 Sending request to:", apiUrl);
