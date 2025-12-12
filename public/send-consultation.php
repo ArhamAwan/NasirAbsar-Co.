@@ -4,29 +4,17 @@
  * Sends form submissions to contact@nasirabsar.com
  */
 
-// Enable error reporting for debugging (disable in production)
-error_reporting(E_ALL);
-ini_set('display_errors', 0); // Don't display errors, but log them
-ini_set('log_errors', 1);
-
-// Handle CORS preflight (OPTIONS request)
-if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-    header('Access-Control-Allow-Origin: *');
-    header('Access-Control-Allow-Methods: POST, OPTIONS');
-    header('Access-Control-Allow-Headers: Content-Type');
-    header('Access-Control-Max-Age: 86400');
-    http_response_code(200);
-    exit;
-}
-
 // Set headers for JSON response and CORS
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: POST, OPTIONS');
 header('Access-Control-Allow-Headers: Content-Type');
 
-// Debug mode - set to true to see detailed error messages
-$debugMode = isset($_GET['debug']) && $_GET['debug'] === 'true';
+// Handle CORS preflight (OPTIONS request)
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    http_response_code(200);
+    exit;
+}
 
 // Only allow POST requests
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
@@ -37,60 +25,21 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 
 // Get JSON input
 $input = file_get_contents('php://input');
-$data = null;
-$jsonError = null;
+$data = json_decode($input, true);
 
-// Try to parse JSON first
-if (!empty($input)) {
-    $data = json_decode($input, true);
-    if (json_last_error() !== JSON_ERROR_NONE) {
-        $jsonError = json_last_error_msg();
-        // If JSON parsing fails, try to get form data
-        parse_str($input, $data);
-        if (empty($data)) {
-            $data = $_POST;
-        }
-    }
-} else {
-    // No input, try POST data
+// Fallback to POST data if JSON parsing fails
+if (!$data) {
     $data = $_POST;
-}
-
-// Log what we received (for debugging)
-if ($debugMode) {
-    error_log('Received data: ' . print_r($data, true));
-    error_log('Input raw: ' . $input);
-    error_log('JSON error: ' . ($jsonError ?: 'none'));
-}
-
-// Check if we have any data at all
-if (empty($data) || !is_array($data)) {
-    http_response_code(400);
-    echo json_encode([
-        'success' => false, 
-        'error' => 'No data received',
-        'debug' => $debugMode ? ['input' => $input, 'post' => $_POST, 'json_error' => $jsonError] : null
-    ]);
-    exit;
 }
 
 // Validate required fields
 $required = ['name', 'email', 'message'];
-$missingFields = [];
 foreach ($required as $field) {
     if (empty($data[$field])) {
-        $missingFields[] = $field;
+        http_response_code(400);
+        echo json_encode(['success' => false, 'error' => "Field '$field' is required"]);
+        exit;
     }
-}
-
-if (!empty($missingFields)) {
-    http_response_code(400);
-    echo json_encode([
-        'success' => false, 
-        'error' => 'Missing required fields: ' . implode(', ', $missingFields),
-        'debug' => $debugMode ? ['received_data' => $data, 'missing' => $missingFields] : null
-    ]);
-    exit;
 }
 
 // Sanitize input
@@ -104,21 +53,6 @@ $message = htmlspecialchars(trim($data['message']), ENT_QUOTES, 'UTF-8');
 if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
     http_response_code(400);
     echo json_encode(['success' => false, 'error' => 'Invalid email address']);
-    exit;
-}
-
-// Basic spam protection: Check for common spam patterns
-$spamPatterns = ['http://', 'https://', 'www.', '.com', '.net', '.org'];
-$spamCount = 0;
-foreach ($spamPatterns as $pattern) {
-    if (stripos($message, $pattern) !== false) {
-        $spamCount++;
-    }
-}
-// Allow some URLs but flag if too many
-if ($spamCount > 3) {
-    http_response_code(400);
-    echo json_encode(['success' => false, 'error' => 'Message contains too many links']);
     exit;
 }
 
@@ -181,7 +115,7 @@ $emailBody = "
 </html>
 ";
 
-// Plain text version for email clients that don't support HTML
+// Plain text version
 $textBody = "
 New Consultation Request
 =======================
@@ -198,47 +132,24 @@ Message:
 Submitted on: " . date('F j, Y, g:i a') . "
 ";
 
-// Email headers
-$headers = [
-    'MIME-Version: 1.0',
-    'Content-Type: text/html; charset=UTF-8',
-    'From: Nasir Absar Website <noreply@nasirabsar.com>',
-    'Reply-To: ' . $email,
-    'X-Mailer: PHP/' . phpversion()
-];
+// Email headers (same as test-email.php)
+$headers = "From: noreply@nasirabsar.com\r\n";
+$headers .= "Reply-To: {$email}\r\n";
+$headers .= "X-Mailer: PHP/" . phpversion();
+$headers .= "\r\nMIME-Version: 1.0\r\n";
+$headers .= "Content-Type: text/html; charset=UTF-8\r\n";
 
-// Try to send email using PHPMailer if available, otherwise use native mail()
+// Try to send email using PHPMailer if available (same as test-email.php)
 $mailSent = false;
-$errorDetails = [];
-$mailMethod = 'none';
 
-// Check if PHPMailer is available (common on cPanel)
 if (class_exists('PHPMailer\\PHPMailer\\PHPMailer')) {
     try {
         $mail = new PHPMailer\PHPMailer\PHPMailer(true);
-        
-        // Enable verbose debug output if in debug mode
-        if ($debugMode) {
-            $mail->SMTPDebug = 2;
-            $mail->Debugoutput = function($str, $level) use (&$errorDetails) {
-                $errorDetails[] = "PHPMailer Debug: $str";
-            };
-        }
-        
-        // SMTP configuration (cPanel default settings)
         $mail->isSMTP();
-        $mail->Host = 'localhost'; // cPanel typically uses localhost
-        $mail->SMTPAuth = false; // Usually not required for localhost
+        $mail->Host = 'localhost';
+        $mail->SMTPAuth = false;
         $mail->Port = 25;
-        $mail->SMTPOptions = array(
-            'ssl' => array(
-                'verify_peer' => false,
-                'verify_peer_name' => false,
-                'allow_self_signed' => true
-            )
-        );
         
-        // Email settings
         $mail->setFrom('noreply@nasirabsar.com', 'Nasir Absar Website');
         $mail->addAddress($to);
         $mail->addReplyTo($email, $name);
@@ -248,75 +159,24 @@ if (class_exists('PHPMailer\\PHPMailer\\PHPMailer')) {
         $mail->Body = $emailBody;
         $mail->AltBody = $textBody;
         
-        $mail->send();
-        $mailSent = true;
-        $mailMethod = 'PHPMailer';
-    } catch (Exception $e) {
-        $errorDetails[] = 'PHPMailer error: ' . $mail->ErrorInfo;
-        $errorDetails[] = 'Exception: ' . $e->getMessage();
-        error_log('PHPMailer error: ' . $mail->ErrorInfo);
-    }
-}
-
-// Fallback to native mail() function
-if (!$mailSent) {
-    $headersString = implode("\r\n", $headers);
-    
-    // Check if mail() function is available
-    if (!function_exists('mail')) {
-        $errorDetails[] = 'mail() function is not available on this server';
-    } else {
-        // Try sending with mail()
-        $lastError = error_get_last();
-        $mailSent = @mail($to, $subject, $emailBody, $headersString);
-        
-        if (!$mailSent) {
-            $lastError = error_get_last();
-            if ($lastError && $lastError['message']) {
-                $errorDetails[] = 'mail() error: ' . $lastError['message'];
-            } else {
-                $errorDetails[] = 'mail() returned false - email may not have been sent';
-            }
-        } else {
-            $mailMethod = 'mail()';
+        if ($mail->send()) {
+            $mailSent = true;
         }
+    } catch (Exception $e) {
+        // Fall through to mail() function
     }
 }
 
-// Log the attempt
-$logMessage = sprintf(
-    "Email send attempt - Method: %s, Success: %s, To: %s, From: %s",
-    $mailMethod,
-    $mailSent ? 'YES' : 'NO',
-    $to,
-    $email
-);
-error_log($logMessage);
+// Fallback to native mail() function (same as test-email.php)
+if (!$mailSent && function_exists('mail')) {
+    $mailSent = @mail($to, $subject, $emailBody, $headers);
+}
 
 if ($mailSent) {
     http_response_code(200);
-    $response = ['success' => true, 'message' => 'Email sent successfully'];
-    if ($debugMode) {
-        $response['debug'] = [
-            'method' => $mailMethod,
-            'to' => $to,
-            'from' => $email
-        ];
-    }
-    echo json_encode($response);
+    echo json_encode(['success' => true, 'message' => 'Email sent successfully']);
 } else {
     http_response_code(500);
-    $response = ['success' => false, 'error' => 'Failed to send email. Please try again later.'];
-    if ($debugMode) {
-        $response['debug'] = [
-            'method' => $mailMethod,
-            'errors' => $errorDetails,
-            'php_version' => phpversion(),
-            'mail_function_exists' => function_exists('mail'),
-            'phpmailer_available' => class_exists('PHPMailer\\PHPMailer\\PHPMailer')
-        ];
-    }
-    echo json_encode($response);
+    echo json_encode(['success' => false, 'error' => 'Failed to send email. Please try again later.']);
 }
 ?>
-
