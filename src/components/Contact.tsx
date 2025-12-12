@@ -112,7 +112,7 @@ const Contact: React.FC = () => {
       details: [
         "info@nasirabsar.com",
         "nasir@nasirabsar.com",
-        "support@nasirabsar.com",
+        "contact@nasirabsar.com",
       ],
     },
     {
