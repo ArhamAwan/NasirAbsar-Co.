@@ -33,7 +33,8 @@ const ConsultationForm: React.FC<ConsultationFormProps> = ({ onSubmit }) => {
     setError(null);
 
     try {
-      const response = await fetch("/debug-form.php", {
+      const url = "/send-consultation.php";
+      const response = await fetch(url, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -41,36 +42,21 @@ const ConsultationForm: React.FC<ConsultationFormProps> = ({ onSubmit }) => {
         body: JSON.stringify(formData),
       });
 
-      // Check if response is actually JSON
       const contentType = response.headers.get("content-type");
-      let result;
+      const isJson = contentType && contentType.includes("application/json");
+      const result = isJson ? await response.json() : null;
 
-      if (contentType && contentType.includes("application/json")) {
-        result = await response.json();
-      } else {
-        // If not JSON, get text response
-        const text = await response.text();
-        console.error("Non-JSON response:", text);
-        throw new Error(
-          "Server returned an invalid response. Please check the console for details."
-        );
-      }
-
-      if (!response.ok || !result.success) {
-        // Show detailed error if available
+      if (!response.ok || !result?.success) {
         const errorMessage =
-          result.error ||
-          result.message ||
+          result?.error ||
+          result?.message ||
           "Failed to send message. Please try again.";
-        console.error("Form submission error:", result);
         throw new Error(errorMessage);
       }
 
-      // Success - show success message
       setIsSubmitted(true);
       setIsLoading(false);
 
-      // Reset form after showing success message
       setTimeout(() => {
         setIsSubmitted(false);
         setFormData({
@@ -86,17 +72,10 @@ const ConsultationForm: React.FC<ConsultationFormProps> = ({ onSubmit }) => {
       }, 3000);
     } catch (err) {
       setIsLoading(false);
-      console.error("Form submission failed:", err);
-
-      // Provide more helpful error messages
       if (err instanceof TypeError && err.message.includes("fetch")) {
-        setError(
-          "Network error. Please check your internet connection and try again."
-        );
+        setError("Network error. Please check your connection and try again.");
       } else if (err instanceof SyntaxError) {
-        setError(
-          "Server response error. Please contact support if this persists."
-        );
+        setError("Server response error. Please try again later.");
       } else {
         setError(
           err instanceof Error
@@ -144,12 +123,46 @@ const ConsultationForm: React.FC<ConsultationFormProps> = ({ onSubmit }) => {
             <motion.div
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
-              className="bg-red-50 border border-red-200 rounded-lg p-4 flex items-start space-x-3"
+              className={`${
+                error.includes("Debug info") || error.includes("✅")
+                  ? "bg-blue-50 border border-blue-200"
+                  : "bg-red-50 border border-red-200"
+              } rounded-lg p-4 flex items-start space-x-3`}
             >
-              <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
+              <AlertCircle
+                className={`w-5 h-5 flex-shrink-0 mt-0.5 ${
+                  error.includes("Debug info") || error.includes("✅")
+                    ? "text-blue-600"
+                    : "text-red-600"
+                }`}
+              />
               <div className="flex-1">
-                <p className="text-sm font-medium text-red-800">Error</p>
-                <p className="text-sm text-red-700 mt-1">{error}</p>
+                <p
+                  className={`text-sm font-medium ${
+                    error.includes("Debug info") || error.includes("✅")
+                      ? "text-blue-800"
+                      : "text-red-800"
+                  }`}
+                >
+                  {error.includes("Debug info") || error.includes("✅")
+                    ? "Debug Mode"
+                    : "Error"}
+                </p>
+                <p
+                  className={`text-sm mt-1 ${
+                    error.includes("Debug info") || error.includes("✅")
+                      ? "text-blue-700"
+                      : "text-red-700"
+                  }`}
+                >
+                  {error}
+                </p>
+                {(error.includes("Debug info") || error.includes("✅")) && (
+                  <p className="text-xs text-blue-600 mt-2">
+                    💡 Open Developer Tools (F12) → Console tab to see detailed
+                    debug information
+                  </p>
+                )}
               </div>
             </motion.div>
           )}
