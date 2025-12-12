@@ -218,7 +218,7 @@ const Header: React.FC = () => {
                 width="56"
                 height="56"
                 loading="eager"
-                fetchpriority="high"
+                fetchPriority="high"
                 onError={(e) => {
                   const target = e.target as HTMLImageElement;
                   if (target.src !== "/logo.png") {
@@ -311,7 +311,7 @@ const Header: React.FC = () => {
                 width="80"
                 height="80"
                 loading="eager"
-                fetchpriority="high"
+                fetchPriority="high"
                 onError={(e) => {
                   const target = e.target as HTMLImageElement;
                   if (target.src !== "/logo.png") {
@@ -394,7 +394,7 @@ const Header: React.FC = () => {
                 width="64"
                 height="64"
                 loading="eager"
-                fetchpriority="high"
+                fetchPriority="high"
                 onError={(e) => {
                   const target = e.target as HTMLImageElement;
                   if (target.src !== "/logo.png") {
@@ -483,7 +483,7 @@ const Header: React.FC = () => {
                     width="40"
                     height="40"
                     loading="eager"
-                    fetchpriority="high"
+                    fetchPriority="high"
                     onError={(e) => {
                       const target = e.target as HTMLImageElement;
                       if (target.src !== "/logo.png") {
