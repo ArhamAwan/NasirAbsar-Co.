@@ -9,6 +9,8 @@ import {
   Linkedin,
   CheckCircle,
   ExternalLink,
+  AlertCircle,
+  Loader2,
 } from "lucide-react";
 
 const Contact: React.FC = () => {
@@ -20,12 +22,60 @@ const Contact: React.FC = () => {
     message: "",
   });
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle form submission here
-    setIsSubmitted(true);
-    setTimeout(() => setIsSubmitted(false), 3000);
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      const response = await fetch('/send-consultation.php', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const contentType = response.headers.get('content-type');
+      const isJson = contentType && contentType.includes('application/json');
+      const result = isJson ? await response.json() : null;
+
+      if (!response.ok || !result?.success) {
+        const errorMessage =
+          result?.error ||
+          result?.message ||
+          'Failed to send message. Please try again.';
+        throw new Error(errorMessage);
+      }
+
+      // Success - show success message
+      setIsSubmitted(true);
+      setIsLoading(false);
+
+      // Reset form after showing success message
+      setTimeout(() => {
+        setIsSubmitted(false);
+        setFormData({
+          name: "",
+          email: "",
+          phone: "",
+          service: "",
+          message: "",
+        });
+      }, 3000);
+    } catch (err) {
+      setIsLoading(false);
+      if (err instanceof TypeError && err.message.includes('fetch')) {
+        setError('Network error. Please check your connection and try again.');
+      } else if (err instanceof SyntaxError) {
+        setError('Server response error. Please try again later.');
+      } else {
+        setError(err instanceof Error ? err.message : 'An unexpected error occurred. Please try again.');
+      }
+    }
   };
 
   const handleChange = (
@@ -200,6 +250,19 @@ const Contact: React.FC = () => {
               </motion.div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-5">
+                {error && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="bg-red-50 border border-red-200 rounded-lg p-4 flex items-start space-x-3"
+                  >
+                    <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
+                    <div className="flex-1">
+                      <p className="text-sm font-medium text-red-800">Error</p>
+                      <p className="text-sm text-red-700 mt-1">{error}</p>
+                    </div>
+                  </motion.div>
+                )}
                 <div className="grid md:grid-cols-2 gap-5">
                   <div>
                     <label
@@ -304,12 +367,22 @@ const Contact: React.FC = () => {
 
                 <motion.button
                   type="submit"
-                  className="w-full glass-button text-white py-3 rounded-lg font-semibold flex items-center justify-center space-x-2 transition-all duration-300 text-sm"
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
+                  disabled={isLoading}
+                  className="w-full glass-button text-white py-3 rounded-lg font-semibold flex items-center justify-center space-x-2 transition-all duration-300 text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+                  whileHover={isLoading ? {} : { scale: 1.02 }}
+                  whileTap={isLoading ? {} : { scale: 0.98 }}
                 >
-                  <Send size={16} />
-                  <span>Send Message</span>
+                  {isLoading ? (
+                    <>
+                      <Loader2 size={16} className="animate-spin" />
+                      <span>Sending...</span>
+                    </>
+                  ) : (
+                    <>
+                      <Send size={16} />
+                      <span>Send Message</span>
+                    </>
+                  )}
                 </motion.button>
               </form>
             )}

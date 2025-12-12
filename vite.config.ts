@@ -7,6 +7,14 @@ export default defineConfig({
   server: {
     host: '0.0.0.0', // Allow access from other devices on the network
     port: 5173,
+    // Proxy PHP requests to local PHP server for development
+    // Start PHP server with: cd dist && php -S localhost:8000
+    proxy: {
+      '/send-consultation.php': {
+        target: 'http://localhost:8000',
+        changeOrigin: true,
+      },
+    },
   },
   optimizeDeps: {
     exclude: ['lucide-react'],
