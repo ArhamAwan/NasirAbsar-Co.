@@ -19,7 +19,8 @@ This guide will help you deploy the review management feature to production.
    ```
    public_html/
    ├── api/
-   │   └── reviews.php
+   │   ├── reviews.php
+   │   └── .htaccess        ← IMPORTANT: Upload this too!
    └── data/
        ├── approved-reviews.json
        └── pending-reviews.json
@@ -28,6 +29,8 @@ This guide will help you deploy the review management feature to production.
 ### 1.2 Upload Files
 
 **Upload `public/api/reviews.php`** to `public_html/api/reviews.php`
+
+**Upload `public/api/.htaccess`** to `public_html/api/.htaccess` (This handles CORS at server level)
 
 **Create `public/data/` directory** and upload:
 
@@ -50,6 +53,24 @@ In cPanel File Manager:
 1. In cPanel, go to **Select PHP Version**
 2. Ensure PHP 7.4 or higher is selected
 3. Enable required extensions (JSON should be enabled by default)
+
+### 1.5 Fix CORS Issues (If Domain Redirects)
+
+If `nasirabsar.com` redirects to `www.nasirabsar.com` (or vice versa), you have two options:
+
+**Option A: Use Same Domain (Recommended)**
+
+- Put PHP files on the same domain as your React app
+- If React is on `www.nasirabsar.com`, ensure PHP is also accessible there
+- Or use a subdomain like `api.nasirabsar.com`
+
+**Option B: Disable Redirect for API**
+
+- In cPanel, check for `.htaccess` in root that redirects
+- Add exception for `/api/` path:
+  ```apache
+  RewriteCond %{REQUEST_URI} !^/api/
+  ```
 
 ## Step 2: Deploy React App to Vercel
 
@@ -102,11 +123,19 @@ Your React app should be accessible at:
 - `www.nasirabsar.com` → Vercel (React app)
 - `nasirabsar.com` → cPanel (PHP API)
 
+**IMPORTANT:** If there's a redirect between www and non-www, it will break CORS. Ensure:
+
+- Either both domains point to the same place
+- Or the API is accessible on the same domain as the React app
+- Or use a subdomain like `api.nasirabsar.com`
+
 ### 3.2 Test API Endpoint
 
 Visit: `https://nasirabsar.com/api/reviews.php?status=approved`
 
 You should see JSON response with reviews.
+
+**If you get a redirect:** Check your domain settings in cPanel and ensure `/api/` path doesn't redirect.
 
 ## Step 4: Test the Feature
 
@@ -141,6 +170,20 @@ You can delete these test files from cPanel:
 
 ## Troubleshooting
 
+### Issue: CORS Error - "Redirect is not allowed for a preflight request"
+
+**Cause:** The domain is redirecting (www to non-www or vice versa) before the PHP file can send CORS headers.
+
+**Solutions:**
+
+1. **Use same domain:** Ensure both React app and PHP API use the same domain (both www or both non-www)
+2. **Disable redirect for API:** Add exception in root `.htaccess`:
+   ```apache
+   RewriteCond %{REQUEST_URI} !^/api/
+   ```
+3. **Use subdomain:** Create `api.nasirabsar.com` subdomain for PHP files
+4. **Check `.htaccess` in api folder:** Ensure `public/api/.htaccess` is uploaded (handles CORS at server level)
+
 ### Issue: 500 Error on API
 
 **Solution:**
@@ -149,6 +192,7 @@ You can delete these test files from cPanel:
 2. Check file permissions on JSON files (should be 666)
 3. Check PHP error logs in cPanel
 4. Verify PHP version is 7.4+
+5. Ensure `.htaccess` file is in the `api` folder
 
 ### Issue: Reviews Not Saving
 
@@ -162,8 +206,10 @@ You can delete these test files from cPanel:
 
 **Solution:**
 
-- The PHP file already includes CORS headers
+- The PHP file and `.htaccess` both include CORS headers
 - If issues persist, check cPanel security settings
+- Verify domain redirects aren't interfering
+- Check browser console for specific error messages
 
 ### Issue: Admin Login Not Working
 
@@ -178,7 +224,8 @@ You can delete these test files from cPanel:
 ```
 cPanel (nasirabsar.com):
 ├── api/
-│   └── reviews.php          ← Upload this
+│   ├── reviews.php          ← Upload this
+│   └── .htaccess            ← Upload this (IMPORTANT for CORS)
 └── data/
     ├── approved-reviews.json ← Upload this (with sample reviews)
     └── pending-reviews.json  ← Upload this (empty array)
@@ -193,10 +240,13 @@ Vercel (www.nasirabsar.com):
 ## Quick Checklist
 
 - [ ] PHP files uploaded to cPanel
+- [ ] `.htaccess` file uploaded to `api` folder (IMPORTANT!)
 - [ ] Data folder created with correct permissions (755)
 - [ ] JSON files created with correct permissions (666)
 - [ ] React app deployed to Vercel
 - [ ] Environment variables set (optional)
+- [ ] Domain redirects checked (www vs non-www)
+- [ ] Test API endpoint directly in browser
 - [ ] Test review submission
 - [ ] Test admin panel login
 - [ ] Test approve/reject/delete functions
@@ -210,3 +260,4 @@ If you encounter issues:
 2. Check PHP error logs in cPanel
 3. Test API endpoint directly: `https://nasirabsar.com/api/reviews.php?status=approved`
 4. Verify file permissions are correct
+5. Check if domain redirects are interfering with CORS

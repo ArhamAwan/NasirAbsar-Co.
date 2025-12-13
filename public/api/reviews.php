@@ -4,6 +4,20 @@
  * Handles review submission, fetching, approval, and rejection
  */
 
+// Set headers FIRST before any output or redirects
+// This must be done before any output, including whitespace
+header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
+header('Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With');
+header('Access-Control-Max-Age: 86400');
+header('Content-Type: application/json');
+
+// Handle CORS preflight (OPTIONS request) - MUST be handled first
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    http_response_code(200);
+    exit(0);
+}
+
 // Start output buffering to catch any errors
 ob_start();
 
@@ -13,6 +27,7 @@ register_shutdown_function(function() {
     if ($error !== null && in_array($error['type'], [E_ERROR, E_PARSE, E_CORE_ERROR, E_COMPILE_ERROR])) {
         ob_clean();
         header('Content-Type: application/json');
+        header('Access-Control-Allow-Origin: *');
         http_response_code(500);
         echo json_encode([
             'success' => false,
@@ -24,18 +39,6 @@ register_shutdown_function(function() {
         exit;
     }
 });
-
-// Set headers for JSON response and CORS
-header('Content-Type: application/json');
-header('Access-Control-Allow-Origin: *');
-header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
-header('Access-Control-Allow-Headers: Content-Type');
-
-// Handle CORS preflight (OPTIONS request)
-if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-    http_response_code(200);
-    exit;
-}
 
 // Define file paths - use __DIR__ to get current directory (public/api)
 // Then go up one level to public, then into data
@@ -381,6 +384,9 @@ if ($method === 'POST' && $action === 'delete') {
 
 // Method not allowed
 ob_end_clean();
+header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
+header('Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With');
 http_response_code(405);
 echo json_encode(['success' => false, 'error' => 'Method not allowed', 'method' => $method, 'action' => $action]);
 
