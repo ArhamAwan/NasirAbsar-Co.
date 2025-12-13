@@ -324,7 +324,7 @@ const Header: React.FC = () => {
                   Nasir Absar & Co.
                 </h1>
                 <p className="text-xs sm:text-sm truncate text-gray-600">
-                  Chartered Accountants
+                  Management Consultants
                 </p>
               </div>
             </motion.div>
@@ -415,7 +415,7 @@ const Header: React.FC = () => {
                     isScrolled ? "text-gray-600" : "text-blue-100"
                   }`}
                 >
-                  Chartered Accountants
+                  Management Consultants
                 </p>
               </div>
             </motion.div>
@@ -496,7 +496,7 @@ const Header: React.FC = () => {
                       Nasir Absar & Co.
                     </h1>
                     <p className="text-xs text-gray-600 drop-shadow-sm">
-                      Chartered Accountants
+                      Management Consultants
                     </p>
                   </div>
                 </div>

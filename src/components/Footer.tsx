@@ -62,7 +62,7 @@ const Footer: React.FC = () => {
                   Nasir Absar & Co.
                 </h3>
                 <p className="text-xs sm:text-sm text-white/80">
-                  Chartered Accountants
+                  Management Consultants
                 </p>
               </div>
             </div>
