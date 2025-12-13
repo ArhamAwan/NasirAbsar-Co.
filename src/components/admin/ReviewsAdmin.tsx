@@ -20,6 +20,8 @@ const ReviewsAdmin: React.FC = () => {
   const fetchReviews = async () => {
     setIsLoading(true);
     try {
+      // Use root domain (without www) for production - points to cPanel
+      // www.nasirabsar.com points to Vercel, nasirabsar.com points to cPanel
       const apiUrl = import.meta.env.PROD 
         ? 'https://nasirabsar.com/api/reviews.php'
         : '/api/reviews.php';
@@ -52,6 +54,8 @@ const ReviewsAdmin: React.FC = () => {
   const handleApprove = async (reviewId: string) => {
     setIsProcessing(reviewId);
     try {
+      // Use root domain (without www) for production - points to cPanel
+      // www.nasirabsar.com points to Vercel, nasirabsar.com points to cPanel
       const apiUrl = import.meta.env.PROD 
         ? 'https://nasirabsar.com/api/reviews.php'
         : '/api/reviews.php';
@@ -88,6 +92,8 @@ const ReviewsAdmin: React.FC = () => {
 
     setIsProcessing(reviewId);
     try {
+      // Use root domain (without www) for production - points to cPanel
+      // www.nasirabsar.com points to Vercel, nasirabsar.com points to cPanel
       const apiUrl = import.meta.env.PROD 
         ? 'https://nasirabsar.com/api/reviews.php'
         : '/api/reviews.php';
@@ -124,6 +130,8 @@ const ReviewsAdmin: React.FC = () => {
 
     setIsProcessing(reviewId);
     try {
+      // Use root domain (without www) for production - points to cPanel
+      // www.nasirabsar.com points to Vercel, nasirabsar.com points to cPanel
       const apiUrl = import.meta.env.PROD 
         ? 'https://nasirabsar.com/api/reviews.php'
         : '/api/reviews.php';

@@ -28,6 +28,8 @@ const Reviews: React.FC = () => {
   useEffect(() => {
     const fetchApprovedReviews = async () => {
       try {
+        // Use root domain (without www) for production - points to cPanel
+        // www.nasirabsar.com points to Vercel, nasirabsar.com points to cPanel
         const apiUrl = import.meta.env.PROD 
           ? 'https://nasirabsar.com/api/reviews.php?status=approved'
           : '/api/reviews.php?status=approved';
@@ -71,6 +73,8 @@ const Reviews: React.FC = () => {
     setSubmitMessage(null);
 
     try {
+      // Use root domain (without www) for production - points to cPanel
+      // www.nasirabsar.com points to Vercel, nasirabsar.com points to cPanel
       const apiUrl = import.meta.env.PROD 
         ? 'https://nasirabsar.com/api/reviews.php'
         : '/api/reviews.php';
