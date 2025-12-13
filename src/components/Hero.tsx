@@ -8,17 +8,19 @@ const Aurora = lazy(() => import("./Aurora"));
 const Hero: React.FC = () => {
   const taglines = [
     <>
-      Redefining Technology with <span className="text-blue-300">NASIR ABSAR:</span>
+      Redefining Technology with{" "}
+      <span className="text-blue-300">NASIR ABSAR:</span>
       <br />
       Unlock the Possibilities.
     </>,
     <>
-      Your Trusted Advocates
+      Your Trusted consultants
       <br />
-      <span className="text-blue-300">Let NASIR ABSAR</span> Help You Win Your Case!
+      <span className="text-blue-300">Let NASIR ABSAR</span> serve you
+      professionally!
     </>,
     <>
-      Investing in Your Future
+      Protect your business from non-compliance risks
       <br />
       <span className="text-blue-300">with NASIR ABSAR</span>
     </>,
@@ -55,11 +57,15 @@ const Hero: React.FC = () => {
       >
         <Suspense fallback={<div className="aurora-container" />}>
           <Aurora
-            colorStops={["#1E90FF", "#0000FF", "#3A29FF"]}
-            blend={0.1}
-            amplitude={0.7}
-            speed={1}
-            height={"160%"}
+            colorStops={[
+              "#60A5FA", // Light sky blue
+              "#3B82F6", // Bright blue
+              "#1E3A8A", // Deep navy blue
+            ]} // Multiple shades of blue for rich gradient
+            blend={0.2} // Slightly smoother blend for better transitions
+            amplitude={0.65} // Slightly reduced for smoother waves
+            speed={1.1} // Slightly faster for more dynamic feel
+            height={"170%"} // Better coverage
           />
         </Suspense>
       </div>

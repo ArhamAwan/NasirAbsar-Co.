@@ -136,7 +136,7 @@ const Team: React.FC = () => {
               if (member.image) {
                 const img = new Image();
                 img.src = member.image;
-                img.fetchPriority = idx < 4 ? "high" : "low";
+                (img as any).fetchPriority = idx < 4 ? "high" : "low";
               }
             });
             observer.disconnect();
@@ -367,7 +367,7 @@ const Team: React.FC = () => {
                       decoding="async"
                       width={320}
                       height={400}
-                      fetchPriority={idx < 4 ? "high" : "auto"}
+                      {...({ fetchPriority: idx < 4 ? "high" : "auto" } as any)}
                       style={{ willChange: "auto" }}
                       onError={(e) => {
                         // Fallback to placeholder if image fails to load
@@ -454,7 +454,7 @@ const Team: React.FC = () => {
                   height={112}
                   loading="eager"
                   decoding="async"
-                  fetchPriority="high"
+                  {...({ fetchPriority: "high" } as any)}
                   onError={(e) => {
                     // Fallback to placeholder if image fails to load
                     const target = e.target as HTMLImageElement;

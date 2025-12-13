@@ -29,6 +29,7 @@ const Header: React.FC = () => {
       "services",
       "team",
       "clients",
+      "reviews",
       "contact",
     ];
 
@@ -150,6 +151,7 @@ const Header: React.FC = () => {
     { name: "Services", href: "/services" },
     { name: "Team", href: "/team" },
     { name: "Clients", href: "/clients" },
+    { name: "Reviews", href: "/reviews" },
     { name: "Contact", href: "/contact" },
   ];
 
@@ -201,41 +203,6 @@ const Header: React.FC = () => {
       <AnimatePresence>
         {!isScrolled && (
           <>
-            {/* Logo in top left - Desktop */}
-            <motion.div
-              initial={{ x: -50, opacity: 0 }}
-              animate={{ x: 0, opacity: 1 }}
-              exit={{ x: -50, opacity: 0 }}
-              transition={{ type: "spring", damping: 25, stiffness: 200 }}
-              className="fixed top-5 left-6 z-[60] hidden lg:flex items-center space-x-3 cursor-pointer"
-              onClick={(e) => handleNavClick(e, "/")}
-            >
-              <img
-                src="/logo-small.webp"
-                srcSet="/logo-small.webp 1x, /logo.webp 2x, /logo.png 1x"
-                alt="Nasir Absar & Co."
-                className="h-14 w-14 object-contain flex-shrink-0"
-                width="56"
-                height="56"
-                loading="eager"
-                fetchPriority="high"
-                onError={(e) => {
-                  const target = e.target as HTMLImageElement;
-                  if (target.src !== "/logo.png") {
-                    target.src = "/logo.png";
-                  }
-                }}
-              />
-              <div className="flex flex-col min-w-0">
-                <h1 className="text-lg font-bold text-white truncate">
-                  Nasir Absar & Co.
-                </h1>
-                <p className="text-sm text-blue-100 truncate">
-                  Management Consultants
-                </p>
-              </div>
-            </motion.div>
-
             {/* Floating Nav - Centered */}
             <motion.div
               initial={{ y: -50, opacity: 0 }}
@@ -244,6 +211,47 @@ const Header: React.FC = () => {
               transition={{ type: "spring", damping: 25, stiffness: 200 }}
               className="fixed top-5 left-0 right-0 z-[60] hidden lg:flex items-center justify-center pointer-events-none"
             >
+              {/* Logo in top left - Desktop */}
+              <motion.div
+                initial={{ x: -50, opacity: 0 }}
+                animate={{ x: 0, opacity: 1 }}
+                exit={{ x: -50, opacity: 0 }}
+                transition={{ type: "spring", damping: 25, stiffness: 200 }}
+                className="absolute left-6 flex items-center cursor-pointer pointer-events-auto"
+                onClick={(e) => handleNavClick(e, "/")}
+              >
+                <img
+                  src="/logo-small.webp"
+                  srcSet="/logo-small.webp 1x, /logo.webp 2x, /logo.png 1x"
+                  alt="Nasir Absar & Co."
+                  className="h-20 w-20 lg:h-24 lg:w-24 xl:h-28 xl:w-28 object-contain flex-shrink-0"
+                  width="112"
+                  height="112"
+                  loading="eager"
+                  {...({ fetchPriority: "high" } as any)}
+                  onError={(e) => {
+                    const target = e.target as HTMLImageElement;
+                    if (target.src !== "/logo.png") {
+                      target.src = "/logo.png";
+                    }
+                  }}
+                />
+              </motion.div>
+
+              {/* Tagline on right - Desktop */}
+              <motion.div
+                initial={{ x: 50, opacity: 0 }}
+                animate={{ x: 0, opacity: 1 }}
+                exit={{ x: 50, opacity: 0 }}
+                transition={{ type: "spring", damping: 25, stiffness: 200 }}
+                className="absolute right-6 flex items-center pointer-events-auto"
+              >
+                <p className="text-xs lg:text-[11.5px] xl:text-sm text-white/90 text-right leading-tight font-bold">
+                  Auditors, Accountants, Corporate
+                  <br />
+                  and Tax Consultants
+                </p>
+              </motion.div>
               <nav
                 className="flex items-center gap-2 px-2 py-2 rounded-full pointer-events-auto"
                 style={{
@@ -296,10 +304,10 @@ const Header: React.FC = () => {
         }`}
       >
         <div className="container mx-auto px-4 w-full max-w-full">
-          <div className="relative flex items-center justify-between h-16 sm:h-20">
+          <div className="relative flex items-center justify-between h-16 sm:h-20 md:h-20 lg:h-24 xl:h-28">
             {/* Logo */}
             <motion.div
-              className="flex items-center space-x-3 cursor-pointer z-10"
+              className="flex items-center cursor-pointer z-10"
               whileHover={{ scale: 1.05 }}
               onClick={(e) => handleNavClick(e, "/")}
             >
@@ -307,9 +315,9 @@ const Header: React.FC = () => {
                 src="/logo-small.webp"
                 srcSet="/logo-small.webp 1x, /logo.webp 2x, /logo.png 1x"
                 alt="Nasir Absar & Co."
-                className="h-12 w-12 sm:h-16 sm:w-16 md:h-20 md:w-20 object-contain flex-shrink-0"
-                width="80"
-                height="80"
+                className="h-16 w-16 sm:h-20 sm:w-20 md:h-20 md:w-20 lg:h-24 lg:w-24 xl:h-28 xl:w-28 object-contain flex-shrink-0"
+                width="112"
+                height="112"
                 loading="eager"
                 fetchPriority="high"
                 onError={(e) => {
@@ -319,14 +327,6 @@ const Header: React.FC = () => {
                   }
                 }}
               />
-              <div className="flex flex-col min-w-0">
-                <h1 className="text-sm xs:text-base sm:text-lg md:text-xl font-bold truncate text-gray-900">
-                  Nasir Absar & Co.
-                </h1>
-                <p className="text-xs sm:text-sm truncate text-gray-600">
-                  Management Consultants
-                </p>
-              </div>
             </motion.div>
 
             {/* Desktop Navigation - Centered */}
@@ -352,8 +352,13 @@ const Header: React.FC = () => {
               })}
             </nav>
 
-            {/* Contact */}
+            {/* Tagline and Contact on Right */}
             <div className="flex items-center space-x-4 z-10">
+              <p className="hidden lg:block text-xs lg:text-[11px] xl:text-sm text-gray-600 text-right max-w-xs leading-tight font-bold">
+                Auditors, Accountants, Corporate
+                <br />
+                and Tax Consultants
+              </p>
               <motion.a
                 href="tel:051-4861322"
                 className="hidden lg:flex items-center space-x-2 text-sm text-gray-600"
@@ -379,10 +384,10 @@ const Header: React.FC = () => {
         }`}
       >
         <div className="container mx-auto px-4 w-full max-w-full">
-          <div className="relative flex items-center justify-between h-16 sm:h-20">
+          <div className="relative flex items-center justify-between h-16 sm:h-20 md:h-20">
             {/* Logo */}
             <motion.div
-              className="flex items-center space-x-3 cursor-pointer z-10"
+              className="flex items-center cursor-pointer z-10"
               whileHover={{ scale: 1.05 }}
               onClick={(e) => handleNavClick(e, "/")}
             >
@@ -390,9 +395,9 @@ const Header: React.FC = () => {
                 src="/logo-small.webp"
                 srcSet="/logo-small.webp 1x, /logo.webp 2x, /logo.png 1x"
                 alt="Nasir Absar & Co."
-                className="h-12 w-12 sm:h-16 sm:w-16 object-contain flex-shrink-0"
-                width="64"
-                height="64"
+                className="h-16 w-16 sm:h-20 sm:w-20 md:h-20 md:w-20 object-contain flex-shrink-0"
+                width="80"
+                height="80"
                 loading="eager"
                 fetchPriority="high"
                 onError={(e) => {
@@ -402,28 +407,26 @@ const Header: React.FC = () => {
                   }
                 }}
               />
-              <div className="flex flex-col min-w-0">
-                <h1
-                  className={`text-sm xs:text-base sm:text-lg font-bold truncate ${
-                    isScrolled ? "text-gray-900" : "text-white"
-                  }`}
-                >
-                  Nasir Absar & Co.
-                </h1>
-                <p
-                  className={`text-xs sm:text-sm truncate ${
-                    isScrolled ? "text-gray-600" : "text-blue-100"
-                  }`}
-                >
-                  Management Consultants
-                </p>
-              </div>
             </motion.div>
+
+            {/* Tagline on Right - Mobile */}
+            <div className="flex-1 flex justify-end items-center pr-2 sm:pr-3">
+              <div
+                className={`text-[10px] xs:text-[10px] sm:text-xs text-right font-bold leading-tight ${
+                  isScrolled ? "text-gray-600" : "text-white/90"
+                }`}
+              >
+                <div className="block">Auditors, Accountants, Corporate</div>
+                <div className="block">and Tax Consultants</div>
+              </div>
+            </div>
 
             {/* Mobile Toggle */}
             <button
               type="button"
-              className={`p-2 ${isScrolled ? "text-gray-900" : "text-white"}`}
+              className={`p-2 flex-shrink-0 ${
+                isScrolled ? "text-gray-900" : "text-white"
+              }`}
               onClick={(e) => {
                 e.preventDefault();
                 setIsMenuOpen(!isMenuOpen);
@@ -479,11 +482,11 @@ const Header: React.FC = () => {
                     src="/logo.webp"
                     srcSet="/logo.webp 1x, /logo.png 1x"
                     alt="Nasir Absar & Co."
-                    className="h-10 w-10 object-contain"
-                    width="40"
-                    height="40"
+                    className="h-20 w-20 sm:h-24 sm:w-24 object-contain"
+                    width="96"
+                    height="96"
                     loading="eager"
-                    fetchPriority="high"
+                    {...({ fetchPriority: "high" } as any)}
                     onError={(e) => {
                       const target = e.target as HTMLImageElement;
                       if (target.src !== "/logo.png") {
@@ -492,11 +495,10 @@ const Header: React.FC = () => {
                     }}
                   />
                   <div>
-                    <h1 className="text-sm font-bold text-gray-900 drop-shadow-sm">
-                      Nasir Absar & Co.
-                    </h1>
-                    <p className="text-xs text-gray-600 drop-shadow-sm">
-                      Management Consultants
+                    <p className="text-xs text-gray-600 drop-shadow-sm leading-tight font-bold">
+                      Auditors, Accountants, Corporate
+                      <br />
+                      and Tax Consultants
                     </p>
                   </div>
                 </div>
