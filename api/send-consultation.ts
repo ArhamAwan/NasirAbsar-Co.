@@ -81,27 +81,89 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       });
     }
 
-    if (!response.ok) {
-      const errorText = await response.text();
-      console.error("PHP API error:", response.status, errorText);
-      return res.status(response.status).json({
+    // Get response text first (can only read once)
+    let responseText = "";
+    try {
+      responseText = await response.text();
+      console.log(
+        "PHP response text (first 500 chars):",
+        responseText.substring(0, 500)
+      );
+    } catch (e) {
+      console.error("Failed to read response text:", e);
+      return res.status(500).json({
         success: false,
-        error: `Server error: ${response.status}`,
-        details: errorText.substring(0, 200),
+        error: "Could not read response from PHP endpoint",
       });
     }
 
-    const data = await response.json();
-    console.log("PHP response data:", data);
+    // Check if response is HTML (error page) instead of JSON
+    if (responseText.trim().startsWith("<")) {
+      console.error("PHP endpoint returned HTML instead of JSON");
+      console.error("HTML response:", responseText.substring(0, 1000));
+      return res.status(500).json({
+        success: false,
+        error: "PHP endpoint returned HTML error page instead of JSON",
+        details:
+          "The endpoint may not exist or there's a server configuration issue. Check that send-consultation.php exists at https://api.nasirabsar.com/send-consultation.php",
+        htmlPreview: responseText.substring(0, 300),
+      });
+    }
+
+    if (!response.ok) {
+      console.error("PHP API error:", response.status, responseText);
+      // Try to parse as JSON even if status is not ok
+      let errorData;
+      try {
+        errorData = JSON.parse(responseText);
+        return res.status(response.status).json({
+          success: false,
+          error: errorData.error || `Server error: ${response.status}`,
+          details: errorData.details || responseText.substring(0, 200),
+        });
+      } catch (e) {
+        // Not JSON, return as text
+        return res.status(response.status).json({
+          success: false,
+          error: `Server error: ${response.status}`,
+          details: responseText.substring(0, 200),
+        });
+      }
+    }
+
+    // Try to parse JSON response
+    let data;
+    try {
+      data = JSON.parse(responseText);
+      console.log("PHP response data:", data);
+    } catch (parseError) {
+      console.error("Failed to parse PHP response as JSON:", parseError);
+      console.error(
+        "Response text that failed to parse:",
+        responseText.substring(0, 500)
+      );
+      return res.status(500).json({
+        success: false,
+        error: "PHP endpoint returned invalid JSON response",
+        details:
+          parseError instanceof Error ? parseError.message : String(parseError),
+        responsePreview: responseText.substring(0, 200),
+      });
+    }
 
     // Return the response
     return res.status(200).json(data);
   } catch (error) {
     console.error("Serverless function error:", error);
+    console.error(
+      "Error stack:",
+      error instanceof Error ? error.stack : "No stack trace"
+    );
     return res.status(500).json({
       success: false,
       error:
         error instanceof Error ? error.message : "Failed to process request",
+      details: error instanceof Error ? error.stack : String(error),
     });
   }
 }
