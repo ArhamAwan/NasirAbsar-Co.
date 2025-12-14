@@ -84,21 +84,21 @@ img[loading="lazy"] {
 }
 
 .scrollbar-hide::-webkit-scrollbar {
-  height: 8px;
+  display: none;
+  width: 0;
+  height: 0;
 }
 
 .scrollbar-hide::-webkit-scrollbar-track {
-  background: rgba(241, 245, 249, 0.5);
-  border-radius: 4px;
+  display: none;
 }
 
 .scrollbar-hide::-webkit-scrollbar-thumb {
-  background: linear-gradient(90deg, #3B82F6, #2563EB);
-  border-radius: 4px;
+  display: none;
 }
 
 .scrollbar-hide::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(90deg, #2563EB, #1d4ed8);
+  display: none;
 }
 
 /* Hide scrollbar for carousel */

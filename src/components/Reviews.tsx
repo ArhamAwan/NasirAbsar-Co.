@@ -1,32 +1,50 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Quote, X } from "lucide-react";
+import ReviewSlider from "./ReviewSlider";
 
-const reviews = [
-  {
-    quote:
-      "I’ve worked with Nasir Absar as they have provided expert tax and legal advice related to operating in Pakistan. Nasir Absar is quick to respond to queries and provides thorough explanation, and is available for follow up questions when it’s needed. I would recommend Nasir Absar to anyone looking for taxation and legal advisory services in Pakistan.",
-    author: "Molly Tutt, Associate Director (Programs), TASK FORCE for GLOBAL HEALTH-USA",
-  },
-  {
-    quote:
-      "Nasir Absar is actually a problem solver for your tax and accounting matters, having worked with them in the recent past. They are focused on getting to the right solutions, and their knowledge of taxation and financial reporting standards is very good. Apart from being very good professionals, they are also very kind hearted and courteous. I highly recommend their services.",
-    author: "Abdul Basit Manzoor, Manager Finance, Menzies- RAS (Pvt.) Limited",
-  },
-  {
-    quote:
-      "With their explicit command over tax laws and practical insight, I found Nasir Absar to be very diligent, proficient and precise in all their consultations. Their listening aptitude and courteous conduct set them apart among consultants in this profession.",
-    author: "Bilal Sarwar, Manager Finance & Accounting, Sukh Chayn Valley (Pvt.) Limited",
-  },
-];
+interface Review {
+  id: string;
+  name: string;
+  title: string;
+  review: string;
+}
 
 const Reviews: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [approvedReviews, setApprovedReviews] = useState<Review[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [submitting, setSubmitting] = useState(false);
+  const [submitSuccess, setSubmitSuccess] = useState(false);
+  const [submitError, setSubmitError] = useState("");
   const [formData, setFormData] = useState({
     name: "",
     title: "",
     review: "",
   });
+
+  const apiUrl = import.meta.env.PROD
+    ? `${window.location.origin}/api/reviews`
+    : '/api/reviews.php';
+
+  useEffect(() => {
+    fetchApprovedReviews();
+  }, []);
+
+  const fetchApprovedReviews = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch(`${apiUrl}?status=approved`);
+      if (response.ok) {
+        const reviews = await response.json();
+        setApprovedReviews(reviews);
+      }
+    } catch (error) {
+      console.error('Failed to fetch reviews:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const onChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -34,16 +52,43 @@ const Reviews: React.FC = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const onSubmit = (e: React.FormEvent) => {
+  const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Hook up to backend or state store as needed
-    setIsModalOpen(false);
-    setFormData({ name: "", title: "", review: "" });
+    setSubmitting(true);
+    setSubmitError("");
+    setSubmitSuccess(false);
+
+    try {
+      const response = await fetch(apiUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const result = await response.json();
+
+      if (response.ok && result.success) {
+        setSubmitSuccess(true);
+        setFormData({ name: "", title: "", review: "" });
+        setTimeout(() => {
+          setIsModalOpen(false);
+          setSubmitSuccess(false);
+        }, 2000);
+      } else {
+        setSubmitError(result.error || "Failed to submit review");
+      }
+    } catch (error) {
+      setSubmitError("Network error. Please try again.");
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
-    <section id="reviews" className="py-12 sm:py-16 md:py-20 bg-gradient-to-br from-white via-blue-50/10 to-gray-50 w-full max-w-full">
-      <div className="container mx-auto px-4 sm:px-6 w-full max-w-full">
+    <section id="reviews" className="py-12 sm:py-16 md:py-20 bg-gradient-to-br from-white via-blue-50/10 to-gray-50 w-full max-w-full" style={{ overflowY: 'visible' }}>
+      <div className="container mx-auto px-4 sm:px-6 w-full max-w-full" style={{ overflowY: 'visible' }}>
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -67,29 +112,21 @@ const Reviews: React.FC = () => {
           </motion.button>
         </motion.div>
 
-        <div className="grid md:grid-cols-3 gap-6 sm:gap-8">
-          {reviews.map((item, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: index * 0.1 }}
-              viewport={{ once: true }}
-              className="glass-card rounded-2xl sm:rounded-3xl p-6 sm:p-7 md:p-8 border border-white/60 shadow-lg flex flex-col space-y-4"
-            >
-              <div className="flex items-center space-x-3 text-blue-600">
-                <Quote className="w-6 h-6" />
-                <span className="font-semibold text-sm uppercase tracking-wide">Review</span>
-              </div>
-              <p className="text-gray-700 text-sm sm:text-base leading-relaxed flex-1">
-                {item.quote}
-              </p>
-              <p className="text-gray-900 font-semibold text-sm sm:text-base leading-snug">
-                {item.author}
-              </p>
-            </motion.div>
-          ))}
-        </div>
+        {loading ? (
+          <div className="flex items-center justify-center min-h-[300px]">
+            <div className="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin" />
+          </div>
+        ) : approvedReviews.length > 0 ? (
+          <div style={{ overflowY: 'visible', paddingBottom: '4rem' }}>
+            <ReviewSlider reviews={approvedReviews} />
+          </div>
+        ) : (
+          <div className="text-center py-12">
+            <p className="text-gray-600 text-lg">
+              No reviews yet. Be the first to share your experience!
+            </p>
+          </div>
+        )}
       </div>
 
       <AnimatePresence>
@@ -129,6 +166,16 @@ const Reviews: React.FC = () => {
                 </div>
 
                 <form onSubmit={onSubmit} className="space-y-4">
+                  {submitSuccess && (
+                    <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg text-sm">
+                      Review submitted successfully! It will be reviewed before being published.
+                    </div>
+                  )}
+                  {submitError && (
+                    <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm">
+                      {submitError}
+                    </div>
+                  )}
                   <div>
                     <label className="block text-sm font-semibold text-gray-800 mb-1">
                       Name & Title
@@ -139,7 +186,8 @@ const Reviews: React.FC = () => {
                       value={formData.name}
                       onChange={onChange}
                       required
-                      className="w-full glass-light border border-white/60 rounded-lg px-3 py-2.5 focus:ring-2 focus:ring-blue-500 focus:border-blue-400 text-sm"
+                      disabled={submitting}
+                      className="w-full glass-light border border-white/60 rounded-lg px-3 py-2.5 focus:ring-2 focus:ring-blue-500 focus:border-blue-400 text-sm disabled:opacity-50"
                       placeholder="Your name and role"
                     />
                   </div>
@@ -152,7 +200,8 @@ const Reviews: React.FC = () => {
                       name="title"
                       value={formData.title}
                       onChange={onChange}
-                      className="w-full glass-light border border-white/60 rounded-lg px-3 py-2.5 focus:ring-2 focus:ring-blue-500 focus:border-blue-400 text-sm"
+                      disabled={submitting}
+                      className="w-full glass-light border border-white/60 rounded-lg px-3 py-2.5 focus:ring-2 focus:ring-blue-500 focus:border-blue-400 text-sm disabled:opacity-50"
                       placeholder="Short title (optional)"
                     />
                   </div>
@@ -166,7 +215,8 @@ const Reviews: React.FC = () => {
                       onChange={onChange}
                       rows={5}
                       required
-                      className="w-full glass-light border border-white/60 rounded-lg px-3 py-2.5 focus:ring-2 focus:ring-blue-500 focus:border-blue-400 text-sm resize-none"
+                      disabled={submitting}
+                      className="w-full glass-light border border-white/60 rounded-lg px-3 py-2.5 focus:ring-2 focus:ring-blue-500 focus:border-blue-400 text-sm resize-none disabled:opacity-50"
                       placeholder="Write your feedback..."
                     />
                   </div>
@@ -174,18 +224,20 @@ const Reviews: React.FC = () => {
                   <div className="flex justify-end space-x-3 pt-2">
                     <button
                       type="button"
-                      className="px-4 py-2 rounded-lg text-sm font-semibold text-gray-700 bg-gray-100 hover:bg-gray-200"
+                      className="px-4 py-2 rounded-lg text-sm font-semibold text-gray-700 bg-gray-100 hover:bg-gray-200 disabled:opacity-50"
                       onClick={() => setIsModalOpen(false)}
+                      disabled={submitting}
                     >
                       Cancel
                     </button>
                     <motion.button
                       type="submit"
-                      className="glass-button text-white px-5 py-2.5 rounded-lg font-semibold text-sm"
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
+                      disabled={submitting}
+                      className="glass-button text-white px-5 py-2.5 rounded-lg font-semibold text-sm disabled:opacity-50"
+                      whileHover={{ scale: submitting ? 1 : 1.02 }}
+                      whileTap={{ scale: submitting ? 1 : 0.98 }}
                     >
-                      Submit Review
+                      {submitting ? "Submitting..." : "Submit Review"}
                     </motion.button>
                   </div>
                 </form>
