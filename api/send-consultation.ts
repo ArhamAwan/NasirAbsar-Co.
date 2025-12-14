@@ -1,77 +1,69 @@
 // Vercel Serverless Function to proxy consultation form submissions
 // This avoids CORS issues by making server-to-server requests
 
-export default async function handler(req: Request) {
-  // Handle CORS preflight FIRST
+import type { VercelRequest, VercelResponse } from '@vercel/node';
+
+export default async function handler(
+  req: VercelRequest,
+  res: VercelResponse
+) {
+  // Set CORS headers
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  res.setHeader('Access-Control-Max-Age', '86400');
+
+  // Handle CORS preflight
   if (req.method === 'OPTIONS') {
-    return new Response(null, {
-      status: 200,
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Methods': 'POST, OPTIONS',
-        'Access-Control-Allow-Headers': 'Content-Type',
-        'Access-Control-Max-Age': '86400',
-      },
-    });
+    return res.status(200).end();
   }
 
   // Only allow POST requests
   if (req.method !== 'POST') {
-    return new Response(
-      JSON.stringify({ success: false, error: 'Method not allowed' }),
-      {
-        status: 405,
-        headers: {
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*',
-          'Access-Control-Allow-Methods': 'POST, OPTIONS',
-          'Access-Control-Allow-Headers': 'Content-Type',
-        },
-      }
-    );
+    return res.status(405).json({
+      success: false,
+      error: 'Method not allowed',
+    });
   }
 
   try {
-    // Get the request body
-    const body = await req.json();
-
+    console.log('Received request body:', req.body);
+    
     // Forward the request to the PHP endpoint on cPanel
     const phpUrl = 'https://nasirabsar.com/send-consultation.php';
+    console.log('Forwarding to PHP URL:', phpUrl);
     
     const response = await fetch(phpUrl, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(body),
+      body: JSON.stringify(req.body),
     });
+
+    console.log('PHP response status:', response.status);
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error('PHP API error:', response.status, errorText);
+      return res.status(response.status).json({
+        success: false,
+        error: `Server error: ${response.status}`,
+        details: errorText.substring(0, 200),
+      });
+    }
 
     const data = await response.json();
+    console.log('PHP response data:', data);
 
-    // Return the response with CORS headers
-    return new Response(JSON.stringify(data), {
-      status: response.status,
-      headers: {
-        'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Methods': 'POST, OPTIONS',
-        'Access-Control-Allow-Headers': 'Content-Type',
-      },
-    });
+    // Return the response
+    return res.status(200).json(data);
   } catch (error) {
-    return new Response(
-      JSON.stringify({
-        success: false,
-        error: 'Failed to process request',
-      }),
-      {
-        status: 500,
-        headers: {
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*',
-        },
-      }
-    );
+    console.error('Serverless function error:', error);
+    return res.status(500).json({
+      success: false,
+      error: error instanceof Error ? error.message : 'Failed to process request',
+    });
   }
 }
 

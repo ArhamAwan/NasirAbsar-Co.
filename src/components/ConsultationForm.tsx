@@ -39,6 +39,7 @@ const ConsultationForm: React.FC<ConsultationFormProps> = ({ onSubmit }) => {
         ? "/api/send-consultation"
         : "/send-consultation.php";
 
+      console.log('Sending request to:', apiUrl);
       const response = await fetch(apiUrl, {
         method: "POST",
         headers: {
@@ -47,9 +48,21 @@ const ConsultationForm: React.FC<ConsultationFormProps> = ({ onSubmit }) => {
         body: JSON.stringify(formData),
       });
 
+      console.log('Response status:', response.status);
+      console.log('Response headers:', Object.fromEntries(response.headers.entries()));
+
       const contentType = response.headers.get("content-type");
       const isJson = contentType && contentType.includes("application/json");
-      const result = isJson ? await response.json() : null;
+      
+      let result = null;
+      if (isJson) {
+        result = await response.json();
+        console.log('Response data:', result);
+      } else {
+        const text = await response.text();
+        console.error('Non-JSON response:', text);
+        throw new Error('Server returned invalid response');
+      }
 
       if (!response.ok || !result?.success) {
         const errorMessage =
