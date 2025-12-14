@@ -46,18 +46,40 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     console.log("Request body type:", typeof requestBody);
 
     // Forward the request to the PHP endpoint on cPanel
-    const phpUrl = "https://nasirabsar.com/send-consultation.php";
+    // Use api subdomain to avoid redirects that convert POST to GET
+    const phpUrl = "https://api.nasirabsar.com/send-consultation.php";
     console.log("Forwarding to PHP URL:", phpUrl);
+    console.log(
+      "Sending POST request with body:",
+      JSON.stringify(requestBody).substring(0, 200)
+    );
 
     const response = await fetch(phpUrl, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        "User-Agent": "Vercel-Serverless-Function",
       },
       body: JSON.stringify(requestBody),
+      redirect: "manual", // Prevent redirects that convert POST to GET
     });
 
     console.log("PHP response status:", response.status);
+    console.log(
+      "PHP response headers:",
+      Object.fromEntries(response.headers.entries())
+    );
+
+    // Handle redirects manually
+    if (response.status >= 300 && response.status < 400) {
+      const location = response.headers.get("location");
+      console.error("PHP endpoint redirected to:", location);
+      return res.status(500).json({
+        success: false,
+        error: "PHP endpoint redirected, which may have converted POST to GET",
+        redirectLocation: location,
+      });
+    }
 
     if (!response.ok) {
       const errorText = await response.text();
