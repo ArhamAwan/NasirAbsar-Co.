@@ -1,12 +1,10 @@
-// Vercel Serverless Function to proxy reviews API requests
-// This avoids CORS issues by making server-to-server requests
-
+// Vercel Serverless Function to handle review rejection
 import type { VercelRequest, VercelResponse } from "@vercel/node";
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   // Set CORS headers
   res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+  res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization, X-Requested-With");
   res.setHeader("Access-Control-Max-Age", "86400");
 
@@ -17,29 +15,26 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(200).end();
   }
 
-  try {
-    // This endpoint handles GET requests (fetching reviews) and POST requests (submitting new reviews)
-    // Actions (approve, reject, delete) are handled by separate endpoints in api/reviews/[action].ts
-    let phpUrl = "https://api.nasirabsar.com/api/reviews.php";
+  if (method !== "POST") {
+    return res.status(405).json({
+      success: false,
+      error: "Method not allowed",
+    });
+  }
 
-    // Add query parameters for GET requests
-    if (method === "GET" && Object.keys(req.query).length > 0) {
-      const queryString = new URLSearchParams(req.query as Record<string, string>).toString();
-      if (queryString && !phpUrl.includes("?")) {
-        phpUrl += "?" + queryString;
-      }
-    }
+  try {
+    const phpUrl = "https://api.nasirabsar.com/api/reviews.php/reject";
 
     // Prepare fetch options
     const fetchOptions: RequestInit = {
-      method: method,
+      method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
     };
 
     // Add body for POST requests
-    if (method === "POST" && req.body) {
+    if (req.body) {
       fetchOptions.body = JSON.stringify(req.body);
     }
 
@@ -119,3 +114,4 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     });
   }
 }
+
