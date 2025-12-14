@@ -33,27 +33,17 @@ const ConsultationForm: React.FC<ConsultationFormProps> = ({ onSubmit }) => {
     setError(null);
 
     try {
-      // Use Vercel serverless function to proxy requests (avoids CORS/redirect issues)
-      // The serverless function makes server-to-server request to PHP, avoiding CORS
       const apiUrl = import.meta.env.PROD
         ? `${window.location.origin}/api/send-consultation`
         : "/send-consultation.php";
 
-      console.log('Sending request to:', apiUrl);
-      console.log('Request method:', "POST");
-      console.log('Request body:', formData);
-      
       const response = await fetch(apiUrl, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(formData),
-        redirect: 'manual', // Prevent redirects that might convert POST to GET
       });
-
-      console.log('Response status:', response.status);
-      console.log('Response headers:', Object.fromEntries(response.headers.entries()));
 
       const contentType = response.headers.get("content-type");
       const isJson = contentType && contentType.includes("application/json");
@@ -61,10 +51,7 @@ const ConsultationForm: React.FC<ConsultationFormProps> = ({ onSubmit }) => {
       let result = null;
       if (isJson) {
         result = await response.json();
-        console.log('Response data:', result);
       } else {
-        const text = await response.text();
-        console.error('Non-JSON response:', text);
         throw new Error('Server returned invalid response');
       }
 
