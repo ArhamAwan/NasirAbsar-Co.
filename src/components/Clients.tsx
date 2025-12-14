@@ -661,9 +661,9 @@ const Clients: React.FC = () => {
       const img = new Image();
       img.src = logoPath;
       if (logoIndex < 20) {
-        (img as any).fetchPriority = "high";
+        img.fetchPriority = "high";
       } else {
-        (img as any).fetchPriority = "low";
+        img.fetchPriority = "low";
       }
       logoIndex++;
     });

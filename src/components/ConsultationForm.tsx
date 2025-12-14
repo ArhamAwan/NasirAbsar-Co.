@@ -33,10 +33,10 @@ const ConsultationForm: React.FC<ConsultationFormProps> = ({ onSubmit }) => {
     setError(null);
 
     try {
-      // Use root domain (without www) for production - points to cPanel
-      // www.nasirabsar.com points to Vercel, nasirabsar.com points to cPanel
+      // Use Vercel serverless function to proxy requests (avoids CORS/redirect issues)
+      // The serverless function makes server-to-server request to PHP, avoiding CORS
       const apiUrl = import.meta.env.PROD
-        ? "https://nasirabsar.com/send-consultation.php"
+        ? "/api/send-consultation"
         : "/send-consultation.php";
 
       const response = await fetch(apiUrl, {

@@ -228,7 +228,7 @@ const Header: React.FC = () => {
                   width="112"
                   height="112"
                   loading="eager"
-                  {...({ fetchPriority: "high" } as any)}
+                  fetchPriority="high"
                   onError={(e) => {
                     const target = e.target as HTMLImageElement;
                     if (target.src !== "/logo.png") {
@@ -486,7 +486,7 @@ const Header: React.FC = () => {
                     width="96"
                     height="96"
                     loading="eager"
-                    {...({ fetchPriority: "high" } as any)}
+                    fetchPriority="high"
                     onError={(e) => {
                       const target = e.target as HTMLImageElement;
                       if (target.src !== "/logo.png") {

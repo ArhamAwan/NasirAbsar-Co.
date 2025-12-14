@@ -1,4 +1,5 @@
 # Allow POST requests and handle CORS
+
 <IfModule mod_headers.c>
     Header always set Access-Control-Allow-Origin "*"
     Header always set Access-Control-Allow-Methods "POST, GET, OPTIONS"
@@ -6,6 +7,7 @@
 </IfModule>
 
 # Handle OPTIONS preflight requests
+
 <IfModule mod_rewrite.c>
     RewriteEngine On
     RewriteCond %{REQUEST_METHOD} OPTIONS
@@ -13,7 +15,7 @@
 </IfModule>
 
 # Ensure PHP files are executed
+
 <IfModule mod_mime.c>
     AddHandler application/x-httpd-php .php
 </IfModule>
-

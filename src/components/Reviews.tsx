@@ -1,16 +1,24 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Quote, X } from "lucide-react";
-import ReviewSlider from "./ReviewSlider";
 
-interface Review {
-  id: string;
-  name: string;
-  title: string;
-  review: string;
-  submittedAt?: string;
-  approvedAt?: string;
-}
+const reviews = [
+  {
+    quote:
+      "I’ve worked with Nasir Absar as they have provided expert tax and legal advice related to operating in Pakistan. Nasir Absar is quick to respond to queries and provides thorough explanation, and is available for follow up questions when it’s needed. I would recommend Nasir Absar to anyone looking for taxation and legal advisory services in Pakistan.",
+    author: "Molly Tutt, Associate Director (Programs), TASK FORCE for GLOBAL HEALTH-USA",
+  },
+  {
+    quote:
+      "Nasir Absar is actually a problem solver for your tax and accounting matters, having worked with them in the recent past. They are focused on getting to the right solutions, and their knowledge of taxation and financial reporting standards is very good. Apart from being very good professionals, they are also very kind hearted and courteous. I highly recommend their services.",
+    author: "Abdul Basit Manzoor, Manager Finance, Menzies- RAS (Pvt.) Limited",
+  },
+  {
+    quote:
+      "With their explicit command over tax laws and practical insight, I found Nasir Absar to be very diligent, proficient and precise in all their consultations. Their listening aptitude and courteous conduct set them apart among consultants in this profession.",
+    author: "Bilal Sarwar, Manager Finance & Accounting, Sukh Chayn Valley (Pvt.) Limited",
+  },
+];
 
 const Reviews: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -19,91 +27,18 @@ const Reviews: React.FC = () => {
     title: "",
     review: "",
   });
-  const [approvedReviews, setApprovedReviews] = useState<Review[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitMessage, setSubmitMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null);
-
-  // Fetch approved reviews on component mount
-  useEffect(() => {
-    const fetchApprovedReviews = async () => {
-      try {
-        // Use root domain (without www) for production - points to cPanel
-        // www.nasirabsar.com points to Vercel, nasirabsar.com points to cPanel
-        const apiUrl = import.meta.env.PROD 
-          ? 'https://nasirabsar.com/api/reviews.php?status=approved'
-          : '/api/reviews.php?status=approved';
-        
-        const response = await fetch(apiUrl);
-        
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        
-        const data = await response.json();
-        
-        if (data.success && Array.isArray(data.reviews)) {
-          setApprovedReviews(data.reviews);
-        } else {
-          // If no reviews yet, set empty array
-          setApprovedReviews([]);
-        }
-      } catch (error) {
-        console.error('Error fetching reviews:', error);
-        // Set empty array on error to prevent crashes
-        setApprovedReviews([]);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchApprovedReviews();
-  }, []);
 
   const onChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
-    setSubmitMessage(null);
   };
 
-  const onSubmit = async (e: React.FormEvent) => {
+  const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSubmitting(true);
-    setSubmitMessage(null);
-
-    try {
-      // Use root domain (without www) for production - points to cPanel
-      // www.nasirabsar.com points to Vercel, nasirabsar.com points to cPanel
-      const apiUrl = import.meta.env.PROD 
-        ? 'https://nasirabsar.com/api/reviews.php'
-        : '/api/reviews.php';
-
-      const response = await fetch(apiUrl, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
-
-      const data = await response.json();
-
-      if (data.success) {
-        setSubmitMessage({ type: 'success', text: data.message || 'Review submitted successfully!' });
-        setFormData({ name: "", title: "", review: "" });
-        setTimeout(() => {
-          setIsModalOpen(false);
-          setSubmitMessage(null);
-        }, 2000);
-      } else {
-        setSubmitMessage({ type: 'error', text: data.error || 'Failed to submit review. Please try again.' });
-      }
-    } catch (error) {
-      setSubmitMessage({ type: 'error', text: 'Network error. Please try again later.' });
-    } finally {
-      setIsSubmitting(false);
-    }
+    // Hook up to backend or state store as needed
+    setIsModalOpen(false);
+    setFormData({ name: "", title: "", review: "" });
   };
 
   return (
@@ -132,19 +67,29 @@ const Reviews: React.FC = () => {
           </motion.button>
         </motion.div>
 
-        {isLoading ? (
-          <div className="flex items-center justify-center py-12">
-            <div className="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin" />
-          </div>
-        ) : approvedReviews.length > 0 ? (
-          <div className="py-4 overflow-visible">
-            <ReviewSlider reviews={approvedReviews} speed={50} />
-          </div>
-        ) : (
-          <div className="text-center py-12">
-            <p className="text-gray-600 text-lg">No reviews yet. Be the first to share your experience!</p>
-          </div>
-        )}
+        <div className="grid md:grid-cols-3 gap-6 sm:gap-8">
+          {reviews.map((item, index) => (
+            <motion.div
+              key={index}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: index * 0.1 }}
+              viewport={{ once: true }}
+              className="glass-card rounded-2xl sm:rounded-3xl p-6 sm:p-7 md:p-8 border border-white/60 shadow-lg flex flex-col space-y-4"
+            >
+              <div className="flex items-center space-x-3 text-blue-600">
+                <Quote className="w-6 h-6" />
+                <span className="font-semibold text-sm uppercase tracking-wide">Review</span>
+              </div>
+              <p className="text-gray-700 text-sm sm:text-base leading-relaxed flex-1">
+                {item.quote}
+              </p>
+              <p className="text-gray-900 font-semibold text-sm sm:text-base leading-snug">
+                {item.author}
+              </p>
+            </motion.div>
+          ))}
+        </div>
       </div>
 
       <AnimatePresence>
@@ -226,38 +171,21 @@ const Reviews: React.FC = () => {
                     />
                   </div>
 
-                  {submitMessage && (
-                    <div
-                      className={`p-3 rounded-lg text-sm ${
-                        submitMessage.type === 'success'
-                          ? 'bg-green-50 text-green-800 border border-green-200'
-                          : 'bg-red-50 text-red-800 border border-red-200'
-                      }`}
-                    >
-                      {submitMessage.text}
-                    </div>
-                  )}
-
                   <div className="flex justify-end space-x-3 pt-2">
                     <button
                       type="button"
-                      className="px-4 py-2 rounded-lg text-sm font-semibold text-gray-700 bg-gray-100 hover:bg-gray-200 disabled:opacity-50"
-                      onClick={() => {
-                        setIsModalOpen(false);
-                        setSubmitMessage(null);
-                      }}
-                      disabled={isSubmitting}
+                      className="px-4 py-2 rounded-lg text-sm font-semibold text-gray-700 bg-gray-100 hover:bg-gray-200"
+                      onClick={() => setIsModalOpen(false)}
                     >
                       Cancel
                     </button>
                     <motion.button
                       type="submit"
-                      className="glass-button text-white px-5 py-2.5 rounded-lg font-semibold text-sm disabled:opacity-50"
+                      className="glass-button text-white px-5 py-2.5 rounded-lg font-semibold text-sm"
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
-                      disabled={isSubmitting}
                     >
-                      {isSubmitting ? 'Submitting...' : 'Submit Review'}
+                      Submit Review
                     </motion.button>
                   </div>
                 </form>

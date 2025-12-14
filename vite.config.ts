@@ -1,44 +1,9 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
-import { copyFileSync, existsSync, mkdirSync } from 'fs';
-import { join } from 'path';
-
-// Custom plugin to exclude PHP files from build
-const excludePhpFiles = () => {
-  return {
-    name: 'exclude-php-files',
-    writeBundle() {
-      // After build, remove PHP files from dist directory
-      const distPath = join(process.cwd(), 'dist');
-      const filesToRemove = [
-        join(distPath, 'send-consultation.php'),
-        join(distPath, 'api'),
-        join(distPath, 'data'),
-      ];
-      
-      filesToRemove.forEach((file) => {
-        try {
-          if (existsSync(file)) {
-            const fs = require('fs');
-            const stat = fs.statSync(file);
-            if (stat.isDirectory()) {
-              fs.rmSync(file, { recursive: true, force: true });
-            } else {
-              fs.unlinkSync(file);
-            }
-            console.log(`Removed from build: ${file}`);
-          }
-        } catch (error) {
-          // Ignore errors
-        }
-      });
-    },
-  };
-};
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react(), excludePhpFiles()],
+  plugins: [react()],
   server: {
     host: '0.0.0.0', // Allow access from other devices on the network
     port: 5173,
@@ -46,10 +11,6 @@ export default defineConfig({
     // Start PHP server with: cd dist && php -S localhost:8000
     proxy: {
       '/send-consultation.php': {
-        target: 'http://localhost:8000',
-        changeOrigin: true,
-      },
-      '/api': {
         target: 'http://localhost:8000',
         changeOrigin: true,
       },
