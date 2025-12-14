@@ -36,16 +36,20 @@ const ConsultationForm: React.FC<ConsultationFormProps> = ({ onSubmit }) => {
       // Use Vercel serverless function to proxy requests (avoids CORS/redirect issues)
       // The serverless function makes server-to-server request to PHP, avoiding CORS
       const apiUrl = import.meta.env.PROD
-        ? "/api/send-consultation"
+        ? `${window.location.origin}/api/send-consultation`
         : "/send-consultation.php";
 
       console.log('Sending request to:', apiUrl);
+      console.log('Request method:', "POST");
+      console.log('Request body:', formData);
+      
       const response = await fetch(apiUrl, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(formData),
+        redirect: 'manual', // Prevent redirects that might convert POST to GET
       });
 
       console.log('Response status:', response.status);

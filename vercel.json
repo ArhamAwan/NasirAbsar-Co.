@@ -115,10 +115,6 @@
   ],
   "rewrites": [
     {
-      "source": "/api/:path*",
-      "destination": "/api/:path*"
-    },
-    {
       "source": "/((?!api|_next|.*\\..*|team|non-profit|manufacturing|education|health|construction|trading|services|mining|power|IT|CompanyProfile).*)",
       "destination": "/index.html"
     }
