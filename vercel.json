@@ -113,6 +113,11 @@
       ]
     }
   ],
+  "functions": {
+    "api/**/*.ts": {
+      "runtime": "@vercel/node"
+    }
+  },
   "rewrites": [
     {
       "source": "/((?!api|_next|.*\\..*|team|non-profit|manufacturing|education|health|construction|trading|services|mining|power|IT|CompanyProfile).*)",
