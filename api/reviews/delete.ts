@@ -38,14 +38,24 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       fetchOptions.body = JSON.stringify(req.body);
     }
 
-    // Add authorization header if present (check both lowercase and capitalized)
-    const authHeader = req.headers.authorization || req.headers.Authorization;
-    if (authHeader) {
-      fetchOptions.headers = {
-        ...fetchOptions.headers,
-        Authorization: authHeader as string,
-      };
+    // Add authorization header if present (check multiple possible locations)
+    const authHeader = 
+      req.headers.authorization || 
+      req.headers.Authorization ||
+      (req.headers as any)['authorization'] ||
+      (req.headers as any)['Authorization'];
+    
+    if (!authHeader) {
+      return res.status(401).json({
+        success: false,
+        error: 'Authorization header missing',
+      });
     }
+    
+    fetchOptions.headers = {
+      ...fetchOptions.headers,
+      Authorization: authHeader as string,
+    };
 
     // Forward the request to the PHP endpoint
     const response = await fetch(phpUrl, fetchOptions);
