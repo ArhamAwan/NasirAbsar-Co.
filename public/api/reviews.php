@@ -143,10 +143,23 @@ if ($method === 'GET') {
 
 // Handle POST request for approving a review
 if ($method === 'POST' && strpos($path, '/approve') !== false) {
+    // Debug: Log what we're receiving
+    error_log('Approve request - HTTP_AUTHORIZATION: ' . ($_SERVER['HTTP_AUTHORIZATION'] ?? 'NOT SET'));
+    
     $authHeader = getAuthHeader();
+    error_log('Approve request - getAuthHeader() result: ' . ($authHeader ?: 'EMPTY'));
+    
     if (empty($authHeader)) {
         http_response_code(401);
-        echo json_encode(['success' => false, 'error' => 'Unauthorized']);
+        echo json_encode([
+            'success' => false, 
+            'error' => 'Unauthorized',
+            'debug' => [
+                'HTTP_AUTHORIZATION' => $_SERVER['HTTP_AUTHORIZATION'] ?? 'NOT SET',
+                'REDIRECT_HTTP_AUTHORIZATION' => $_SERVER['REDIRECT_HTTP_AUTHORIZATION'] ?? 'NOT SET',
+                'apache_request_headers' => function_exists('apache_request_headers') ? apache_request_headers() : 'NOT AVAILABLE'
+            ]
+        ]);
         exit;
     }
     
@@ -203,10 +216,30 @@ if ($method === 'POST' && strpos($path, '/approve') !== false) {
 
 // Handle POST request for rejecting a review
 if ($method === 'POST' && strpos($path, '/reject') !== false) {
+    // Debug: Log what we're receiving
+    error_log('Reject request - REQUEST_METHOD: ' . $method);
+    error_log('Reject request - REQUEST_URI: ' . ($_SERVER['REQUEST_URI'] ?? 'N/A'));
+    error_log('Reject request - HTTP_AUTHORIZATION: ' . ($_SERVER['HTTP_AUTHORIZATION'] ?? 'NOT SET'));
+    error_log('Reject request - REDIRECT_HTTP_AUTHORIZATION: ' . ($_SERVER['REDIRECT_HTTP_AUTHORIZATION'] ?? 'NOT SET'));
+    if (function_exists('apache_request_headers')) {
+        $headers = apache_request_headers();
+        error_log('Reject request - apache_request_headers: ' . json_encode($headers));
+    }
+    
     $authHeader = getAuthHeader();
+    error_log('Reject request - getAuthHeader() result: ' . ($authHeader ?: 'EMPTY'));
+    
     if (empty($authHeader)) {
         http_response_code(401);
-        echo json_encode(['success' => false, 'error' => 'Unauthorized']);
+        echo json_encode([
+            'success' => false, 
+            'error' => 'Unauthorized',
+            'debug' => [
+                'HTTP_AUTHORIZATION' => $_SERVER['HTTP_AUTHORIZATION'] ?? 'NOT SET',
+                'REDIRECT_HTTP_AUTHORIZATION' => $_SERVER['REDIRECT_HTTP_AUTHORIZATION'] ?? 'NOT SET',
+                'apache_request_headers' => function_exists('apache_request_headers') ? apache_request_headers() : 'NOT AVAILABLE'
+            ]
+        ]);
         exit;
     }
     
@@ -255,10 +288,23 @@ if ($method === 'POST' && strpos($path, '/reject') !== false) {
 
 // Handle POST request for deleting a review
 if ($method === 'POST' && strpos($path, '/delete') !== false) {
+    // Debug: Log what we're receiving
+    error_log('Delete request - HTTP_AUTHORIZATION: ' . ($_SERVER['HTTP_AUTHORIZATION'] ?? 'NOT SET'));
+    
     $authHeader = getAuthHeader();
+    error_log('Delete request - getAuthHeader() result: ' . ($authHeader ?: 'EMPTY'));
+    
     if (empty($authHeader)) {
         http_response_code(401);
-        echo json_encode(['success' => false, 'error' => 'Unauthorized']);
+        echo json_encode([
+            'success' => false, 
+            'error' => 'Unauthorized',
+            'debug' => [
+                'HTTP_AUTHORIZATION' => $_SERVER['HTTP_AUTHORIZATION'] ?? 'NOT SET',
+                'REDIRECT_HTTP_AUTHORIZATION' => $_SERVER['REDIRECT_HTTP_AUTHORIZATION'] ?? 'NOT SET',
+                'apache_request_headers' => function_exists('apache_request_headers') ? apache_request_headers() : 'NOT AVAILABLE'
+            ]
+        ]);
         exit;
     }
     

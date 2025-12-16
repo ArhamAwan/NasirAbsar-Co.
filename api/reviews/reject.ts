@@ -71,8 +71,14 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       Authorization: authHeader,
     };
 
+    console.log('Sending to PHP with headers:', JSON.stringify(fetchOptions.headers, null, 2));
+    console.log('PHP URL:', phpUrl);
+
     // Forward the request to the PHP endpoint
     const response = await fetch(phpUrl, fetchOptions);
+    
+    console.log('PHP response status:', response.status);
+    console.log('PHP response headers:', JSON.stringify(Object.fromEntries(response.headers.entries()), null, 2));
 
     // Handle redirects
     if (response.status >= 300 && response.status < 400) {
