@@ -92,6 +92,17 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     let responseText = "";
     try {
       responseText = await response.text();
+      console.log('PHP response body:', responseText);
+      
+      // If it's a 401, try to parse the debug info
+      if (response.status === 401) {
+        try {
+          const errorData = JSON.parse(responseText);
+          console.log('PHP 401 debug info:', JSON.stringify(errorData.debug, null, 2));
+        } catch (e) {
+          console.log('Could not parse PHP response as JSON');
+        }
+      }
     } catch (e) {
       return res.status(500).json({
         success: false,

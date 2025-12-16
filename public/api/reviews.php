@@ -57,25 +57,43 @@ function writeJsonFile($file, $data) {
 
 // Helper function to get Authorization header from various sources
 function getAuthHeader() {
-    // Check standard location
-    if (isset($_SERVER['HTTP_AUTHORIZATION'])) {
+    // Method 1: Check standard location
+    if (isset($_SERVER['HTTP_AUTHORIZATION']) && !empty($_SERVER['HTTP_AUTHORIZATION'])) {
         return $_SERVER['HTTP_AUTHORIZATION'];
     }
     
-    // Check redirect location (some servers)
-    if (isset($_SERVER['REDIRECT_HTTP_AUTHORIZATION'])) {
+    // Method 2: Check redirect location (some servers)
+    if (isset($_SERVER['REDIRECT_HTTP_AUTHORIZATION']) && !empty($_SERVER['REDIRECT_HTTP_AUTHORIZATION'])) {
         return $_SERVER['REDIRECT_HTTP_AUTHORIZATION'];
     }
     
-    // Check using apache_request_headers if available
+    // Method 3: Check using apache_request_headers if available (most reliable)
     if (function_exists('apache_request_headers')) {
         $headers = apache_request_headers();
-        if (isset($headers['Authorization'])) {
+        if (isset($headers['Authorization']) && !empty($headers['Authorization'])) {
             return $headers['Authorization'];
         }
-        if (isset($headers['authorization'])) {
+        if (isset($headers['authorization']) && !empty($headers['authorization'])) {
             return $headers['authorization'];
         }
+    }
+    
+    // Method 4: Try getallheaders() as fallback
+    if (function_exists('getallheaders')) {
+        $headers = getallheaders();
+        if ($headers) {
+            foreach ($headers as $key => $value) {
+                if (strtolower($key) === 'authorization' && !empty($value)) {
+                    return $value;
+                }
+            }
+        }
+    }
+    
+    // Method 5: Try reading from input stream (for some proxy configurations)
+    $input = file_get_contents('php://input');
+    if (!empty($input)) {
+        // This won't work for Authorization header, but keeping for reference
     }
     
     return '';
@@ -217,14 +235,24 @@ if ($method === 'POST' && strpos($path, '/approve') !== false) {
 // Handle POST request for rejecting a review
 if ($method === 'POST' && strpos($path, '/reject') !== false) {
     // Debug: Log what we're receiving
-    error_log('Reject request - REQUEST_METHOD: ' . $method);
-    error_log('Reject request - REQUEST_URI: ' . ($_SERVER['REQUEST_URI'] ?? 'N/A'));
-    error_log('Reject request - HTTP_AUTHORIZATION: ' . ($_SERVER['HTTP_AUTHORIZATION'] ?? 'NOT SET'));
-    error_log('Reject request - REDIRECT_HTTP_AUTHORIZATION: ' . ($_SERVER['REDIRECT_HTTP_AUTHORIZATION'] ?? 'NOT SET'));
+    $debugInfo = [
+        'REQUEST_METHOD' => $method,
+        'REQUEST_URI' => $_SERVER['REQUEST_URI'] ?? 'N/A',
+        'HTTP_AUTHORIZATION' => $_SERVER['HTTP_AUTHORIZATION'] ?? 'NOT SET',
+        'REDIRECT_HTTP_AUTHORIZATION' => $_SERVER['REDIRECT_HTTP_AUTHORIZATION'] ?? 'NOT SET',
+    ];
+    
     if (function_exists('apache_request_headers')) {
         $headers = apache_request_headers();
-        error_log('Reject request - apache_request_headers: ' . json_encode($headers));
+        $debugInfo['apache_request_headers'] = $headers;
     }
+    
+    if (function_exists('getallheaders')) {
+        $allHeaders = getallheaders();
+        $debugInfo['getallheaders'] = $allHeaders;
+    }
+    
+    error_log('Reject request debug: ' . json_encode($debugInfo));
     
     $authHeader = getAuthHeader();
     error_log('Reject request - getAuthHeader() result: ' . ($authHeader ?: 'EMPTY'));
@@ -234,11 +262,7 @@ if ($method === 'POST' && strpos($path, '/reject') !== false) {
         echo json_encode([
             'success' => false, 
             'error' => 'Unauthorized',
-            'debug' => [
-                'HTTP_AUTHORIZATION' => $_SERVER['HTTP_AUTHORIZATION'] ?? 'NOT SET',
-                'REDIRECT_HTTP_AUTHORIZATION' => $_SERVER['REDIRECT_HTTP_AUTHORIZATION'] ?? 'NOT SET',
-                'apache_request_headers' => function_exists('apache_request_headers') ? apache_request_headers() : 'NOT AVAILABLE'
-            ]
+            'debug' => $debugInfo
         ]);
         exit;
     }
