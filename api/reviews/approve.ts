@@ -38,12 +38,12 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       fetchOptions.body = JSON.stringify(req.body);
     }
 
-    // Add authorization header if present
-    const authHeader = req.headers.authorization;
+    // Add authorization header if present (check both lowercase and capitalized)
+    const authHeader = req.headers.authorization || req.headers.Authorization;
     if (authHeader) {
       fetchOptions.headers = {
         ...fetchOptions.headers,
-        Authorization: authHeader,
+        Authorization: authHeader as string,
       };
     }
 

@@ -55,6 +55,32 @@ function writeJsonFile($file, $data) {
     return file_put_contents($file, json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
 }
 
+// Helper function to get Authorization header from various sources
+function getAuthHeader() {
+    // Check standard location
+    if (isset($_SERVER['HTTP_AUTHORIZATION'])) {
+        return $_SERVER['HTTP_AUTHORIZATION'];
+    }
+    
+    // Check redirect location (some servers)
+    if (isset($_SERVER['REDIRECT_HTTP_AUTHORIZATION'])) {
+        return $_SERVER['REDIRECT_HTTP_AUTHORIZATION'];
+    }
+    
+    // Check using apache_request_headers if available
+    if (function_exists('apache_request_headers')) {
+        $headers = apache_request_headers();
+        if (isset($headers['Authorization'])) {
+            return $headers['Authorization'];
+        }
+        if (isset($headers['authorization'])) {
+            return $headers['authorization'];
+        }
+    }
+    
+    return '';
+}
+
 // Handle POST request for submitting a review
 if ($method === 'POST' && !strpos($path, '/approve') && !strpos($path, '/reject') && !strpos($path, '/delete')) {
     $input = file_get_contents('php://input');
@@ -117,8 +143,7 @@ if ($method === 'GET') {
 
 // Handle POST request for approving a review
 if ($method === 'POST' && strpos($path, '/approve') !== false) {
-    // Basic authentication check
-    $authHeader = $_SERVER['HTTP_AUTHORIZATION'] ?? '';
+    $authHeader = getAuthHeader();
     if (empty($authHeader)) {
         http_response_code(401);
         echo json_encode(['success' => false, 'error' => 'Unauthorized']);
@@ -178,7 +203,7 @@ if ($method === 'POST' && strpos($path, '/approve') !== false) {
 
 // Handle POST request for rejecting a review
 if ($method === 'POST' && strpos($path, '/reject') !== false) {
-    $authHeader = $_SERVER['HTTP_AUTHORIZATION'] ?? '';
+    $authHeader = getAuthHeader();
     if (empty($authHeader)) {
         http_response_code(401);
         echo json_encode(['success' => false, 'error' => 'Unauthorized']);
@@ -230,7 +255,7 @@ if ($method === 'POST' && strpos($path, '/reject') !== false) {
 
 // Handle POST request for deleting a review
 if ($method === 'POST' && strpos($path, '/delete') !== false) {
-    $authHeader = $_SERVER['HTTP_AUTHORIZATION'] ?? '';
+    $authHeader = getAuthHeader();
     if (empty($authHeader)) {
         http_response_code(401);
         echo json_encode(['success' => false, 'error' => 'Unauthorized']);
