@@ -25,6 +25,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   try {
     const phpUrl = "https://api.nasirabsar.com/api/reviews.php/approve";
 
+    // Debug: Log all headers to see what we're receiving
+    console.log('Received headers:', JSON.stringify(req.headers, null, 2));
+    console.log('Request body:', JSON.stringify(req.body, null, 2));
+
     // Prepare fetch options
     const fetchOptions: RequestInit = {
       method: "POST",
@@ -38,23 +42,33 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       fetchOptions.body = JSON.stringify(req.body);
     }
 
-    // Add authorization header if present (check multiple possible locations)
+    // Add authorization header if present (Vercel normalizes headers to lowercase)
+    // Check all possible variations
     const authHeader = 
-      req.headers.authorization || 
-      req.headers.Authorization ||
-      (req.headers as any)['authorization'] ||
-      (req.headers as any)['Authorization'];
+      (req.headers.authorization as string) || 
+      (req.headers['authorization'] as string) ||
+      (req.headers.Authorization as string) ||
+      (req.headers['Authorization'] as string) ||
+      '';
+    
+    console.log('Extracted authHeader:', authHeader ? 'Found' : 'Missing');
     
     if (!authHeader) {
+      // Log for debugging
+      console.error('Missing Authorization header. Available headers:', Object.keys(req.headers));
       return res.status(401).json({
         success: false,
         error: 'Authorization header missing',
+        debug: {
+          availableHeaders: Object.keys(req.headers),
+          headers: req.headers
+        }
       });
     }
     
     fetchOptions.headers = {
       ...fetchOptions.headers,
-      Authorization: authHeader as string,
+      Authorization: authHeader,
     };
 
     // Forward the request to the PHP endpoint
